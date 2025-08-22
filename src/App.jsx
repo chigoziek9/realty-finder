@@ -26,9 +26,6 @@ export default function App() {
           <Route path="/agent" element={<Agent />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/mortgage" element={<Mortgage />} />
-          
-          {/* Add more routes here as needed */}
-          {/* Add more routes here later */}
         </Routes>
       </main>
     </div>
