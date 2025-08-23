@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Viewproperty from "./Viewproperty";
 
-export default function Property() {
+export default function Newtomarket() {
   const [property, setProperty] = useState([]);
   const navigate = useNavigate();
 
@@ -10,7 +9,7 @@ export default function Property() {
     const storedProperty = localStorage.getItem("exploreProperty");
 
     if (storedProperty) {
-      setProperty(JSON.parse(storedProperty).slice(0, 6)); // limit to 10
+      setProperty(JSON.parse(storedProperty)); // limit to 10
     } else {
       fetch("/properties.json")
         .then((res) => res.json())
@@ -30,7 +29,12 @@ export default function Property() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 sm:px-4 pb-8">
+        <div className="mt-10 flex justify-center items-center">
+           <h1 className="text-3xl md:text-5xl font-bold mb-4">
+            New To Market Properties.
+          </h1>
+        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 sm:px-4 pb-8 mt-10">
         {property.map((house) => (
           <div
             key={house.id}
@@ -45,7 +49,7 @@ export default function Property() {
             <div className="p-4">
               <h3 className="text-lg font-bold">{house.title}</h3>
               <p className="text-gray-600 text-sm">{house.description}</p>
-              <p className="text-[#28563a] font-semibold mt-2">{house.price}</p>
+              <p className="text-green-600 font-semibold mt-2">{house.price}</p>
               <p className="text-gray-500 text-xs mt-1">
                 🛏 {house.beds} beds • 🛁 {house.baths} baths • 📐 {house.sqft}{" "}
                 sqft
@@ -57,9 +61,7 @@ export default function Property() {
           </div>
         ))}
       </div>
-      <div>
-        <Viewproperty />
-      </div>
+   
 
     </div>
   );
