@@ -82,7 +82,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="text-center text-white/70 text-sm mt-12">
-        Copyright © 2022. All rights reserved
+        Copyright © 2025. All rights reserved
       </div>
     </footer>
   );

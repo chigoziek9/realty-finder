@@ -48,7 +48,7 @@ export default function FAQSection() {
             Here are some important questions that are frequently asked and the
             answers to the questions.
           </p>
-          <button className="px-6 py-3 rounded-full border border-black bg-white text-black text-sm font-medium hover:bg-black hover:text-white transition w-fit">
+          <button className="px-6 py-3 rounded-full border bg-[#28563a]  text-white text-sm font-medium hover:bg-black hover:text-white transition w-fit">
             Contact Us
           </button>
         </div>
