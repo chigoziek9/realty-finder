@@ -11,6 +11,10 @@ export default function PropertyDetails() {
       .then((data) => {
         // ✅ Find the property with matching id
         const foundProperty = data.find((item) => String(item.id) === id);
+        console.log("All properties:", data);
+        console.log("Looking for id:", id);
+        console.log("Found property:", foundProperty);
+
         setProperty(foundProperty);
       })
       .catch((err) => console.error("Failed to load property", err));
@@ -29,7 +33,7 @@ export default function PropertyDetails() {
       {/* Image Section */}
       <div className="w-full lg:w-1/2 flex justify-center items-center">
         <img
-          src={property.image}  
+          src={property.image}
           alt={property.title}
           className="w-full max-w-md h-64 object-cover rounded"
         />
@@ -37,10 +41,15 @@ export default function PropertyDetails() {
 
       {/* Info Section */}
       <div className="w-full lg:w-1/2 px-2 md:px-6 pb-4 md:pb-6">
-        <h1 className="text-2xl md:text-4xl font-bold mt-4">{property.title}</h1>
-        <p className="text-green-600 text-xl md:text-2xl mt-2">{property.price}</p>
+        <h1 className="text-2xl md:text-4xl font-bold mt-4">
+          {property.title}
+        </h1>
+        <p className="text-green-600 text-xl md:text-2xl mt-2">
+          {property.price}
+        </p>
         <p className="text-gray-500 text-sm md:text-base mt-1">
-          🛏 {property.beds} beds • 🛁 {property.baths} baths • 📐 {property.sqft} sqft
+          🛏 {property.beds} beds • 🛁 {property.baths} baths • 📐{" "}
+          {property.sqft} sqft
         </p>
         <p className="text-gray-400 text-xs mt-1">
           Listed {property.listed} • {property.source}

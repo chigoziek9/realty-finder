@@ -27,6 +27,7 @@ export default function App() {
           <Route path="/agent" element={<Agent />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/mortgage" element={<Mortgage />} />
+          <Route path="/property/:id" element={<PropertyDetails />} />
         </Routes>
       </main>
     </div>
