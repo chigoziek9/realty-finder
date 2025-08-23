@@ -72,7 +72,7 @@ export default function Locations() {
                 alt={loc.name}
                 className="w-full h-48 object-cover"
               />
-              <div className="p-4 bg-gray-800 text-white">
+              <div className="p-4 bg-[#28563a] text-white">
                 <h3 className="text-lg font-semibold">{loc.name}</h3>
               </div>
             </div>
