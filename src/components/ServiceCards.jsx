@@ -38,29 +38,29 @@ export default function ServiceCards() {
 
       {/* Cards Grid Section */}
       <section className="w-full flex justify-center px-4 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl w-full ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl w-full">
           {cards.map((card) => (
             <div
               key={card.id}
-              className="border border-gray-200 bg-white rounded-2xl shadow-md p-6 flex flex-col hover:shadow-lg transition hover:bg-[#d9d9d9]"
+              className="group border border-gray-200 bg-white rounded-2xl shadow-md p-6 flex flex-col hover:shadow-lg transition hover:bg-[#28563a]"
             >
               {/* Number aligned right */}
               <div className="w-full flex justify-end mb-4 mt-3">
-                <span className="text-7xl  text-black">
+                <span className="text-7xl text-black group-hover:text-white transition">
                   {card.id}
                 </span>
               </div>
 
               {/* Title + Text */}
-              <h2 className="text-5xl font-semibold text-black mb-8 mt-8">
+              <h2 className="text-3xl font-semibold text-black mb-6 mt-6 group-hover:text-white transition">
                 {card.title}
               </h2>
-              <p className="text-gray-700 flex-1 leading-relaxed mb-10">
+              <p className="text-gray-700 flex-1 leading-relaxed mb-10 group-hover:text-white transition">
                 {card.text}
               </p>
 
               {/* Rounded Pill Button */}
-              <button className="border border-black text-black py-2 px-6 rounded-full hover:bg-black hover:text-white transition">
+              <button className="border border-black text-black py-2 px-6 rounded-full group-hover:bg-black group-hover:border-white group-hover:text-white transition">
                 {card.button}
               </button>
             </div>
