@@ -23,14 +23,14 @@ export default function ServiceCards() {
   ];
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-[#fafafa]">
       {/* Header Section */}
-      <section className="w-full flex justify-center px-4 py-8">
+      <section className="w-full flex justify-center px-4 py-8 mt-20 bg-[#fafafa]">
         <div className="max-w-4xl text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-5xl font-bold text-gray-900">
             See how RealtyFinder can help
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 text-2xl mt-2">
             High-quality homes with low-carbon impact.
           </p>
         </div>
@@ -38,24 +38,24 @@ export default function ServiceCards() {
 
       {/* Cards Grid Section */}
       <section className="w-full flex justify-center px-4 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl w-full ">
           {cards.map((card) => (
             <div
               key={card.id}
-              className="border border-gray-200 bg-white rounded-2xl shadow-md p-6 flex flex-col hover:shadow-lg transition"
+              className="border border-gray-200 bg-white rounded-2xl shadow-md p-6 flex flex-col hover:shadow-lg transition hover:bg-[#d9d9d9]"
             >
               {/* Number aligned right */}
-              <div className="w-full flex justify-end mb-4">
-                <span className="text-3xl font-extrabold text-black">
+              <div className="w-full flex justify-end mb-4 mt-3">
+                <span className="text-7xl  text-black">
                   {card.id}
                 </span>
               </div>
 
               {/* Title + Text */}
-              <h2 className="text-xl font-semibold text-black mb-2">
+              <h2 className="text-5xl font-semibold text-black mb-8 mt-8">
                 {card.title}
               </h2>
-              <p className="text-gray-700 flex-1 leading-relaxed mb-4">
+              <p className="text-gray-700 flex-1 leading-relaxed mb-10">
                 {card.text}
               </p>
 

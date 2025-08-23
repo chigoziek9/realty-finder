@@ -8,6 +8,7 @@ import Account from "./pages/Account";
 import Agent from "./pages/Agent";
 import Sell from "./pages/Sell";
 import Mortgage from "./pages/Mortgage";
+import PropertyDetails from "./components/propertydetail";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/agent" element={<Agent />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/mortgage" element={<Mortgage />} />
+          <Route path="/property/:id" element={<PropertyDetails />} />
         </Routes>
       </main>
     </div>

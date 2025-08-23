@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Property() {
   const [property, setProperty] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedProperty = localStorage.getItem("exploreProperty");
@@ -13,10 +16,11 @@ export default function Property() {
         .then((res) => res.json())
         .then((data) => {
           setProperty(data); // our JSON is already an array
-         
         });
     }
   }, []);
+
+  
 
   if (property.length === 0) {
     return (
@@ -31,6 +35,8 @@ export default function Property() {
       {property.map((house) => (
         <div
           key={house.id}
+          onClick={() => navigate(`/property/${house.id}`)}
+         
           className="w-72 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
         >
           <img
