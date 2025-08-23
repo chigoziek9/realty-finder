@@ -11,45 +11,41 @@ export default function PropertyTabs() {
   ];
 
   return (
-    <div className="">
+    <div className="w-full px-4 sm:px-6 lg:px-10">
       {/* Tabs */}
-      <div className="flex gap-8 border-b border-gray-200 pb-2">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`pb-1 transition font-medium ${
-              activeTab === tab.id
-                ? "border-b-2 border-black font-bold"
-                : "text-gray-500 hover:text-black"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      <div className="flex md:justify-center">
+        <div className="flex gap-6 sm:gap-8 border-b border-gray-200 pb-2 overflow-x-auto no-scrollbar md:overflow-visible">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`pb-2 text-sm sm:text-base transition whitespace-nowrap ${
+                activeTab === tab.id
+                  ? "border-b-2 border-black font-semibold text-black"
+                  : "text-gray-500 hover:text-black"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Content */}
-      <div className="mt-6 w-screen -mx-[calc((100vw-100%)/2)]">
+      <div className="mt-6">
         {activeTab === "new" && (
-          <div>
-            <div className="w-[100%] mt-10">
-              <Properties />
-            </div>
+          <div className="mt-6">
+            <Properties />
           </div>
         )}
         {activeTab === "nature" && (
-          <div>
-            <div className="w-[100%] mt-10">
-              <Properties />
-            </div>
+          <div className="mt-6">
+            <Properties />
           </div>
         )}
         {activeTab === "most" && (
-          <div>
-            <div className="w-[100%] mt-10">
-              <Properties />
-            </div>
+          <div className="mt-6">
+            <Properties />
           </div>
         )}
       </div>
