@@ -8,6 +8,8 @@ import Account from "./pages/Account";
 import Agent from "./pages/Agent";
 import Sell from "./pages/Sell";
 import Mortgage from "./pages/Mortgage";
+import SignUp from "./pages/SignUp";
+import SigninPage from "./pages/SignIn";
 
 export default function App() {
   return (
@@ -26,6 +28,8 @@ export default function App() {
           <Route path="/agent" element={<Agent />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/mortgage" element={<Mortgage />} />
+          <Route path="/signup" element={<SignUp />} />   {/* 👈 signup route */}
+          <Route path="/signin" element={<SigninPage />} /> {/* 👈 signin route */}
         </Routes>
       </main>
     </div>
