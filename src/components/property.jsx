@@ -59,6 +59,7 @@ export default function Property() {
       </div>
       <div>
         <Viewproperty />
+        <h1>testing</h1>
       </div>
 
     </div>
