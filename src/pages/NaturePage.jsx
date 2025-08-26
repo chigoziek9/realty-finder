@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Viewproperty from "./Viewproperty";
 
-export default function Property() {
+
+export default function NaturePage() {
   const [property, setProperty] = useState([]);
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ export default function Property() {
             <div className="p-4">
               <h3 className="text-lg font-bold">{house.title}</h3>
               <p className="text-gray-600 text-sm">{house.description}</p>
-              <p className="text-[#28563a] font-semibold mt-2">{house.price}</p>
+              <p className="text-green-600 font-semibold mt-2">{house.price}</p>
               <p className="text-gray-500 text-xs mt-1">
                 🛏 {house.beds} beds • 🛁 {house.baths} baths • 📐 {house.sqft}{" "}
                 sqft
@@ -57,10 +57,7 @@ export default function Property() {
           </div>
         ))}
       </div>
-      <div>
-        <Viewproperty />
-        <h1>testing</h1>
-      </div>
+      
 
     </div>
   );

@@ -23,10 +23,10 @@ const testimonials = [
 export default function Testimonials() {
   return (
     <section className="w-full flex flex-col items-center px-4 py-12 bg-white">
-      <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
+      <h2 className="text-2xl md:text-5xl font-bold text-center mt-6 mb-2">
         What our customers say?
       </h2>
-      <p className="text-gray-600 text-center mb-10">
+      <p className="text-gray-600 text-center text-2xl mb-10">
         Hear from our satisfied customers and clients.
       </p>
 
