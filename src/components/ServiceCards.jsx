@@ -60,7 +60,7 @@ export default function ServiceCards() {
               </p>
 
               {/* Rounded Pill Button */}
-              <button className="border bg-[#28563a] text-white text-sm sm:text-base py-2 px-5 rounded-full group-hover:bg-black group-hover:border-white group-hover:text-white transition">
+              <button className="border bg-[#28563a] text-white text-sm sm:text-base py-2 px-5 rounded-full group-hover:border-white group-hover:text-white transition">
                 {card.button}
               </button>
             </div>
