@@ -8,6 +8,8 @@ import Account from "./pages/Account";
 import Agent from "./pages/Agent";
 import Sell from "./pages/Sell";
 import Mortgage from "./pages/Mortgage";
+import SignUp from "./pages/SignUp";
+import SigninPage from "./pages/SignIn";
 import PropertyDetails from "./components/propertydetail";
 import Newtomarket from "./pages/Newtomarket";
 import MostViewed from "./pages/MostViewed";
@@ -30,10 +32,12 @@ export default function App() {
           <Route path="/agent" element={<Agent />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/mortgage" element={<Mortgage />} />
+          <Route path="/signup" element={<SignUp />} />   {/* 👈 signup route */}
+          <Route path="/signin" element={<SigninPage />} /> {/* 👈 signin route */}
           <Route path="/property/:id" element={<PropertyDetails />} />
           <Route path="/Newtomarket" element={<Newtomarket />} />
-          <Route path="/ MostViewed" element={<MostViewed />} />
-          <Route path="/ NaturePage" element={<NaturePage />} />
+          <Route path="/MostViewed" element={<MostViewed />} />
+          <Route path="/NaturePage" element={<NaturePage />} />
         </Routes>
       </main>
     </div>
