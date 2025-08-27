@@ -76,6 +76,8 @@ export default function Navbar() {
             Create an account
           </button>
         </div>
+    
+       
       </div>
     </header>
   );
