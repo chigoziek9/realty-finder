@@ -93,8 +93,10 @@ export default function Navbar() {
           >
             Create an account
           </Link>
-          <H1>My name is merit</H1>
+         
         </div>
+    
+       
       </div>
     </header>
   );
