@@ -72,7 +72,7 @@ export default function Navbar() {
                   >
                     Long Term
                   </Link>
-                  <h1>done</h1>
+                
                 </div>
               )}
             </li>
