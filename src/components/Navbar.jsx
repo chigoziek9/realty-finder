@@ -16,7 +16,7 @@ export default function Navbar() {
       {/* Logo */}
       <div className="flex items-center gap-2">
         <Link to="/" >
-          <img src={logo} alt="Logo" className="h-8" />
+          <img src={logo} alt="Logo"  />
         </Link>
       </div>
 
