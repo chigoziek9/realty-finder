@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import Arrow from "../assets/ArrowRight.png";
 
 const Viewproperty = () => {
   const navigate = useNavigate();
@@ -8,12 +9,13 @@ const Viewproperty = () => {
   };
 
   return (
-    <div className="flex justify-center px-4 sm:px-6">
+    <div className="flex justify-center items-center px-4 sm:px-6">
       <button
         onClick={handleClick}
-        className="w-full max-w-xs sm:max-w-sm md:max-w-md px-4 py-3 sm:py-4 text-sm sm:text-base cursor-pointer text-center bg-[#28563a] text-white font-semibold hover:bg-blue-800 transition-colors duration-200"
+        className="px-6 py-2 text-sm sm:text-base bg-[#28563a] text-white font-semibold rounded-3xl hover:bg-blue-800 transition flex items-center"
       >
         View All Property
+        <img src={Arrow} alt="Arrow" className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
       </button>
     </div>
   );

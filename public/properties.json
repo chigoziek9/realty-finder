@@ -9,7 +9,8 @@
     "listed": "2 days ago",
     "image": "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
     "title": "Rustic Retreat Cottage",
-    "description": "An elegant 3-bedroom, 2.5-bathroom townhouse in a gated community."
+    "description": "An elegant 3-bedroom, 2.5-bathroom townhouse in a gated community.",
+    "address": "Plot 15 Lekki Phase 1, Lagos"
   },
   {
     "id": 2,
@@ -21,7 +22,8 @@
     "listed": "5 days ago",
     "image": "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
     "title": "Modern Glass Haven",
-    "description": "Contemporary 3-bed home with floor-to-ceiling windows and minimalist design."
+    "description": "Contemporary 3-bed home with floor-to-ceiling windows and minimalist design.",
+    "address": "Plot 21 Garki II, Abuja"
   },
   {
     "id": 3,
@@ -33,7 +35,8 @@
     "listed": "1 day ago",
     "image": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
     "title": "Spacious Family Manor",
-    "description": "A luxurious 5-bedroom estate with lush gardens and premium finishes."
+    "description": "A luxurious 5-bedroom estate with lush gardens and premium finishes.",
+    "address": "Plot 3 Independence Layout, Enugu"
   },
   {
     "id": 4,
@@ -45,7 +48,8 @@
     "listed": "3 days ago",
     "image": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
     "title": "Cozy Brick Cottage",
-    "description": "Quaint brick façade 3-bed cottage with a charming front porch."
+    "description": "Quaint brick façade 3-bed cottage with a charming front porch.",
+    "address": "Plot 7 Rumuola Road, Port Harcourt"
   },
   {
     "id": 5,
@@ -57,7 +61,8 @@
     "listed": "4 days ago",
     "image": "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
     "title": "Suburban Family Home",
-    "description": "Comfortable 4-bed house in a quiet suburban neighborhood."
+    "description": "Comfortable 4-bed house in a quiet suburban neighborhood.",
+    "address": "Plot 12 Bodija Estate, Ibadan"
   },
   {
     "id": 6,
@@ -69,7 +74,8 @@
     "listed": "12 hours ago",
     "image": "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
     "title": "Luxury Mansion Retreat",
-    "description": "Expansive 6-bed mansion, perfect for entertaining and relaxation."
+    "description": "Expansive 6-bed mansion, perfect for entertaining and relaxation.",
+    "address": "Plot 45 Banana Island Road, Ikoyi, Lagos"
   },
   {
     "id": 7,
@@ -81,7 +87,8 @@
     "listed": "1 week ago",
     "image": "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
     "title": "Compact Townhouse",
-    "description": "Affordable 2-bed townhouse ideal for first-time buyers."
+    "description": "Affordable 2-bed townhouse ideal for first-time buyers.",
+    "address": "Plot 18 Abakiliki Road, Onitsha"
   },
   {
     "id": 8,
@@ -93,7 +100,8 @@
     "listed": "6 days ago",
     "image": "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
     "title": "Elegant Colonial",
-    "description": "Classic colonial-style 4-bed home with modern updates."
+    "description": "Classic colonial-style 4-bed home with modern updates.",
+    "address": "Plot 33 Asokoro Avenue, Abuja"
   },
   {
     "id": 9,
@@ -105,7 +113,8 @@
     "listed": "2 days ago",
     "image": "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
     "title": "Modern Ranch Villa",
-    "description": "One-story ranch villa with open floor plan and spacious yard."
+    "description": "One-story ranch villa with open floor plan and spacious yard.",
+    "address": "Plot 9 Iwofe Road, Port Harcourt"
   },
   {
     "id": 10,
@@ -117,114 +126,7 @@
     "listed": "3 days ago",
     "image": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
     "title": "Mid-Century Modern",
-    "description": "Stylish mid-century inspired home with clean lines and retro charm."
-  },
-  {
-    "id": 11,
-    "price": "₦1,300,000",
-    "beds": 5,
-    "baths": 4,
-    "sqft": 3500,
-    "source": "EstateMaster",
-    "listed": "1 day ago",
-    "image": "https://images.pexels.com/photos/211473/pexels-photo-211473.jpeg",
-    "title": "Grand Colonial Lodge",
-    "description": "Stately 5-bed lodge with large porches and classic design."
-  },
-  {
-    "id": 12,
-    "price": "₦730,000",
-    "beds": 3,
-    "baths": 2.5,
-    "sqft": 2000,
-    "source": "HomeLink",
-    "listed": "5 hours ago",
-    "image": "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
-    "title": "Contemporary Edge",
-    "description": "Sleek contemporary home with sharp architectural lines."
-  },
-  {
-    "id": 13,
-    "price": "₦820,000",
-    "beds": 4,
-    "baths": 2.5,
-    "sqft": 2300,
-    "source": "RealtyFinder",
-    "listed": "4 days ago",
-    "image": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-    "title": "Country Manor",
-    "description": "4-bed manor set in tranquil countryside, ideal for nature lovers."
-  },
-  {
-    "id": 14,
-    "price": "₦650,000",
-    "beds": 3,
-    "baths": 2,
-    "sqft": 1800,
-    "source": "BudgetHomes",
-    "listed": "2 weeks ago",
-    "image": "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-    "title": "Economical Suburban",
-    "description": "Budget-friendly suburban home with all necessary comforts."
-  },
-  {
-    "id": 15,
-    "price": "₦1,800,000",
-    "beds": 7,
-    "baths": 5,
-    "sqft": 5000,
-    "source": "EstateMaster",
-    "listed": "10 hours ago",
-    "image": "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
-    "title": "Estate of Elegance",
-    "description": "Palatial 7-bed estate with pristine grounds and opulent interiors."
-  },
-  {
-    "id": 16,
-    "price": "₦900,000",
-    "beds": 4,
-    "baths": 3,
-    "sqft": 2400,
-    "source": "HomeLink",
-    "listed": "1 day ago",
-    "image": "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg",
-    "title": "Suburban Oasis",
-    "description": "Peaceful 4-bed in a leafy, family-friendly neighborhood."
-  },
-  {
-    "id": 17,
-    "price": "₦540,000",
-    "beds": 2,
-    "baths": 1.5,
-    "sqft": 1300,
-    "source": "BudgetHomes",
-    "listed": "3 days ago",
-    "image": "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-    "title": "Charming Duplex",
-    "description": "Cozy duplex unit, perfect for small families or couples."
-  },
-  {
-    "id": 18,
-    "price": "₦1,250,000",
-    "beds": 5,
-    "baths": 3.5,
-    "sqft": 3300,
-    "source": "RealtyFinder",
-    "listed": "12 hours ago",
-    "image": "https://images.pexels.com/photos/211473/pexels-photo-211473.jpeg",
-    "title": "Elegant Heritage Home",
-    "description": "5-bed heritage property with character and timeless appeal."
-  },
-  {
-    "id": 19,
-    "price": "₦780,000",
-    "beds": 3,
-    "baths": 2,
-    "sqft": 1900,
-    "source": "HomeLink",
-    "listed": "2 days ago",
-    "image": "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-    "title": "Modern Minimalist",
-    "description": "Minimalist home with open spaces and neutral tones."
+    "description": "Stylish mid-century inspired home with clean lines and retro charm.",
+    "address": "Plot 4 GRA Phase 2, Benin City"
   }
 ]
