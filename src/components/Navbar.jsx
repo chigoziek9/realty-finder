@@ -31,8 +31,75 @@ export default function Navbar() {
 
       {/* Auth buttons */}
       <div className="hidden md:flex gap-4">
+<<<<<<< Updated upstream
         <button className="px-5 py-2 border border-black rounded-full hover:bg-gray-100">Login</button>
         <button className="px-5 py-2 bg-gray-300 rounded-full hover:bg-gray-400">Create an account</button>
+=======
+        <Link
+          to="/signin"
+          className="px-5 py-2 border border-black rounded-full hover:bg-gray-100"
+        >
+          Login
+        </Link>
+        <Link
+          to="/signup"
+          className="px-5 py-2 bg-gray-300 rounded-full hover:bg-gray-400"
+        >
+          Create an account
+        </Link>
+      </div>
+
+      {/* Mobile Menu Button */}
+      <button
+        className="md:hidden p-2 rounded focus:outline-none"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {isOpen ? <X size={28} /> : <Menu size={28} />}
+      </button>
+
+      {/* Mobile Drawer Menu */}
+      <div
+        className={`fixed top-0 right-0 h-full w-3/4 max-w-xs bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {/* Close Button inside drawer */}
+        <div className="flex justify-end p-4">
+          <button onClick={() => setIsOpen(false)}>
+            <X size={28} />
+          </button>
+        </div>
+
+        <ul className="flex flex-col gap-6 text-lg font-medium px-6">
+          <li><Link to="/" onClick={() => setIsOpen(false)} className="hover:text-red-500">Home</Link></li>
+          <li><Link to="/buy" onClick={() => setIsOpen(false)} className="hover:text-red-500">Buy</Link></li>
+          <li><Link to="/sell" onClick={() => setIsOpen(false)} className="hover:text-red-500">Sell</Link></li>
+          <li><Link to="/rent" onClick={() => setIsOpen(false)} className="hover:text-red-500">Rent</Link></li>
+          <li><Link to="/mortgage" onClick={() => setIsOpen(false)} className="hover:text-red-500">Mortgage</Link></li>
+          <li><Link to="/agent" onClick={() => setIsOpen(false)} className="hover:text-red-500">Agent</Link></li>
+          <li><Link to="/account" onClick={() => setIsOpen(false)} className="hover:text-red-500">Account</Link></li>
+          <li><Link to="/help" onClick={() => setIsOpen(false)} className="hover:text-red-500">Help</Link></li>
+        </ul>
+
+        {/* Auth buttons */}
+        <div className="flex flex-col gap-3 mt-8 px-6">
+          <Link
+            to="/signin"
+            className="w-full px-5 py-2 border border-black rounded-full hover:bg-gray-100 text-center"
+            onClick={() => setIsOpen(false)}
+          >
+            Login
+          </Link>
+          <Link
+            to="/signup"
+            className="w-full px-5 py-2 bg-gray-300 rounded-full hover:bg-gray-400 text-center"
+            onClick={() => setIsOpen(false)}
+          >
+            Create an account
+          </Link>
+      
+        </div>
+>>>>>>> Stashed changes
       </div>
     </header>
   );
