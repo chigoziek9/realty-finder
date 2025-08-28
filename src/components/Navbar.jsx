@@ -1,19 +1,24 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa";
-import logo from "../assets/logo.png";
+import { Menu, X, ChevronDown } from "lucide-react";
+import logo from "../assets/logo.png"; // replace with your logo
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(null);
+
+  const toggleMenu = (menu) => {
+    setMenuOpen(menuOpen === menu ? null : menu);
+  };
 
   return (
-    <header className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="Realty Finder Logo" className="h-10 w-auto" />
-          <span className="text-xl font-bold text-green-900">RealtyFinder</span>
+    <header className="bg-white shadow-sm px-6 md:px-10 py-4 flex items-center relative">
+      {/* Logo */}
+      <div className="flex items-center gap-2">
+        <Link to="/" >
+          <img src={logo} alt="Logo" className="h-8" />
         </Link>
+      </div>
 
       {/* Desktop Nav + Auth (all to the right) */}
       <div className="hidden md:flex items-center gap-8 ml-auto">
@@ -67,6 +72,7 @@ export default function Navbar() {
                   >
                     Long Term
                   </Link>
+                
                 </div>
               )}
             </li>
