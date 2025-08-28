@@ -71,7 +71,8 @@ export default function SignIn() {
         <h2 className="text-2xl font-bold mb-1">Welcome back</h2>
         <p className="text-gray-500 mb-6">Sign in to your account</p>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        {/* ✅ Correctly wrapped form */}
+        <form className="space-y-4 text-left" onSubmit={handleSubmit}>
           {/* Email */}
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
@@ -93,7 +94,9 @@ export default function SignIn() {
                 required
               />
             </div>
-            {emailError && <p className="text-sm text-red-500 mt-1">{emailError}</p>}
+            {emailError && (
+              <p className="text-sm text-red-500 mt-1">{emailError}</p>
+            )}
           </div>
 
           {/* Password */}
@@ -135,10 +138,12 @@ export default function SignIn() {
               <input type="checkbox" className="h-4 w-4 rounded text-green-600" />
               <span className="text-gray-700">Remember me</span>
             </label>
-            <a href="/forgot-password" className="text-green-600 font-medium hover:underline">
-  Forgot password?
-</a>
-
+            <a
+              href="/forgot-password"
+              className="text-green-600 font-medium hover:underline"
+            >
+              Forgot password?
+            </a>
           </div>
 
           {/* Sign In Button */}

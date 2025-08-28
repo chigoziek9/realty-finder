@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import signupImage from "../assets/Frame 1.png"; 
+import signupImage from "../assets/Frame 1.png";
+import logo from "../assets/logo.png"; 
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -31,18 +32,18 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
+    <div className="min-h-screen flex flex-col md:grid md:grid-cols-2">
       {/* Left Side: Image */}
-      <div className="w-full md:w-1/2">
+      <div className="w-full h-48 md:h-auto">
         <img
           src={signupImage}
           alt="Sign Up Banner"
-          className="w-full h-48 md:h-full object-cover"
+          className="w-full h-full object-cover"
         />
       </div>
 
       {/* Right Side: Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center px-4 py-8 bg-white">
+      <div className="flex items-center justify-center px-4 py-8 bg-white">
         <div className="w-full max-w-md space-y-6">
           {/* Title */}
           <div className="text-center">
@@ -149,7 +150,7 @@ export default function SignUp() {
               </div>
               <ul className="text-xs text-gray-600 mt-2 space-y-1 bg-blue-50 p-3 rounded-lg">
                 <li>• Password must be at least 8 characters long.</li>
-                <li>• Password must not be longer than 18 characters.</li>
+                <li>• Must not be longer than 18 characters.</li>
                 <li>• Must contain at least one uppercase and lowercase letter.</li>
                 <li>• Must contain at least one number or punctuation.</li>
                 <li>• No spaces or unicode characters allowed.</li>
@@ -198,7 +199,7 @@ export default function SignUp() {
               </span>
             </div>
 
-            {/* Buttons */}
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full py-3 rounded-lg bg-green-700 text-white font-semibold hover:bg-green-800"
@@ -206,12 +207,14 @@ export default function SignUp() {
               Sign up
             </button>
 
+            {/* Divider */}
             <div className="flex items-center my-4">
               <hr className="flex-1 border-gray-300" />
               <span className="mx-2 text-sm text-gray-500">or</span>
               <hr className="flex-1 border-gray-300" />
             </div>
 
+            {/* Google Signup */}
             <button
               type="button"
               className="w-full py-3 rounded-lg border border-green-700 text-green-700 font-semibold flex items-center justify-center space-x-2 hover:bg-green-50"
