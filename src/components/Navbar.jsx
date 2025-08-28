@@ -1,47 +1,122 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
+import logo from "../assets/logo.png"; // replace with your logo
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(null);
+
+  const toggleMenu = (menu) => {
+    setMenuOpen(menuOpen === menu ? null : menu);
+  };
 
   return (
-    <header className="bg-red shadow-sm px-6 md:px-10 py-4 flex items-center justify-between relative">
+    <header className="bg-white shadow-sm px-6 md:px-10 py-4 flex items-center justify-between relative">
       {/* Logo */}
       <div className="flex items-center gap-2">
-        <div className="w-8 h-8 border-2 border-black rounded-full flex items-center justify-center">
-          <span className="text-sm font-bold">X</span>
-        </div>
+        <img src={logo} alt="Logo" className="w-8 h-8" />
         <span className="font-bold text-lg">RealtyFinder</span>
       </div>
 
       {/* Desktop Nav */}
       <nav className="hidden md:block">
-        <ul className="flex items-center gap-8 text-sm font-medium">
-          <li><Link to="/" className="hover:text-gray-600">Home</Link></li>
-          <li><Link to="/buy" className="hover:text-gray-600">Buy</Link></li>
-          <li><Link to="/sell" className="hover:text-gray-600">Sell</Link></li>
-          <li><Link to="/rent" className="hover:text-gray-600">Rent</Link></li>
-          <li><Link to="/mortgage" className="hover:text-gray-600">Mortgage</Link></li>
-          <li><Link to="/agent" className="hover:text-gray-600">Agent</Link></li>
-          <li><Link to="/account" className="hover:text-gray-600">Account</Link></li>
-          <li><Link to="/help" className="hover:text-gray-600">Help</Link></li>
+        <ul className="flex items-center gap-8 text-sm font-medium text-black">
+          {/* Buy Dropdown */}
+          <li className="relative">
+            <button
+              onClick={() => toggleMenu("buy")}
+              className="flex items-center hover:text-green-800"
+            >
+              Buy <ChevronDown size={14} className="ml-1" />
+            </button>
+            {menuOpen === "buy" && (
+              <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-40 z-50">
+                <Link
+                  to="/buy/houses"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  Houses
+                </Link>
+                <Link
+                  to="/buy/apartments"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  Apartments
+                </Link>
+              </div>
+            )}
+          </li>
+
+          {/* Rent Dropdown */}
+          <li className="relative">
+            <button
+              onClick={() => toggleMenu("rent")}
+              className="flex items-center hover:text-green-800"
+            >
+              Rent <ChevronDown size={14} className="ml-1" />
+            </button>
+            {menuOpen === "rent" && (
+              <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-40 z-50">
+                <Link
+                  to="/rent/short-let"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  Short Let
+                </Link>
+                <Link
+                  to="/rent/long-term"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  Long Term
+                </Link>
+              </div>
+            )}
+          </li>
+
+          {/* Real estate agents Dropdown */}
+          <li className="relative">
+            <button
+              onClick={() => toggleMenu("agents")}
+              className="flex items-center hover:text-green-800"
+            >
+              Real estate agents <ChevronDown size={14} className="ml-1" />
+            </button>
+            {menuOpen === "agents" && (
+              <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-48 z-50">
+                <Link
+                  to="/agents/lagos"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  Lagos
+                </Link>
+                <Link
+                  to="/agents/abuja"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  Abuja
+                </Link>
+              </div>
+            )}
+          </li>
+
+          {/* Feed link */}
+          <li>
+            <Link to="/feed" className="hover:text-green-800">
+              Feed
+            </Link>
+          </li>
         </ul>
       </nav>
 
       {/* Desktop Auth */}
       <div className="hidden md:flex gap-4">
+       
         <Link
           to="/signin"
-          className="px-5 py-2 border border-black rounded-full hover:bg-gray-100"
+          className="px-5 py-2 bg-green-900 text-white rounded-xl hover:bg-green-800"
         >
-          Login
-        </Link>
-        <Link
-          to="/signup"
-          className="px-5 py-2 bg-gray-300 rounded-full hover:bg-gray-400"
-        >
-          Create an account
+          Login / Sign-Up
         </Link>
       </div>
 
@@ -67,36 +142,55 @@ export default function Navbar() {
         </div>
 
         <ul className="flex flex-col gap-6 text-lg font-medium px-6">
-          <li><Link to="/" onClick={() => setIsOpen(false)} className="hover:text-red-500">Home</Link></li>
-          <li><Link to="/buy" onClick={() => setIsOpen(false)} className="hover:text-red-500">Buy</Link></li>
-          <li><Link to="/sell" onClick={() => setIsOpen(false)} className="hover:text-red-500">Sell</Link></li>
-          <li><Link to="/rent" onClick={() => setIsOpen(false)} className="hover:text-red-500">Rent</Link></li>
-          <li><Link to="/mortgage" onClick={() => setIsOpen(false)} className="hover:text-red-500">Mortgage</Link></li>
-          <li><Link to="/agent" onClick={() => setIsOpen(false)} className="hover:text-red-500">Agent</Link></li>
-          <li><Link to="/account" onClick={() => setIsOpen(false)} className="hover:text-red-500">Account</Link></li>
-          <li><Link to="/help" onClick={() => setIsOpen(false)} className="hover:text-red-500">Help</Link></li>
+          <li>
+            <Link
+              to="/buy"
+              onClick={() => setIsOpen(false)}
+              className="hover:text-green-700"
+            >
+              Buy
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/rent"
+              onClick={() => setIsOpen(false)}
+              className="hover:text-green-700"
+            >
+              Rent
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/agents"
+              onClick={() => setIsOpen(false)}
+              className="hover:text-green-700"
+            >
+              Real estate agents
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/feed"
+              onClick={() => setIsOpen(false)}
+              className="hover:text-green-700"
+            >
+              Feed
+            </Link>
+          </li>
         </ul>
 
         {/* Auth buttons */}
         <div className="flex flex-col gap-3 mt-8 px-6">
+         
           <Link
             to="/signin"
-            className="w-full px-5 py-2 border border-black rounded-full hover:bg-gray-100 text-center"
+            className="w-full px-5 py-2 bg-green-900 text-white rounded-full hover:bg-green-800 text-center"
             onClick={() => setIsOpen(false)}
           >
-            Login
+           Login / Sign-Up
           </Link>
-          <Link
-            to="/signup"
-            className="w-full px-5 py-2 bg-gray-300 rounded-full hover:bg-gray-400 text-center"
-            onClick={() => setIsOpen(false)}
-          >
-            Create an account
-          </Link>
-         
         </div>
-    
-       
       </div>
     </header>
   );
