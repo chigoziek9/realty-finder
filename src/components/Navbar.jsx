@@ -15,72 +15,113 @@ export default function Navbar() {
           <span className="text-xl font-bold text-green-900">RealtyFinder</span>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
-          <Link to="/" className="hover:text-green-800">
-            Home
-          </Link>
-          <Link to="/newtomarket" className="hover:text-green-800">
-            New to Market
-          </Link>
-          <Link to="/popular" className="hover:text-green-800">
-            Popular
-          </Link>
-          <Link to="/contact" className="hover:text-green-800">
-            Contact
-          </Link>
+      {/* Desktop Nav + Auth (all to the right) */}
+      <div className="hidden md:flex items-center gap-8 ml-auto">
+        <nav>
+          <ul className="flex items-center gap-8 text-sm font-medium text-black">
+            {/* Buy Dropdown */}
+            <li className="relative">
+              <button
+                onClick={() => toggleMenu("buy")}
+                className="flex items-center hover:text-green-800"
+              >
+                Buy <ChevronDown size={14} className="ml-1" />
+              </button>
+              {menuOpen === "buy" && (
+                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-40 z-50">
+                  <Link
+                    to="/buy/houses"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Houses
+                  </Link>
+                  <Link
+                    to="/buy/apartments"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Apartments
+                  </Link>
+                </div>
+              )}
+            </li>
+
+            {/* Rent Dropdown */}
+            <li className="relative">
+              <button
+                onClick={() => toggleMenu("rent")}
+                className="flex items-center hover:text-green-800"
+              >
+                Rent <ChevronDown size={14} className="ml-1" />
+              </button>
+              {menuOpen === "rent" && (
+                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-40 z-50">
+                  <Link
+                    to="/rent/short-let"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Short Let
+                  </Link>
+                  <Link
+                    to="/rent/long-term"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Long Term
+                  </Link>
+                </div>
+              )}
+            </li>
+
+            {/* Agents */}
+            <li className="relative">
+              <button
+                onClick={() => toggleMenu("agents")}
+                className="flex items-center hover:text-green-800"
+              >
+                Real estate agents <ChevronDown size={14} className="ml-1" />
+              </button>
+              {menuOpen === "agents" && (
+                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-48 z-50">
+                  <Link
+                    to="/agents/lagos"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Lagos
+                  </Link>
+                  <Link
+                    to="/agents/abuja"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Abuja
+                  </Link>
+                </div>
+              )}
+            </li>
+
+            {/* Feed */}
+            <li>
+              <Link to="/feed" className="hover:text-green-800">
+                Feed
+              </Link>
+            </li>
+          </ul>
         </nav>
 
-        {/* Auth Buttons (Desktop) */}
-        <div className="hidden md:flex items-center gap-4">
-          <Link
-            to="/signin"
-            className="px-5 py-2 bg-gray-300 rounded-full hover:bg-gray-400"
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="px-5 py-2 bg-green-900 text-white rounded-full hover:bg-green-800"
-          >
-            Create an account
-          </Link>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-2xl text-green-900"
-          onClick={() => setIsOpen(!isOpen)}
+        {/* Auth Button */}
+        <Link
+          to="/signin"
+          className="px-5 py-2 bg-green-900 text-white rounded-xl hover:bg-green-800"
         >
-          {isOpen ? <FaTimes /> : <FaBars />}
-        </button>
+          Login / Sign-Up
+        </Link>
       </div>
 
-      {/* Mobile Drawer Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-white shadow-md px-6 py-4 flex flex-col gap-4">
-          <Link to="/" onClick={() => setIsOpen(false)}>
-            Home
-          </Link>
-          <Link to="/newtomarket" onClick={() => setIsOpen(false)}>
-            New to Market
-          </Link>
-          <Link to="/popular" onClick={() => setIsOpen(false)}>
-            Popular
-          </Link>
-          <Link to="/contact" onClick={() => setIsOpen(false)}>
-            Contact
-          </Link>
-
-          <Link
-            to="/signin"
-            className="w-full px-5 py-2 bg-green-900 text-white rounded-full hover:bg-green-800 text-center"
-            onClick={() => setIsOpen(false)}
-          >
-            Login / Sign-Up
-          </Link>
-        </div>
-      )}
+      {/* Mobile Menu Button (unchanged) */}
+      <button
+        className="md:hidden p-2 rounded focus:outline-none ml-auto"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {isOpen ? <X size={28} /> : <Menu size={28} />}
+      </button>
     </header>
   );
 }
