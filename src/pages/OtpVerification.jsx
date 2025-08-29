@@ -1,26 +1,30 @@
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Mail } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { ArrowLeft, Mail, Phone } from "lucide-react";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { auth } from "../firebase"; // ✅ make sure your firebase.js exports auth
 import houseImg from "../assets/Frame 1.png";
 import logoImg from "../assets/logo.png";
 
 export default function OtpVerification() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const correctOtp = "123456"; // demo OTP
+  const method = location.state?.method || "phone";
+  const phone = location.state?.phone || "";
 
-  // Handle input change
+  // Handle OTP input
   const handleChange = (element, index) => {
     if (isNaN(element.value)) return false;
 
     let newOtp = [...otp];
     newOtp[index] = element.value;
     setOtp(newOtp);
-
-    // Reset error as user types
     setError(false);
 
     if (element.value !== "" && index < 5) {
@@ -35,15 +39,66 @@ export default function OtpVerification() {
     }
   };
 
-  // Handle submit
-  const handleSubmit = (e) => {
+  // Handle OTP verify
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const enteredOtp = otp.join("");
 
-    if (enteredOtp === correctOtp) {
-      navigate("/reset-password");
-    } else {
+    if (enteredOtp.length !== 6) {
       setError(true);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const result = await window.confirmationResult.confirm(enteredOtp);
+      alert(`Welcome ${result.user.phoneNumber}`);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ✅ Resend OTP
+  const handleResend = async () => {
+    if (!phone) {
+      alert("Phone number missing");
+      return;
+    }
+    try {
+      setResending(true);
+
+      // Setup reCAPTCHA (invisible mode)
+      if (!window.recaptchaVerifier) {
+        window.recaptchaVerifier = new RecaptchaVerifier(
+          auth,
+          "resend-recaptcha", // hidden container
+          {
+            size: "invisible",
+            callback: (response) => {
+              console.log("reCAPTCHA solved");
+            },
+          }
+        );
+      }
+
+      const appVerifier = window.recaptchaVerifier;
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        phone,
+        appVerifier
+      );
+
+      window.confirmationResult = confirmationResult;
+      alert("A new OTP has been sent!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to resend OTP. Try again later.");
+    } finally {
+      setResending(false);
     }
   };
 
@@ -60,30 +115,38 @@ export default function OtpVerification() {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-2">
             <img src={logoImg} alt="RealtyFinder" className="w-6 h-6" />
-            <span className="text-xl font-semibold text-gray-900">RealtyFinder</span>
+            <span className="text-xl font-semibold text-gray-900">
+              RealtyFinder
+            </span>
           </div>
         </div>
 
         {/* Back Arrow */}
         <button
-          onClick={() => navigate("/forgot-password")}
+          onClick={() => navigate(-1)}
           className="flex items-center text-gray-600 hover:text-green-700 mb-6"
         >
           <ArrowLeft size={20} className="mr-2" />
           Back
         </button>
 
-        {/* Small Mail Icon */}
+        {/* Small Icon */}
         <div className="flex justify-center mb-6">
           <div className="p-3 bg-green-100 rounded-full">
-            <Mail size={28} className="text-green-700" />
+            {method === "email" ? (
+              <Mail size={28} className="text-green-700" />
+            ) : (
+              <Phone size={28} className="text-green-700" />
+            )}
           </div>
         </div>
 
         {/* Text */}
         <h2 className="text-2xl font-bold mb-1 text-center">OTP Verification</h2>
         <p className="text-gray-500 mb-6 text-center">
-          Check your email to see the verification code
+          {method === "email"
+            ? "Check your email to see the verification code"
+            : `Enter the code sent to ${phone}`}
         </p>
 
         {/* OTP Inputs */}
@@ -107,29 +170,34 @@ export default function OtpVerification() {
           {/* Verify Button */}
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition"
           >
-            Verify
+            {loading ? "Verifying..." : "Verify"}
           </button>
         </form>
 
-        {/* Error Message */}
+        {/* Error */}
         {error && (
           <p className="text-red-500 text-sm text-center mt-2">
             Invalid OTP. Please try again.
           </p>
         )}
 
-        {/* Resend link */}
+        {/* Resend */}
         <p className="text-center text-sm text-gray-500 mt-4">
           Didn’t receive the code?{" "}
           <button
-            onClick={() => alert("Resend OTP")}
+            onClick={handleResend}
+            disabled={resending}
             className="text-green-700 font-medium hover:underline"
           >
-            Resend code
+            {resending ? "Resending..." : "Resend code"}
           </button>
         </p>
+
+        {/* Hidden recaptcha container */}
+        <div id="resend-recaptcha"></div>
       </div>
     </div>
   );

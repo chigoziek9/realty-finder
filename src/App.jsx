@@ -9,7 +9,6 @@ import Agent from "./pages/Agent";
 import Sell from "./pages/Sell";
 import Mortgage from "./pages/Mortgage";
 import SignUp from "./pages/SignUp";
-import SigninPage from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import OtpVerification from "./pages/OtpVerification";
@@ -18,6 +17,13 @@ import PropertyDetails from "./components/propertydetail";
 import Newtomarket from "./pages/Newtomarket";
 import MostViewed from "./pages/MostViewed";
 import NaturePage from "./pages/NaturePage";
+import SigninPage from "./pages/SignIn"; 
+import SignInEmail from "./pages/SignInEmail";
+import SignInPhone from "./pages/SignInPhone";
+import PhoneSigninPage from "./pages/PhoneSigninPage";
+
+ 
+
 
 export default function App() {
   return (
@@ -36,19 +42,25 @@ export default function App() {
           <Route path="/agent" element={<Agent />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/mortgage" element={<Mortgage />} />
-          
-          {/* Add more routes here as needed */}
-          {/* Add more routes here later */}
-          <Route path="/signup" element={<SignUp />} />   {/* 👈 signup route */}
-          <Route path="/signin" element={<SigninPage />} /> {/* 👈 signin route */}
-          <Route path="/property/:id" element={<PropertyDetails />} />
-          <Route path="/Newtomarket" element={<Newtomarket />} />
-          <Route path="/MostViewed" element={<MostViewed />} />
-          <Route path="/NaturePage" element={<NaturePage />} />
+
+          {/* Auth routes */}
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SigninPage />} />
+          <Route path="/phone-signin" element={<PhoneSigninPage />} />
+          <Route path="/signin-email" element={<SignInEmail />} />
+          <Route path="/signin-phone" element={<SignInPhone />} />
+
+          {/* Password reset flow */}
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/otp-verification" element={<OtpVerification />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/reset-success" element={<ResetPasswordSuccess />} />
+
+          {/* Property routes */}
+          <Route path="/property/:id" element={<PropertyDetails />} />
+          <Route path="/Newtomarket" element={<Newtomarket />} />
+          <Route path="/MostViewed" element={<MostViewed />} />
+          <Route path="/NaturePage" element={<NaturePage />} />
         </Routes>
       </main>
     </div>

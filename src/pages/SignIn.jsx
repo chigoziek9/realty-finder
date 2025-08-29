@@ -1,187 +1,186 @@
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 import houseImg from "../assets/Frame 1.png";
 import logoImg from "../assets/logo.png";
+import { signInWithGoogle } from "../firebase";
 
-export default function SignIn() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+export default function SigninPage() {
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
 
-  const correctPassword = "correctpassword"; // demo password
-
-  // Real-time email validation
-  const handleEmailChange = (e) => {
-    const value = e.target.value;
-    setEmail(value);
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (value && !emailRegex.test(value)) {
-      setEmailError("Please enter a valid email address.");
-    } else {
-      setEmailError("");
-    }
-  };
-
-  // Real-time password validation
-  const handlePasswordChange = (e) => {
-    const value = e.target.value;
-    setPassword(value);
-
-    if (value && value !== correctPassword) {
-      setPasswordError("Incorrect password. Please try again.");
-    } else {
-      setPasswordError("");
-    }
-  };
-
+  // 🔹 Normal Email/Password Demo Login
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!emailError && !passwordError && email && password) {
-      alert("Signed in successfully ✅");
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+
+    // demo check
+    if (password !== "1234") {
+      setError("Incorrect password. Try again.");
+      return;
+    }
+
+    navigate("/");
+  };
+
+  // 🔹 Google Sign In
+  const handleGoogleSignIn = async () => {
+    try {
+      const user = await signInWithGoogle();
+      alert(`Welcome ${user.displayName}!`);
+      navigate("/"); // ✅ Redirect after login
+    } catch (err) {
+      console.error("Google Sign In failed:", err);
+      setError("Google Sign In failed. Please try again.");
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col md:grid md:grid-cols-2">
-      {/* Image Section */}
+      {/* Left Side Image */}
       <div className="w-full h-64 md:h-auto">
-        <img src={houseImg} alt="House" className="w-full h-full object-cover" />
+        <img
+          src={houseImg}
+          alt="House"
+          className="w-full h-full object-cover"
+        />
       </div>
 
-      {/* Form Section */}
-      <div className="flex flex-col justify-center px-6 md:px-12 relative bg-white py-8">
-        {/* Header with Logo and Close button */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-2">
-            <img src={logoImg} alt="RealtyFinder" className="w-6 h-6" />
-            <span className="text-xl font-semibold text-gray-900">
-              RealtyFinder
-            </span>
-          </div>
-          <button className="text-gray-600 hover:text-gray-900">
-            <X size={24} />
-          </button>
+      {/* Right Side */}
+      <div className="flex flex-col justify-center px-6 md:px-12 bg-white py-8 relative">
+        {/* Close Button (X) */}
+        <button
+          onClick={() => navigate("/")}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <X size={24} />
+        </button>
+
+        {/* Logo */}
+        <div className="flex items-center gap-2 mb-8">
+          <img src={logoImg} alt="RealtyFinder" className="w-6 h-6" />
+          <span className="text-xl font-semibold text-gray-900">
+            RealtyFinder
+          </span>
         </div>
 
-        {/* Welcome Text */}
+        {/* Headings */}
         <h2 className="text-2xl font-bold mb-1">Welcome back</h2>
         <p className="text-gray-500 mb-6">Sign in to your account</p>
 
-        {/* ✅ Correctly wrapped form */}
-        <form className="space-y-4 text-left" onSubmit={handleSubmit}>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <div className="relative">
-              <Mail
-                size={18}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-              <input
-                type="email"
-                value={email}
-                onChange={handleEmailChange}
-                className={`w-full border rounded-lg pl-10 pr-3 py-2 focus:ring-2 ${
-                  emailError
-                    ? "border-red-500 focus:ring-red-500"
-                    : "focus:ring-green-600"
-                }`}
-                placeholder="charlesdoe@example.com"
-                required
-              />
-            </div>
-            {emailError && (
-              <p className="text-sm text-red-500 mt-1">{emailError}</p>
-            )}
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-1 block w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600"
+              placeholder="you@example.com"
+            />
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <div className="relative">
-              <Lock
-                size={18}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={handlePasswordChange}
-                className={`w-full border rounded-lg pl-10 pr-10 py-2 focus:ring-2 ${
-                  passwordError
-                    ? "border-red-500 focus:ring-red-500"
-                    : "focus:ring-green-600"
-                }`}
-                placeholder="Enter your password"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500"
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-            {passwordError && (
-              <p className="text-sm text-red-500 mt-1">{passwordError}</p>
-            )}
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError("");
+              }}
+              className={`mt-1 block w-full border rounded-lg px-3 py-2 focus:ring-2 ${
+                error
+                  ? "border-red-500 focus:ring-red-500"
+                  : "focus:ring-green-600"
+              }`}
+              placeholder="Enter your password"
+            />
           </div>
 
-          {/* Remember me + Forgot password */}
+          {/* Error */}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
+          {/* Remember Me + Forgot Password */}
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center gap-2">
-              <input type="checkbox" className="h-4 w-4 rounded text-green-600" />
-              <span className="text-gray-700">Remember me</span>
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4"
+              />
+              Remember me
             </label>
-            <a
-              href="/forgot-password"
-              className="text-green-600 font-medium hover:underline"
+            <button
+              type="button"
+              onClick={() => navigate("/forgot-password")}
+              className="text-green-700 hover:underline"
             >
               Forgot password?
-            </a>
+            </button>
           </div>
 
           {/* Sign In Button */}
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
-            disabled={!!emailError || !!passwordError || !email || !password}
+            className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition"
           >
-            Sign in
-          </button>
-
-          {/* Divider */}
-          <div className="flex items-center gap-2 my-4">
-            <div className="flex-grow border-t border-gray-300"></div>
-            <span className="text-gray-500 text-sm">or</span>
-            <div className="flex-grow border-t border-gray-300"></div>
-          </div>
-
-          {/* Google Sign In */}
-          <button
-            type="button"
-            className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50 transition"
-          >
-            <img
-              src="https://www.svgrepo.com/show/355037/google.svg"
-              alt="Google"
-              className="w-5 h-5"
-            />
-            <span className="text-gray-700 font-medium">Sign in with Google</span>
+            Sign In
           </button>
         </form>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-600 mt-6">
+        {/* Divider */}
+        <div className="flex items-center my-6">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="mx-3 text-sm text-gray-500">or</span>
+          <div className="flex-grow border-t border-gray-300"></div>
+        </div>
+
+        {/* Google Sign In */}
+        <button
+          onClick={handleGoogleSignIn}
+          className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50 transition"
+        >
+          <img
+            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            alt="Google"
+            className="w-5 h-5"
+          />
+          Sign in with Google
+        </button>
+
+        {/* Continue with Phone (no input, just button) */}
+        <button
+          onClick={() => navigate("/phone-signin")}
+          className="w-full mt-3 flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50 transition"
+        >
+          📱 Continue with Phone
+        </button>
+
+        {/* Sign Up Link */}
+        <p className="text-center text-sm text-gray-500 mt-6">
           Don’t have an account?{" "}
-          <a href="/signup" className="text-green-600 font-medium hover:underline">
-            Sign up
-          </a>
+          <button
+            onClick={() => navigate("/signup")}
+            className="text-green-700 font-medium hover:underline"
+          >
+            Sign Up
+          </button>
         </p>
       </div>
     </div>
