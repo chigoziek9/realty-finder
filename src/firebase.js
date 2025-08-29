@@ -1,3 +1,4 @@
+// firebase.js
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -16,17 +17,29 @@ const firebaseConfig = {
   appId: "YOUR_APP_ID",
 };
 
+// ✅ Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-// ✅ Google Sign-In
-const provider = new GoogleAuthProvider();
-export const signInWithGoogle = () => signInWithPopup(auth, provider);
+// ================== GOOGLE AUTH ==================
+const googleProvider = new GoogleAuthProvider();
 
-// ✅ Recaptcha setup
+/**
+ * Google Sign-In
+ */
+export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
+
+// ================== PHONE AUTH ==================
+/**
+ * Set up Recaptcha & Send OTP
+ * @param {string} phoneNumber - Must include country code, e.g. +234XXXXXXXXXX
+ * @returns {Promise<ConfirmationResult>}
+ */
 export const setUpRecaptcha = (phoneNumber) => {
-  const recaptcha = new RecaptchaVerifier(auth, "recaptcha-container", {
-    size: "invisible", // or 'normal' if you want visible box
-  });
-  return signInWithPhoneNumber(auth, phoneNumber, recaptcha);
+  const recaptchaVerifier = new RecaptchaVerifier(
+    "recaptcha-container", // this must match the <div id="recaptcha-container"></div> in your component
+    { size: "invisible" }, // invisible reCAPTCHA
+    auth
+  );
+  return signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
 };
