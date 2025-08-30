@@ -7,7 +7,7 @@ import Rent from "./pages/Rent";
 import Account from "./pages/Account";
 import Agent from "./pages/Agent";
 import Sell from "./pages/Sell";
-import Mortgage from "./pages/Mortgage";
+import Feed from "./pages/Feed";
 import SignUp from "./pages/SignUp";
 import SigninPage from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -35,7 +35,7 @@ export default function App() {
           <Route path="/account" element={<Account />} />
           <Route path="/agent" element={<Agent />} />
           <Route path="/sell" element={<Sell />} />
-          <Route path="/mortgage" element={<Mortgage />} />
+          <Route path="/Feed" element={<Feed />} />
           
           {/* Add more routes here as needed */}
           {/* Add more routes here later */}
