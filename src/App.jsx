@@ -7,8 +7,11 @@ import Rent from "./pages/Rent";
 import Account from "./pages/Account";
 import Agent from "./pages/Agent";
 import Sell from "./pages/Sell";
-import Mortgage from "./pages/Mortgage";
+
+import Feed from "./pages/Feed";
+
 import ChooseAccountType from "./pages/ChooseAccountType";
+
 import SignUp from "./pages/SignUp";
 import PhoneSignup from "./pages/PhoneSignup";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -63,8 +66,17 @@ export default function App() {
           <Route path="/account" element={<Account />} />
           <Route path="/agent" element={<Agent />} />
           <Route path="/sell" element={<Sell />} />
-          <Route path="/mortgage" element={<Mortgage />} />
-
+          <Route path="/Feed" element={<Feed />} />
+          
+          {/* Add more routes here as needed */}
+          {/* Add more routes here later */}
+          <Route path="/signup" element={<SignUp />} />   {/* 👈 signup route */}
+          <Route path="/signin" element={<SigninPage />} /> {/* 👈 signin route */}
+          <Route path="/property/:id" element={<PropertyDetails />} />
+          <Route path="/Newtomarket" element={<Newtomarket />} />
+          <Route path="/MostViewed" element={<MostViewed />} />
+          <Route path="/NaturePage" element={<NaturePage />} />
+         
           {/* Auth routes */}
           <Route
             path="/signup"

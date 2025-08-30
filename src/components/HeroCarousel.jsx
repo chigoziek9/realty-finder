@@ -48,12 +48,12 @@ export default function HeroCarousel() {
 
         {/* Search Bar */}
         {/* Search Bar */}
-        <div className="flex bg-white rounded-full shadow-md w-full max-w-lg relative">
+        <div className="flex flex-col sm:flex-row items-stretch bg-white rounded-2xl shadow-md w-full max-w-lg relative overflow-hidden">
           {/* Dropdown */}
-          <div className="relative">
+          <div className="relative w-full sm:w-auto">
             <button
               onClick={() => setOpen(!open)}
-              className="flex items-center px-4 py-2 bg-[#e5e5e5] text-black rounded-l-full"
+              className="flex items-center justify-between w-full sm:w-auto px-4 py-3 bg-[#e5e5e5] text-black sm:rounded-l-2xl text-sm sm:text-base"
             >
               {option}
               <ChevronDown className="ml-2 h-4 w-4" />
@@ -68,7 +68,7 @@ export default function HeroCarousel() {
                       setOption(item);
                       setOpen(false);
                     }}
-                    className="block w-full text-left  text-black px-4 py-2 hover:bg-gray-100"
+                    className="block w-full text-left text-black px-4 py-2 hover:bg-gray-100"
                   >
                     {item}
                   </button>
@@ -81,14 +81,16 @@ export default function HeroCarousel() {
           <input
             type="text"
             placeholder="Enter an address, city, neighborhood, or ZIP code"
-            className="flex-grow px-4 py-2 text-black focus:outline-none"
+            className="flex-grow px-4 py-3 text-black focus:outline-none text-sm sm:text-base border-t sm:border-t-0 sm:border-l border-gray-200"
           />
 
-          {/* Clear button */}
-          <button className="px-4 text-gray-500">✕</button>
+          {/* Clear button (hidden on mobile) */}
+          <button className="px-4 text-gray-500 hidden sm:flex items-center justify-center">
+            ✕
+          </button>
 
           {/* Search button */}
-          <button className="px-4 py-2 bg-[#4b642b] text-black rounded-r-full">
+          <button className="px-4 py-3 bg-[#4b642b] text-white rounded-b-2xl sm:rounded-b-none sm:rounded-r-2xl flex items-center justify-center">
             <img src={search} alt="search" className="w-5 h-5" />
           </button>
         </div>
