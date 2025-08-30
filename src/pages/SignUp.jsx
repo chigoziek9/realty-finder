@@ -91,7 +91,11 @@ export default function SignUp({ accountType: propAccountType }) {
       alert("Password does not meet the requirements.");
       return;
     }
+
     console.log("Form submitted:", formData);
+
+    // ✅ Redirect to EmailSMS page after signup
+    navigate("/email-sms");
   };
 
   return (

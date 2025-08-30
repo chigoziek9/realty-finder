@@ -1,5 +1,4 @@
-import { BrowserRouter as Router,Routes, Route, Navigate, useLocation } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Help from "./pages/Help";
 import Buy from "./pages/Buy";
@@ -27,7 +26,13 @@ import SigninPage from "./pages/SignIn";
 import SignInEmail from "./pages/SignInEmail";
 import SignInPhone from "./pages/SignInPhone";
 import PhoneSigninPage from "./pages/PhoneSigninPage";
- 
+import Notifications from "./pages/Notifications";
+import EmailSms from "./pages/EmailSMS";
+import HomeMatches from "./pages/HomeMatches";
+import Messages from "./pages/Messages";
+import SavedProperty from "./pages/SavedProperty";
+import Hometours from "./pages/Hometours";
+import HomeReport from "./pages/HomeReport";
 
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
@@ -49,15 +54,12 @@ function ProtectedSignupRoute({ children }) {
   return children;
 }
 
-
 export default function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1">
-        <Routes>
-          {/* 🔽 This ensures all paths become lowercase */}
-          <Route path="*" element={<LowercaseRedirect />} />
+    <Routes>
+      {/* 🔽 This ensures all paths become lowercase */}
+      <Route path="*" element={<LowercaseRedirect />} />
+
 
           <Route path="/" element={<Home />} />
           <Route path="/help" element={<Help />} />
@@ -97,15 +99,53 @@ export default function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/reset-success" element={<ResetPasswordSuccess />} />
           <Route path="/signup/phone" element={<PhoneSignup />} />
+=======
+      <Route path="/" element={<Home />} />
+      <Route path="/help" element={<Help />} />
+      <Route path="/buy" element={<Buy />} />
+      <Route path="/rent" element={<Rent />} />
+      <Route path="/account" element={<Account />} />
+      <Route path="/agent" element={<Agent />} />
+      <Route path="/sell" element={<Sell />} />
+      <Route path="/mortgage" element={<Mortgage />} />
 
-          {/* Property routes */}
-          <Route path="/property/:id" element={<PropertyDetails />} />
-          <Route path="/newtomarket" element={<Newtomarket />} />
-          <Route path="/mostviewed" element={<MostViewed />} />
-          <Route path="/naturepage" element={<NaturePage />} />
-          <Route path="/phone-signin-otp" element={<PhoneSigninOtp />} />
-          </Routes>
-      </main>
-    </div>
+      {/* Auth routes */}
+      <Route
+        path="/signup"
+        element={
+          <ProtectedSignupRoute>
+            <SignUp />
+          </ProtectedSignupRoute>
+        }
+      />
+      <Route path="/choose-account-type" element={<ChooseAccountType />} />
+      <Route path="/signin" element={<SigninPage />} />
+      <Route path="/phone-signin" element={<PhoneSigninPage />} />
+      <Route path="/signin-email" element={<SignInEmail />} />
+      <Route path="/signin-phone" element={<SignInPhone />} />
+      {/* Password reset flow */}
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/otp-verification" element={<OtpVerification />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/reset-success" element={<ResetPasswordSuccess />} />
+      <Route path="/signup/phone" element={<PhoneSignup />} />
+(Auto-redirect users to /email-sms after signup)
+
+      {/* Property routes */}
+      <Route path="/property/:id" element={<PropertyDetails />} />
+      <Route path="/newtomarket" element={<Newtomarket />} />
+      <Route path="/mostviewed" element={<MostViewed />} />
+      <Route path="/naturepage" element={<NaturePage />} />
+      <Route path="/phone-signin-otp" element={<PhoneSigninOtp />} />
+
+      {/* Notifications & Settings */}
+      <Route path="/notifications" element={<Notifications />} />
+      <Route path="/email-sms" element={<EmailSms />} />
+      <Route path="/home-matches" element={<HomeMatches />} />
+      <Route path="/messages" element={<Messages />} />
+      <Route path="/saved-property" element={<SavedProperty />} />
+      <Route path="/home-tours" element={<Hometours />} />
+      <Route path="/home-report" element={<HomeReport />} />
+    </Routes>
   );
 }
