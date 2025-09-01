@@ -1,10 +1,21 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaGoogle,
+  FaPhone,
+} from "react-icons/fa";
 import signupImage from "../assets/Frame 1.png";
-import logo from "../assets/logo.png"; 
+import logo from "../assets/logo.png";
 
-export default function SignUp() {
+export default function SignUp({ accountType: propAccountType }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     middleName: "",
@@ -13,10 +24,23 @@ export default function SignUp() {
     password: "",
     confirmPassword: "",
     agree: false,
+    accountType: propAccountType || "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // ✅ Load accountType from localStorage if not passed as prop
+  useEffect(() => {
+    if (!formData.accountType) {
+      const savedType = localStorage.getItem("accountType");
+      if (savedType) {
+        setFormData((prev) => ({ ...prev, accountType: savedType }));
+      } else {
+        navigate("/choose-account-type");
+      }
+    }
+  }, [formData.accountType, navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -26,29 +50,79 @@ export default function SignUp() {
     });
   };
 
+  // ✅ Password validation rules
+  const passwordRules = [
+    {
+      text: "Password must be at least 8 characters long.",
+      valid: formData.password.length >= 8,
+    },
+    {
+      text: "Password must not be longer than 18 characters.",
+      valid: formData.password.length <= 18 && formData.password.length > 0,
+    },
+    {
+      text: "Password must contain at least one upper and one lower case letter.",
+      valid: /[A-Z]/.test(formData.password) && /[a-z]/.test(formData.password),
+    },
+    {
+      text: "Password must contain at least one number or punctuation character.",
+      valid: /[0-9\W]/.test(formData.password),
+    },
+    {
+      text: "Password must not contain space or unicode characters.",
+      valid:
+        !/\s/.test(formData.password) && /^[\x00-\x7F]*$/.test(formData.password),
+    },
+  ];
+
+  const allValid = passwordRules.every((rule) => rule.valid);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!formData.agree) {
+      alert("You must agree to the terms & conditions.");
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    if (!allValid) {
+      alert("Password does not meet the requirements.");
+      return;
+    }
+
     console.log("Form submitted:", formData);
+
+    // ✅ Redirect to EmailSMS page after signup
+    navigate("/email-sms");
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:grid md:grid-cols-2">
-      {/* Left Side: Image */}
-      <div className="w-full h-48 md:h-auto">
+    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
+      {/* Left Image */}
+      <div className="hidden md:block">
         <img
           src={signupImage}
           alt="Sign Up Banner"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-r-3xl"
         />
       </div>
 
-      {/* Right Side: Form */}
-      <div className="flex items-center justify-center px-4 py-8 bg-white">
+      {/* Right Form */}
+      <div className="flex items-center justify-center px-6 py-10 bg-white">
         <div className="w-full max-w-md space-y-6">
-          {/* Title */}
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900">Get started now</h2>
-            <p className="mt-2 text-sm text-gray-600">Let’s create your account</p>
+          {/* Logo + Title */}
+          <div className="text-left">
+            <img src={logo} alt="Logo" className="w-32 mb-6" />
+            <h2 className="text-3xl font-bold text-gray-900">
+              Get started now
+            </h2>
+            <p className="mt-2 text-gray-600">
+              {formData.accountType
+                ? `Create your ${formData.accountType} account`
+                : "Let’s create your account"}
+            </p>
           </div>
 
           {/* Form */}
@@ -67,6 +141,7 @@ export default function SignUp() {
                   value={formData.firstName}
                   onChange={handleChange}
                   className="w-full focus:outline-none"
+                  required
                 />
               </div>
             </div>
@@ -74,7 +149,7 @@ export default function SignUp() {
             {/* Middle Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Middle name <span className="text-red-500">*</span>
+                Middle name
               </label>
               <div className="flex items-center border rounded-lg px-3 py-2">
                 <FaUser className="text-gray-400 mr-2" />
@@ -103,6 +178,7 @@ export default function SignUp() {
                   value={formData.lastName}
                   onChange={handleChange}
                   className="w-full focus:outline-none"
+                  required
                 />
               </div>
             </div>
@@ -121,6 +197,7 @@ export default function SignUp() {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full focus:outline-none"
+                  required
                 />
               </div>
             </div>
@@ -139,6 +216,7 @@ export default function SignUp() {
                   value={formData.password}
                   onChange={handleChange}
                   className="w-full focus:outline-none pr-8"
+                  required
                 />
                 <button
                   type="button"
@@ -148,13 +226,27 @@ export default function SignUp() {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
-              <ul className="text-xs text-gray-600 mt-2 space-y-1 bg-blue-50 p-3 rounded-lg">
-                <li>• Password must be at least 8 characters long.</li>
-                <li>• Must not be longer than 18 characters.</li>
-                <li>• Must contain at least one uppercase and lowercase letter.</li>
-                <li>• Must contain at least one number or punctuation.</li>
-                <li>• No spaces or unicode characters allowed.</li>
-              </ul>
+
+              {/* ✅ Password Rules in a box */}
+              <div className="mt-3 bg-gray-50 border border-gray-200 rounded-lg p-4 text-xs leading-5">
+                <ul className="space-y-1">
+                  {passwordRules.map((rule, idx) => (
+                    <li
+                      key={idx}
+                      className={`flex items-center gap-2 ${
+                        rule.valid ? "text-green-600" : "text-gray-500"
+                      }`}
+                    >
+                      {rule.valid ? (
+                        <FaCheckCircle className="text-green-600" />
+                      ) : (
+                        <FaTimesCircle className="text-gray-400" />
+                      )}
+                      {rule.text}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
             {/* Confirm Password */}
@@ -171,6 +263,7 @@ export default function SignUp() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className="w-full focus:outline-none pr-8"
+                  required
                 />
                 <button
                   type="button"
@@ -190,6 +283,7 @@ export default function SignUp() {
                 checked={formData.agree}
                 onChange={handleChange}
                 className="h-4 w-4 text-green-600"
+                required
               />
               <span className="ml-2 text-sm text-gray-600">
                 I agree to RealtyFinder’s{" "}
@@ -199,37 +293,43 @@ export default function SignUp() {
               </span>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
               type="submit"
-              className="w-full py-3 rounded-lg bg-green-700 text-white font-semibold hover:bg-green-800"
+              disabled={!allValid}
+              className={`w-full py-3 rounded-lg font-semibold transition ${
+                allValid
+                  ? "bg-green-700 text-white hover:bg-green-800"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
             >
               Sign up
             </button>
-
-            {/* Divider */}
-            <div className="flex items-center my-4">
-              <hr className="flex-1 border-gray-300" />
-              <span className="mx-2 text-sm text-gray-500">or</span>
-              <hr className="flex-1 border-gray-300" />
-            </div>
-
-            {/* Google Signup */}
-            <button
-              type="button"
-              className="w-full py-3 rounded-lg border border-green-700 text-green-700 font-semibold flex items-center justify-center space-x-2 hover:bg-green-50"
-            >
-              <img
-                src="https://www.svgrepo.com/show/355037/google.svg"
-                alt="Google"
-                className="w-5 h-5"
-              />
-              <span>Sign up with Google</span>
-            </button>
           </form>
 
+          {/* Divider */}
+          <div className="flex items-center my-4">
+            <hr className="flex-grow border-gray-300" />
+            <span className="px-3 text-gray-500 text-sm">or</span>
+            <hr className="flex-grow border-gray-300" />
+          </div>
+
+          {/* Social Sign Up */}
+          <div className="space-y-3">
+            <button className="w-full flex items-center justify-center gap-2 border rounded-lg py-3 hover:bg-gray-50 transition">
+              <FaGoogle className="text-red-500" /> Sign up with Google
+            </button>
+
+            {/* ✅ Link to PhoneSignup */}
+            <Link to="/signup/phone">
+              <button className="w-full flex items-center justify-center gap-2 border rounded-lg py-3 hover:bg-gray-50 transition">
+                <FaPhone className="text-green-600" /> Sign up with Phone
+              </button>
+            </Link>
+          </div>
+
           {/* Footer */}
-          <p className="text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-gray-600 mt-4">
             Already have an account?{" "}
             <Link to="/signin" className="text-green-600 font-medium">
               Sign in
