@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import logo from "../assets/NavLogo.png"; // replace with your logo
+import Houses from "../pages/Houses";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
