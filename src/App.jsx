@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Help from "./pages/Help";
 import Buy from "./pages/Buy";
-import Rent from "./pages/Rent";
+import Houses from "./pages/Houses";
 import Account from "./pages/Account";
 import Agent from "./pages/Agent";
 import Sell from "./pages/Sell";
@@ -31,7 +31,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/help" element={<Help />} />
           <Route path="/buy" element={<Buy />} />
-          <Route path="/rent" element={<Rent />} />
+          <Route path="/buy/houses" element={<Houses />} />
           <Route path="/account" element={<Account />} />
           <Route path="/agent" element={<Agent />} />
           <Route path="/sell" element={<Sell />} />
