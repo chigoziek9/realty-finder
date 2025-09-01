@@ -82,14 +82,17 @@ export default function Feed() {
         </div>
       </div>
       {/* heading*/}
-      <div className="flex justify-between p-10">
-        <h1 className="text-4xl md:text-4xl font-extrabold text-gray-900 leading-tight ">
-          Feed
-        </h1>
-        <div className="flex gap-2">
-          <img src={Settings} alt="" className="w-8" />
-          <p> Feed Setting</p>
+      <div>
+        <div className="flex justify-between p-10">
+          <h1 className="text-4xl md:text-4xl font-extrabold text-gray-900 leading-tight ">
+            Feed
+          </h1>
+          <div className="flex gap-2">
+            <img src={Settings} alt="" className="w-8" />
+            <p> Feed Setting</p>
+          </div>
         </div>
+        <h1 className="text-3xl font-bold ">Previous update</h1>
       </div>
 
       {/* Grid layout */}
