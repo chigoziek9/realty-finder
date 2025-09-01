@@ -32,6 +32,8 @@ import Messages from "./pages/Messages";
 import SavedProperty from "./pages/SavedProperty";
 import Hometours from "./pages/Hometours";
 import HomeReport from "./pages/HomeReport";
+import Contact from "./pages/Contact";
+import RentProperty from "./pages/RentProperty";
 
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
@@ -70,6 +72,7 @@ export default function App() {
       <Route path="/agent" element={<Agent />} />
       <Route path="/sell" element={<Sell />} />
       <Route path="/feed" element={<Feed />} />
+      <Route path="/contact" element={<Contact />} />
 
       {/* Property routes */}
       <Route path="/property/:id" element={<PropertyDetails />} />
@@ -108,6 +111,7 @@ export default function App() {
       <Route path="/saved-property" element={<SavedProperty />} />
       <Route path="/home-tours" element={<Hometours />} />
       <Route path="/home-report" element={<HomeReport />} />
+      <Route path="/rent" element={<RentProperty />} />
     </Routes>
     </>
     

@@ -1,88 +1,95 @@
 import React from "react";
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaTimes } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedinIn,
+} from "react-icons/fa";
+import logoImg from "../assets/NavLogo.png"; 
 
 export default function Footer() {
   return (
-    <footer className="bg-[#28563a] py-12 px-6 border-t border-white">
+    <footer className="bg-[#28563a] py-12 px-6">
       <div className="max-w-[1200px] mx-auto grid md:grid-cols-4 gap-10 text-white">
         
         {/* Logo & Socials */}
         <div>
-          {/* Logo with white X sign */}
           <div className="flex items-center space-x-2 mb-6">
-            <FaTimes className="text-2xl text-white" />
+            <img
+              src={logoImg}
+              alt="RealtyFinder Logo"
+              className="w-10 h-10 object-contain"
+            />
             <span className="text-2xl font-bold">RealtyFinder</span>
           </div>
 
-          {/* Social Icons */}
           <div className="flex space-x-3 mb-6">
-            <a
-              href="#"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-[#28563a] transition"
-            >
+            <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-[#28563a] transition">
               <FaFacebookF size={18} />
             </a>
-            <a
-              href="#"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-[#28563a] transition"
-            >
+            <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-[#28563a] transition">
+              <FaLinkedinIn size={18} />
+            </a>
+            <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-[#28563a] transition">
               <FaTwitter size={18} />
             </a>
-            <a
-              href="#"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-[#28563a] transition"
-            >
+            <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-[#28563a] transition">
               <FaInstagram size={18} />
-            </a>
-            <a
-              href="#"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-[#28563a] transition"
-            >
-              <FaLinkedinIn size={18} />
             </a>
           </div>
 
           {/* Contact Button */}
-          <button className="px-6 py-2 border border-white rounded-full text-sm font-medium hover:bg-white hover:text-[#28563a] transition">
-            Contact Us
-          </button>
+          <Link 
+            to="/contact" 
+            className="px-6 py-2 bg-white text-[#28563a] rounded-full text-sm font-medium hover:bg-white/90 transition"
+          >
+            Contact us
+          </Link>
         </div>
 
         {/* Navigation */}
         <div>
           <h4 className="font-semibold mb-4 text-lg">Navigation</h4>
-          <ul className="space-y-2 text-white/80 text-sm">
-            <li>Buy</li>
-            <li>Sell</li>
-            <li>Rent</li>
-            <li>Mortgage</li>
-            <li>Manage Rental</li>
+          <ul className="space-y-2 text-white text-sm">
+            <li><Link to="/buy">Buy</Link></li>
+            <li><Link to="/rent">Rent</Link></li>
+            <li><Link to="/agents">Real estate agent</Link></li>
+            <li><Link to="/feed">Feed</Link></li>
+            <li><Link to="/faq">FAQ’s</Link></li>
           </ul>
         </div>
 
         {/* Resources */}
         <div>
           <h4 className="font-semibold mb-4 text-lg">Resources</h4>
-          <ul className="space-y-2 text-white/80 text-sm">
-            <li>Agent</li>
-            <li>Properties Details</li>
-            <li>Add property</li>
+          <ul className="space-y-2 text-white text-sm">
+            <li><Link to="/agents">Agent</Link></li>
+            <li><Link to="/property-details">Property details</Link></li>
+            <li><Link to="/add-property">Add property</Link></li>
+            <li><Link to="/testimonials">Testimonial</Link></li>
+            <li><Link to="/clients">Our clients</Link></li>
           </ul>
         </div>
 
         {/* Support */}
         <div>
           <h4 className="font-semibold mb-4 text-lg">Support</h4>
-          <ul className="space-y-2 text-white/80 text-sm">
-            <li>Contact us</li>
-            <li>Login</li>
+          <ul className="space-y-2 text-white text-sm">
+            <li><Link to="/contact">Contact us</Link></li>
+            <li>
+              <Link to="/login">Login</Link> / <Link to="/signup">Sign up</Link>
+            </li>
           </ul>
         </div>
       </div>
 
       {/* Copyright */}
-      <div className="text-center text-white/70 text-sm mt-12">
-        Copyright © 2025. All rights reserved
+      <div className="text-center text-white/70 text-sm mt-12 border-t border-white/20 pt-6">
+        Copyright © 2025 RealtyFinder. All Rights Reserved.{" "}
+        <Link to="/terms" className="underline hover:text-white">
+          Terms & Conditions
+        </Link>
       </div>
     </footer>
   );

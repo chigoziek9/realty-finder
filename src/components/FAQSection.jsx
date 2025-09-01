@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FiPlus, FiX } from "react-icons/fi";
+import { Link } from "react-router-dom"; // ✅ import Link
 
 const faqs = [
   {
@@ -48,9 +49,13 @@ export default function FAQSection() {
             Here are some important questions that are frequently asked and the
             answers to the questions.
           </p>
-          <button className="px-6 py-3 rounded-full border bg-[#28563a]  text-white text-sm font-medium hover:bg-black hover:text-white transition w-fit">
+          {/* ✅ Updated: Link instead of plain button */}
+          <Link
+            to="/contact"
+            className="px-6 py-3 rounded-full border bg-[#28563a] text-white text-sm font-medium hover:bg-black hover:text-white transition w-fit"
+          >
             Contact Us
-          </button>
+          </Link>
         </div>
 
         {/* RIGHT SIDE - FAQ LIST */}
