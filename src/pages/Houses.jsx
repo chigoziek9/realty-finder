@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Frame from "../assets/Frame.png"; // replace with your image
-import Size from "../assets/Size.png"; // replace with your image
+import Size from "../assets/size.png"; // replace with your image
 import Location from "../assets/Vector.png"
 import Calendar from "../assets/calendar.png"
 import Pricing from "../assets/pricing.png"
