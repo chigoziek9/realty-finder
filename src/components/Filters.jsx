@@ -1,114 +1,122 @@
 import { useState } from "react";
-import Frame from "../assets/Frame.png"; // replace with your image
-import Size from "../assets/size.png"; // replace with your image
-import Location from "../assets/Vector.png"
-import Calendar from "../assets/calendar.png"
-import Pricing from "../assets/pricing.png"
+import Frame from "../assets/Frame.png"; 
+import Size from "../assets/size.png"; 
+import Location from "../assets/Vector.png";
+import Calendar from "../assets/calendar.png";
+import Pricing from "../assets/pricing.png";
 
 export default function Filters() {
   const [location, setLocation] = useState("");
   const [type, setType] = useState("");
   const [pricing, setPricing] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+
+  const FilterBox = ({ icon, value, setValue, options, placeholder }) => (
+    <div className="flex items-center bg-white border border-gray-300 rounded-2xl shadow-sm overflow-hidden w-full sm:w-[236px] h-[52px]">
+      <div className="px-3 flex items-center">
+        <img src={icon} alt="icon" />
+      </div>
+      <div className="h-6 w-px bg-gray-300 mx-2" />
+      <select
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className="flex-1 p-2 text-gray-700 text-sm sm:text-base focus:outline-none"
+      >
+        <option value="">{placeholder}</option>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
 
   return (
-    <div className="w-full px-4 bg-[]">
-      {/* Parent container: column on mobile, row on md+ screens */}
-      <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-        {/* Location Box */}
-        <div className="flex items-center bg-white border border-gray-300 rounded-2xl shadow-sm overflow-hidden w-[236px] h-[52px]">
-          {/* Icon */}
-          <div className="px-3 text-gray-500 flex items-center">
-            <img src={Location} alt="icon" />
-          </div>
+    <div className="w-full px-4">
+      {/* Feed header + Filter button in same row */}
+      <div className="flex justify-between items-center mb-3 sm:hidden">
+        <h2 className="text-lg font-semibold text-gray-800">Feeds</h2>
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="px-4 py-2 bg-green-900 text-white rounded-lg text-sm"
+        >
+          {showFilters ? "Close Filters" : "Filter"}
+        </button>
+      </div>
 
-          {/* Divider */}
-          <div className="h-6 w-px bg-gray-300 mx-2" />
+      {/* Filters container */}
+      <div
+        className={`
+          flex flex-col sm:flex-row gap-4 justify-center items-center
+          ${showFilters ? "block" : "hidden sm:flex"}
+        `}
+      >
+        {/* Location */}
+        <FilterBox
+          icon={Location}
+          value={location}
+          setValue={setLocation}
+          placeholder="Location"
+          options={[
+            { value: "lagos", label: "Lagos" },
+            { value: "abuja", label: "Abuja" },
+            { value: "portharcourt", label: "Port Harcourt" },
+            { value: "kano", label: "Kano" },
+          ]}
+        />
 
-          {/* Dropdown */}
-          <select
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="flex-1 p-3 text-gray-700 text-base focus:outline-none"
-          >
-            <option value="">Location</option>
-            <option value="lagos">Lagos</option>
-            <option value="abuja">Abuja</option>
-            <option value="portharcourt">Port Harcourt</option>
-            <option value="kano">Kano</option>
-          </select>
-        </div>
+        {/* Type */}
+        <FilterBox
+          icon={Frame}
+          value={type}
+          setValue={setType}
+          placeholder="Property Type"
+          options={[
+            { value: "apartment", label: "Apartment" },
+            { value: "duplex", label: "Duplex" },
+            { value: "bungalow", label: "Bungalow" },
+          ]}
+        />
 
-        {/* Type Box */}
-        <div className="flex items-center bg-white border border-gray-300 rounded-2xl shadow-sm overflow-hidden w-[236px] h-[52px]">
-          <div className="px-3 text-gray-500 flex items-center">
-            <img src={Frame} alt="icon" />
-          </div>
-          <div className="h-6 w-px bg-gray-300 mx-2" />
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="flex-1 p-3 text-gray-700 text-base focus:outline-none"
-          >
-            <option value="">Property Type</option>
-            <option value="apartment">Apartment</option>
-            <option value="duplex">Duplex</option>
-            <option value="bungalow">Bungalow</option>
-          </select>
-        </div>
+        {/* Pricing */}
+        <FilterBox
+          icon={Pricing}
+          value={pricing}
+          setValue={setPricing}
+          placeholder="Pricing Range"
+          options={[
+            { value: "low", label: "₦0 - ₦500k" },
+            { value: "mid", label: "₦500k - ₦2M" },
+            { value: "high", label: "₦2M+" },
+          ]}
+        />
 
-        {/* Pricing Box */}
-        <div className="flex items-center bg-white border border-gray-300 rounded-2xl shadow-sm overflow-hidden w-[236px] h-[52px]">
-          <div className="px-3 text-gray-500 flex items-center">
-            <img src={Pricing} alt="icon" />
-          </div>
-          <div className="h-6 w-px bg-gray-300 mx-2" />
-          <select
-            value={Pricing}
-            onChange={(e) => setPricing(e.target.value)}
-            className="flex-1 p-3 text-gray-700 text-base focus:outline-none"
-          >
-            <option value="">Pricing Range</option>
-            <option value="low">₦0 - ₦500k</option>
-            <option value="mid">₦500k - ₦2M</option>
-            <option value="high">₦2M+</option>
-          </select>
-        </div>
+        {/* Size */}
+        <FilterBox
+          icon={Size}
+          value={pricing}
+          setValue={setPricing}
+          placeholder="Property Size"
+          options={[
+            { value: "small", label: "1-2 Bedroom" },
+            { value: "medium", label: "3-4 Bedroom" },
+            { value: "large", label: "5+ Bedroom" },
+          ]}
+        />
 
-        {/* Size Box */}
-        <div className="flex items-center bg-white border border-gray-300 rounded-2xl shadow-sm overflow-hidden w-[236px] h-[52px]">
-          <div className="px-3 text-gray-500 flex items-center">
-            <img src={Size} alt="icon" />
-          </div>
-          <div className="h-6 w-px bg-gray-300 mx-2" />
-          <select
-            value={pricing}
-            onChange={(e) => setPricing(e.target.value)}
-            className="flex-1 p-3 text-gray-700 text-base focus:outline-none"
-          >
-            <option value="">Property Size</option>
-            <option value="low">₦0 - ₦500k</option>
-            <option value="mid">₦500k - ₦2M</option>
-            <option value="high">₦2M+</option>
-          </select>
-        </div>
-
-        {/* Year Box */}
-        <div className="flex items-center bg-white border border-gray-300 rounded-2xl shadow-sm overflow-hidden w-[236px] h-[52px]">
-          <div className="px-3 text-gray-500 flex items-center">
-            <img src={Calendar} alt="icon" />
-          </div>
-          <div className="h-6 w-px bg-gray-300 mx-2" />
-          <select
-            value={pricing}
-            onChange={(e) => setPricing(e.target.value)}
-            className="flex-1 p-3 text-gray-700 text-base focus:outline-none"
-          >
-            <option value="">Build Year</option>
-            <option value="low">₦0 - ₦500k</option>
-            <option value="mid">₦500k - ₦2M</option>
-            <option value="high">₦2M+</option>
-          </select>
-        </div>
+        {/* Year */}
+        <FilterBox
+          icon={Calendar}
+          value={pricing}
+          setValue={setPricing}
+          placeholder="Build Year"
+          options={[
+            { value: "2020", label: "2020+" },
+            { value: "2010", label: "2010 - 2019" },
+            { value: "2000", label: "2000 - 2009" },
+          ]}
+        />
       </div>
     </div>
   );
