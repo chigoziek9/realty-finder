@@ -15,13 +15,14 @@ export default function PropertyTabs() {
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8">
       {/* Tabs */}
-      <div className="flex ">
-        <div className="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar md:overflow-visible">
+      <div className="flex">
+        <div className="flex gap-2 sm:gap-4 overflow-x-auto no-scrollbar md:overflow-visible">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-full text-sm sm:text-base font-medium transition-all border 
+              className={`whitespace-nowrap px-3 py-2 sm:px-4 sm:py-2 rounded-full 
+                text-sm sm:text-base font-medium transition-all border 
                 ${
                   activeTab === tab.id
                     ? "bg-green-900 text-white border-green-900"
@@ -30,14 +31,15 @@ export default function PropertyTabs() {
             >
               {tab.label}
             </button>
-            
           ))}
-          
         </div>
-        
       </div>
+
+      {/* Heading */}
       <div>
-        <h1 className="text-4xl font-bold mt-7 ">Previous update</h1>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mt-7">
+          Previous update
+        </h1>
       </div>
 
       {/* Content */}
@@ -47,7 +49,6 @@ export default function PropertyTabs() {
         {activeTab === "sold" && <Properties />}
         {activeTab === "status" && <Properties />}
         {activeTab === "all" && <Properties />}
-        
       </div>
     </div>
   );
