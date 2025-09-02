@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import Viewproperty from "../components/Viewproperty";
 import Filters from "../components/Filters";
 import Settings from "../assets/feedsetting.png";
+import FeedNav from "../components/FeedNav";
 
 export default function Feed() {
   const [property, setProperty] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const storedProperty = localStorage.getItem("exploreProperty");
@@ -87,72 +87,25 @@ export default function Feed() {
           <h1 className="text-4xl md:text-4xl font-extrabold text-gray-900 leading-tight ">
             Feed
           </h1>
-          <div className="flex gap-2">
-            <img src={Settings} alt="" className="w-8" />
-            <p> Feed Setting</p>
-          </div>
+          
+            <div className=" pt-3 flex items-center gap-2 text-[#28563a] font-medium text-lg">
+              <img src={Settings} alt="settings" className="w-5 h-5" />
+              <p>Feed setting</p>
+            </div>
+          
         </div>
-        <h1 className="text-3xl font-bold ">Previous update</h1>
+
+        {/* heading*/}
       </div>
 
       {/* Grid layout */}
-      <div className="px-2 sm:px-4 md:px-8 lg:px-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
-          {property.map((house) => (
-            <div
-              key={house.id}
-              onClick={() => navigate(`/property/${house.id}`)}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer mt-3"
-            >
-              {/* Price + Button */}
-              {/* Price + Button */}
-              <div className="flex items-center justify-between mt-4 px-4">
-                <p className="text-[#28563a] font-semibold text-lg sm:text-xl">
-                  {house.price}
-                </p>
-                <button className="px-4 sm:px-6 py-2 sm:py-3 rounded-full border bg-[#28563a] text-white text-sm font-medium hover:bg-black transition">
-                  Contact Us
-                </button>
-              </div>
+      <FeedNav />
 
-              {/* Beds + Info */}
-              <div className="flex flex-col sm:flex-row sm:justify-between text-gray-700 mt-4 px-4 text-sm sm:text-base">
-                <p>
-                  {house.beds} beds • {house.baths} baths • {house.sqft} sqft •
-                  RealtyFinder
-                </p>
-                <p className="mt-1 sm:mt-0 text-gray-500 text-xs sm:text-sm">
-                  2 days ago
-                </p>
-              </div>
-
-              {/* Image */}
-              <img
-                src={house.image}
-                alt={house.title}
-                className="w-full h-48 sm:h-56 md:h-64 object-cover mt-4"
-              />
-
-              {/* Title + Description */}
-              <div className="p-4">
-                <h3 className="text-lg sm:text-xl font-semibold">
-                  {house.title}
-                </h3>
-                <p className="text-[#545454] mt-2 text-xs sm:text-sm leading-relaxed">
-                  {house.description}
-                </p>
-                <p className="text-gray-400 text-xs mt-2">
-                  Listed {house.listed} • {house.source}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Extra Component */}
-        <div className="mt-8">
-          <Viewproperty />
-        </div>
+      <div className="text-center py-20 px-4 sm:px-6 lg:px-8 bg-[#f3f3f3] mt-4">
+        <h1 className="text-4xl md:text-4xl font-extrabold text-black-200 leading-tight ">
+            You're all caught up!
+          </h1>
+          <p className="text-3xl">Check back shortly for the latest listings.</p>
       </div>
     </div>
   );
