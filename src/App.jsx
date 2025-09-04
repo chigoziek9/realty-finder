@@ -34,6 +34,7 @@ import Hometours from "./pages/Hometours";
 import HomeReport from "./pages/HomeReport";
 import Contact from "./pages/Contact";
 import RentProperty from "./pages/RentProperty";
+import Rent from "./pages/Rent";
 
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
@@ -111,7 +112,8 @@ export default function App() {
       <Route path="/saved-property" element={<SavedProperty />} />
       <Route path="/home-tours" element={<Hometours />} />
       <Route path="/home-report" element={<HomeReport />} />
-      <Route path="/rent" element={<RentProperty />} />
+      <Route path="/rent" element={<Rent />} />
+        <Route path="/rent-property" element={<RentProperty />} />
     </Routes>
     </>
     
