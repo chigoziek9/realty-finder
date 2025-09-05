@@ -1,116 +1,145 @@
-// src/pages/PropertyRequestAlert.jsx
-import { Info, Plus, Trash2 } from "lucide-react";
+import { Clock, Bell, Heart, Settings, LogOut, X, Trash2 } from "lucide-react";
 import profileImg from "../assets/profile.png";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function PropertyRequestAlert() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Utility to check if a link is active
+  const isActive = (path) =>
+    location.pathname === path ? "bg-green-800 font-medium" : "hover:bg-green-800";
+
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* ✅ Sidebar */}
-      <aside className="w-64 bg-green-900 text-white flex flex-col">
-        {/* Removed Logo */}
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-green-900 text-white flex flex-col justify-between">
+        <div>
+          {/* Menu */}
+          <nav className="mt-6 space-y-1">
+            <button
+              onClick={() => navigate("/property-request-alert")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/property-request-alert"
+              )}`}
+            >
+              <Clock size={18} />
+              <span>Property Request Alert</span>
+            </button>
 
-        {/* Menu */}
-        <nav className="flex-1 p-4">
-          <ul className="space-y-3 text-sm">
-            <li className="bg-green-700 text-white font-semibold px-3 py-2 rounded-lg cursor-pointer">
-              🏠 Dashboard
-            </li>
-            <li className="text-green-200 hover:text-white cursor-pointer">
-              📋 My Requests
-            </li>
-            <li className="text-green-200 hover:text-white cursor-pointer">
-              ❤️ Saved
-            </li>
-            <li className="text-green-200 hover:text-white cursor-pointer">
-              ⚙ Settings
-            </li>
-          </ul>
-        </nav>
+            <button
+              onClick={() => navigate("/my-property-alerts")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/my-property-alerts"
+              )}`}
+            >
+              <Bell size={18} />
+              <span>My Property Alerts</span>
+            </button>
 
-        {/* Profile */}
-        <div className="p-4 border-t border-green-700 flex items-center gap-3">
-          <img
-            src={profileImg}
-            alt="Profile"
-            className="w-10 h-10 rounded-full border border-green-700"
-          />
-          <div>
-            <p className="text-sm font-medium">John Doe</p>
-            <p className="text-xs text-green-200">john@example.com</p>
+            <button
+              onClick={() => navigate("/saved-properties")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/saved-properties"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>My Saved Property</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/account-settings")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg ${isActive(
+                "/account-settings"
+              )}`}
+            >
+              <Settings size={18} />
+              <span>Account Settings</span>
+            </button>
+          </nav>
+        </div>
+
+        {/* User Info */}
+        <div className="p-6 border-t border-green-800">
+          <div className="flex items-center space-x-3">
+            <img
+              src={profileImg}
+              alt="User Avatar"
+              className="w-10 h-10 rounded-full border"
+            />
+            <div>
+              <p className="font-medium">Charles Doe</p>
+              <p className="text-sm text-gray-300">email@gmail.com</p>
+            </div>
           </div>
+          <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
+            <LogOut size={18} />
+            <span>Logout</span>
+          </button>
         </div>
       </aside>
 
-      {/* ✅ Main Content */}
+      {/* Main Content */}
       <main className="flex-1 p-8">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            Property Request Alerts
-          </h2>
-          <button className="flex items-center gap-2 bg-green-900 text-white px-4 py-2 rounded-lg hover:bg-green-800">
-            <Plus size={18} /> New Alert
+        {/* Top Section */}
+        <div>
+          <h1 className="text-2xl font-bold flex items-center space-x-2">
+            <Clock className="text-green-900" size={22} />
+            <span>Property Request Alert</span>
+          </h1>
+          <p className="text-gray-600 mt-1">
+            View, manage and update all your properties in one place
+          </p>
+          <button
+            onClick={() => navigate("/add-property-request-alert")}
+            className="mt-4 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
+          >
+            + Add Property Request Alert
           </button>
         </div>
 
-        {/* Info Box */}
-        <div className="flex items-start gap-3 bg-green-50 border border-green-200 p-4 rounded-lg mb-6">
-          <Info className="text-green-700 mt-1" size={20} />
-          <p className="text-sm text-gray-700">
-            Find your ideal home — Explore fresh listings daily, use custom
-            filters to narrow your search, and connect directly with property
-            managers — all in one convenient platform.
-          </p>
+        {/* Middle Section */}
+        <div className="mt-6">
+          {/* Queued Message */}
+          <div className="flex items-center justify-between bg-green-100 text-green-700 px-4 py-3 rounded-md">
+            <p>
+              Your request has been queued for review and will be posted after it
+              has been reviewed
+            </p>
+            <X size={18} className="cursor-pointer" />
+          </div>
+
+          {/* Result Count */}
+          <div className="mt-4 bg-gray-200 text-gray-700 px-4 py-2 rounded">
+            Result 1–1 of 1
+          </div>
         </div>
 
-        {/* Alerts Table */}
-        <div className="bg-white rounded-xl shadow-sm border">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-gray-100 text-gray-700 text-xs uppercase">
-              <tr>
-                <th className="px-6 py-3">Location</th>
-                <th className="px-6 py-3">Type</th>
-                <th className="px-6 py-3">Budget</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Row 1 */}
-              <tr className="border-t">
-                <td className="px-6 py-4">Lagos</td>
-                <td className="px-6 py-4">Apartment</td>
-                <td className="px-6 py-4">₦800,000</td>
-                <td className="px-6 py-4">
-                  <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">
-                    Active
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <button className="text-red-500 hover:text-red-700">
-                    <Trash2 size={16} />
-                  </button>
-                </td>
-              </tr>
+        {/* Bottom Section */}
+        <div className="mt-6 bg-white shadow-md rounded-lg p-6">
+          <div className="space-y-3 text-sm">
+            <p>
+              <span className="font-semibold">Type:</span> Mini flats for rent
+            </p>
+            <p>
+              <span className="font-semibold">Bedrooms:</span> 5
+            </p>
+            <p>
+              <span className="font-semibold">Areas:</span> Rivers
+            </p>
+            <p>
+              <span className="font-semibold">Date:</span> 12th Aug. 2025
+            </p>
+            <p>
+              <span className="font-semibold">Status:</span>{" "}
+              <span className="text-yellow-600 font-medium">Awaiting Review</span>
+            </p>
+          </div>
 
-              {/* Row 2 */}
-              <tr className="border-t">
-                <td className="px-6 py-4">Abuja</td>
-                <td className="px-6 py-4">Duplex</td>
-                <td className="px-6 py-4">₦2,000,000</td>
-                <td className="px-6 py-4">
-                  <span className="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">
-                    Paused
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <button className="text-red-500 hover:text-red-700">
-                    <Trash2 size={16} />
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          {/* Delete Button (text + icon) */}
+          <button className="mt-6 flex items-center gap-2 text-red-600 font-medium hover:text-red-800">
+            <Trash2 size={18} /> Delete
+          </button>
         </div>
       </main>
     </div>
