@@ -6,28 +6,16 @@ import ownerImg from "../assets/property owner.png";
 import agentImg from "../assets/Realestateagent.png";
 
 const accountTypes = [
-  {
-    id: "individual",
-    title: "Individual",
-    image: individualImg,
-  },
-  {
-    id: "owner",
-    title: "Property Owner",
-    image: ownerImg,
-  },
-  {
-    id: "agent",
-    title: "Real Estate Agent",
-    image: agentImg,
-  },
+  { id: "individual", title: "Individual", image: individualImg },
+  { id: "owner", title: "Property Owner", image: ownerImg },
+  { id: "agent", title: "Real Estate Agent", image: agentImg },
 ];
 
 export default function ChooseAccountType() {
   const [selected, setSelected] = useState(null);
   const navigate = useNavigate();
 
-  // ✅ Load saved account type on mount (so selection persists after refresh)
+  // ✅ Load saved account type on mount
   useEffect(() => {
     const savedType = localStorage.getItem("accountType");
     if (savedType) {
@@ -35,10 +23,14 @@ export default function ChooseAccountType() {
     }
   }, []);
 
+  const handleSelect = (typeId) => {
+    setSelected(typeId);
+    localStorage.setItem("accountType", typeId); // ✅ save immediately
+  };
+
   const handleContinue = () => {
     if (!selected) return;
-    localStorage.setItem("accountType", selected); // ✅ Save account type
-    navigate("/signup"); // ✅ Redirect to signup page
+    navigate("/signup"); // ✅ redirect to signup page
   };
 
   return (
@@ -47,7 +39,7 @@ export default function ChooseAccountType() {
         {/* Back Button */}
         <button
           className="text-gray-600 mb-6 flex items-center hover:underline"
-          onClick={() => navigate(-1)} // go back
+          onClick={() => navigate(-1)}
         >
           &larr; Back
         </button>
@@ -65,7 +57,7 @@ export default function ChooseAccountType() {
           {accountTypes.map((type) => (
             <div
               key={type.id}
-              onClick={() => setSelected(type.id)}
+              onClick={() => handleSelect(type.id)}
               className={`relative border rounded-xl p-6 flex flex-col items-center cursor-pointer transition-all ${
                 selected === type.id
                   ? "border-green-600 bg-green-50"

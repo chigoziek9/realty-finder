@@ -36,6 +36,7 @@ import Contact from "./pages/Contact";
 import RentProperty from "./pages/RentProperty";
 import Rent from "./pages/Rent";
 import PropertyRequestAlert from "./pages/PropertyRequestAlert";
+import AddPropertyRequestAlert from "./pages/AddPropertyRequestAlert";
 
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
@@ -116,7 +117,7 @@ export default function App() {
       <Route path="/rent" element={<Rent />} />
         <Route path="/rent-property" element={<RentProperty />} />
          <Route path="/property-request-alert" element={<PropertyRequestAlert />} />
-
+          <Route path="/add-property-request-alert" element={<AddPropertyRequestAlert />} />
     </Routes>
     </>
     

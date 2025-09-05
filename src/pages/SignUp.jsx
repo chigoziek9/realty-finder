@@ -50,6 +50,12 @@ export default function SignUp({ accountType: propAccountType }) {
     });
   };
 
+  // ✅ Allow user to re-select account type
+  const handleChangeType = () => {
+    localStorage.removeItem("accountType");
+    navigate("/choose-account-type");
+  };
+
   // ✅ Password validation rules
   const passwordRules = [
     {
@@ -115,13 +121,25 @@ export default function SignUp({ accountType: propAccountType }) {
           {/* Logo + Title */}
           <div className="text-left">
             <img src={logo} alt="Logo" className="w-32 mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900">
-              Get started now
-            </h2>
+            <h2 className="text-3xl font-bold text-gray-900">Get started now</h2>
             <p className="mt-2 text-gray-600">
-              {formData.accountType
-                ? `Create your ${formData.accountType} account`
-                : "Let’s create your account"}
+              {formData.accountType ? (
+                <span>
+                  Create your{" "}
+                  <span className="font-semibold capitalize">
+                    {formData.accountType}
+                  </span>{" "}
+                  account
+                  <button
+                    onClick={handleChangeType}
+                    className="ml-3 text-sm text-green-600 hover:underline"
+                  >
+                    Change
+                  </button>
+                </span>
+              ) : (
+                "Let’s create your account"
+              )}
             </p>
           </div>
 
@@ -227,7 +245,7 @@ export default function SignUp({ accountType: propAccountType }) {
                 </button>
               </div>
 
-              {/* ✅ Password Rules in a box */}
+              {/* ✅ Password Rules */}
               <div className="mt-3 bg-gray-50 border border-gray-200 rounded-lg p-4 text-xs leading-5">
                 <ul className="space-y-1">
                   {passwordRules.map((rule, idx) => (
@@ -267,7 +285,9 @@ export default function SignUp({ accountType: propAccountType }) {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
                   className="absolute right-3 text-gray-500"
                 >
                   {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
@@ -320,7 +340,6 @@ export default function SignUp({ accountType: propAccountType }) {
               <FaGoogle className="text-red-500" /> Sign up with Google
             </button>
 
-            {/* ✅ Link to PhoneSignup */}
             <Link to="/signup/phone">
               <button className="w-full flex items-center justify-center gap-2 border rounded-lg py-3 hover:bg-gray-50 transition">
                 <FaPhone className="text-green-600" /> Sign up with Phone
