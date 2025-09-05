@@ -126,6 +126,10 @@ export default function Rent() {
               or preparing to sign a lease, our tools and resources make the
               process simple, informed and stress-free.
             </p>
+            <button className="mt-6 px-9 py-3 bg-green-900 text-white rounded-lg hover:bg-green-800">
+            See How
+          </button>
+
           </div>
         </div>
       </div>
