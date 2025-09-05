@@ -1,8 +1,9 @@
 // src/pages/Rent.jsx
 import { useNavigate } from "react-router-dom";
-import { Search, Heart, Settings } from "lucide-react";
+import { Search, Heart, Settings, Home } from "lucide-react";
 import Footer from "../components/Footer";
-import heroImage from "../assets/hero-image.png"; // 👈 main house image
+import heroImage from "../assets/hero-image.png"; 
+import logoImg from "../assets/logo.png"; 
 import { useState } from "react";
 
 export default function Rent() {
@@ -132,70 +133,84 @@ export default function Rent() {
         </div>
       </section>
 
-      {/* ✅ Section Title */}
-      <section className="max-w-6xl mx-auto px-6 py-10">
-        <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-8">
-          Abuja houses for sale
-        </h2>
-      </section>
+      {/* ✅ Abuja House Card + Rental Solution Side by Side */}
+      <section className="max-w-6xl mx-auto pb-16 px-6 lg:px-20 grid lg:grid-cols-2 gap-12 items-start mt-10">
+        {/* Abuja House Card - Clean phone-style mockup */}
+        <div className="flex justify-center">
+          <div className="bg-white rounded-[2.5rem] shadow-2xl w-[280px] h-[600px] flex flex-col border">
+            
+            {/* Top Bar with Logo + Hamburger */}
+            <div className="flex items-center justify-between px-4 py-3 border-b">
+              <img src={logoImg} alt="Logo" className="h-5" />
+              <div className="space-y-1 cursor-pointer">
+                <span className="block w-5 h-0.5 bg-gray-800"></span>
+                <span className="block w-5 h-0.5 bg-gray-800"></span>
+                <span className="block w-5 h-0.5 bg-gray-800"></span>
+              </div>
+            </div>
 
-      {/* ✅ Featured Rentals + Rental Solution Side by Side */}
-      <section className="max-w-6xl mx-auto pb-16 px-6 lg:px-20 grid lg:grid-cols-2 gap-12 items-start">
-        {/* Featured Rentals */}
-        <div>
-          <div className="bg-white shadow-lg rounded-2xl p-4">
+            {/* Intro Text */}
+            <div className="px-4 py-3 border-b">
+              <h2 className="text-green-900 font-bold text-sm">Find your ideal home</h2>
+              <p className="text-gray-600 text-xs mt-1">
+                Explore fresh listings daily, use custom filters to narrow your search,
+                and connect directly with property managers—all in one convenient
+                platform.
+              </p>
+            </div>
+
             {/* Price & Button */}
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-xl font-semibold">₦550,000</h3>
-              <button className="bg-green-700 text-white text-sm px-4 py-2 rounded-lg">
+            <div className="flex justify-between items-center px-3 py-2">
+              <h3 className="text-lg font-semibold">₦550,000</h3>
+              <button className="bg-green-700 text-white text-xs px-3 py-1 rounded-md">
                 View details
               </button>
             </div>
 
             {/* Property Info */}
-            <div className="flex justify-between text-gray-500 text-sm mb-3">
+            <div className="flex justify-between text-gray-500 text-xs px-3 mb-2">
               <span>4 beds • 1 baths • 1931 sqft • RealtyFinder</span>
-              <span>2 days ago</span>
+              <span>2d ago</span>
             </div>
 
             {/* Image */}
             <img
               src={heroImage}
               alt="Rental Property"
-              className="w-full h-52 object-cover rounded-lg mb-3"
+              className="w-full h-40 object-cover"
             />
 
             {/* Title & Description */}
-            <h4 className="text-lg font-semibold">Rustic retreat cottage</h4>
-            <p className="text-gray-600 text-sm mb-2">
-              An elegant 3–bedroom, 2.5–bathroom townhouse in a gated community…
-              <span className="text-green-700 font-medium cursor-pointer">
-                {" "}
-                Read More
-              </span>
-            </p>
+            <div className="px-3 py-2 flex-1 flex flex-col">
+              <h4 className="text-base font-semibold">Rustic retreat cottage</h4>
+              <p className="text-gray-600 text-xs mb-1">
+                An elegant 3–bedroom townhouse in a gated community…
+                <span className="text-green-700 font-medium cursor-pointer"> Read More</span>
+              </p>
+              <a
+                href="#"
+                className="block text-green-700 text-xs underline mb-2"
+              >
+                Plot 16 Chief Nwuke Street <br /> Trans Amadi Industrial Layout
+              </a>
 
-            {/* Address */}
-            <a
-              href="#"
-              className="block text-green-700 text-sm font-medium underline mb-3"
-            >
-              Plot 16 Chief Nwuke Street <br /> Trans Amadi Industrial Layout
-            </a>
-
-            {/* Bottom Icons */}
-            <div className="flex justify-between items-center">
-              <Settings size={20} className="text-gray-500 cursor-pointer" />
-              <Heart size={20} className="text-gray-500 cursor-pointer" />
+              {/* Bottom Icons */}
+              <div className="flex justify-between items-center mt-auto">
+                <Settings size={16} className="text-gray-500 cursor-pointer" />
+                <Heart size={16} className="text-gray-500 cursor-pointer" />
+              </div>
             </div>
           </div>
         </div>
 
         {/* Rental Solution */}
         <div className="lg:pl-8 text-center lg:text-left">
-          <span className="text-green-900 font-semibold text-sm uppercase">
-            Rental Solution
-          </span>
+          <div className="flex items-center justify-center lg:justify-start gap-2">
+            <Home size={20} className="text-green-900" />
+            <span className="text-green-900 font-semibold text-sm uppercase">
+              Rental Solution
+            </span>
+          </div>
           <h2 className="mt-3 text-2xl lg:text-3xl font-bold text-gray-900 leading-snug">
             From budgeting to move-in, everything you need in one place.
           </h2>
