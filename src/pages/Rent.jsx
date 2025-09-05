@@ -24,7 +24,7 @@ export default function Rent() {
   const handleSearch = (e) => {
     e.preventDefault();
     const query = new URLSearchParams(
-      Object.entries(filters).filter(([_, v]) => v !== "")
+      Object.entries(filters).filter(([, v]) => v !== "")
     ).toString();
 
     navigate(`/rent-property?${query}`);
