@@ -65,10 +65,20 @@ export default function Footer() {
           <h4 className="font-semibold mb-4 text-lg">Resources</h4>
           <ul className="space-y-2 text-white text-sm">
             <li><Link to="/agents">Agent</Link></li>
-            <li><Link to="/property-details">Property details</Link></li>
+            <li>
+              <Link to="/propertydetail" className="hover:underline">
+                Property Detail
+              </Link>
+            </li>
             <li><Link to="/add-property">Add property</Link></li>
             <li><Link to="/testimonials">Testimonial</Link></li>
             <li><Link to="/clients">Our clients</Link></li>
+            {/* ✅ New Property Request Alert link */}
+            <li>
+              <Link to="/property-request-alert" className="hover:underline">
+                Property Request Alert
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -79,6 +89,12 @@ export default function Footer() {
             <li><Link to="/contact">Contact us</Link></li>
             <li>
               <Link to="/login">Login</Link> / <Link to="/signup">Sign up</Link>
+            </li>
+            {/* ✅ Added under Support as well */}
+            <li>
+              <Link to="/property-request-alert" className="hover:underline">
+                Property Request Alert
+              </Link>
             </li>
           </ul>
         </div>
