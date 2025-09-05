@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Viewproperty from "../components/Viewproperty";
 import Filters from "../components/Filters";
 import FeedNav from "../components/FeedNav";
-import phoneimg from "../assets/iphonerent.png";
+import phoneimg from "../assets/iPhonerent.png";
 import Good from "../assets/Goodcheck.png";
 import { Link } from "react-router-dom";
 
