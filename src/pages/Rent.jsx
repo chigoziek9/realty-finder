@@ -127,7 +127,13 @@ export default function Rent() {
               process simple, informed and stress-free.
             </p>
             <button className="mt-6 px-9 py-3 bg-green-900 text-white rounded-lg hover:bg-green-800">
-            See How
+                <Link
+                  to="/explore"
+                  className="px-3"
+                >
+                  Explore Rentals
+                </Link>
+           
           </button>
 
           </div>
