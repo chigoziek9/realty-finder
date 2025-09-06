@@ -4,9 +4,10 @@ import Viewproperty from "../components/Viewproperty";
 import Filters from "../components/Filters";
 import Settings from "../assets/feedsetting.png";
 import FeedNav from "../components/FeedNav";
+import Exploreproperty from "../components/Exploreproperty";
 import Footer from "../components/Footer";
 
-export default function Feed() {
+export default function Explore() {
   const [property, setProperty] = useState([]);
 
   useEffect(() => {
@@ -88,31 +89,27 @@ export default function Feed() {
         </div>
       </div>
 
-      {/* heading */}
-      <div className="px-4 sm:px-10 py-6 sm:py-10 flex flex-row items-center justify-between gap-4">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
-          Feed
-        </h1>
-        <div className="pt-1 flex items-center gap-2 text-[#28563a] font-medium text-base sm:text-lg">
-          <img src={Settings} alt="settings" className="w-5 h-5" />
-          <p>Feed setting</p>
+        {/* popular in lagos*/}
+        <div>
+            <h1 className="mt-9 text-3xl p-8 font-semibold">Popular In Lagos</h1>
+            <Exploreproperty />
         </div>
-      </div>
+         {/* Rentals with deals in lagos*/}
+          <div>
+            <h1 className="mt-9 text-3xl p-8 font-semibold">Rentals With Deals In Lagos</h1>
+            <Exploreproperty />
+        </div>
+          {/* Pet-friendly rentals In Lagos*/}
+           <div>
+            <h1 className="mt-9 text-3xl p-8 font-semibold">Pet-friendly rentals In Lagos</h1>
+            <Exploreproperty />
+        </div>
+        
 
-      {/* nav */}
-      <FeedNav />
 
-      {/* footer message */}
-      <div className="text-center py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#f3f3f3] mt-4">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black leading-tight">
-          You're all caught up!
-        </h1>
-        <p className="mt-2 text-lg sm:text-xl md:text-2xl">
-          Check back shortly for the latest listings.
-        </p>
-      </div>
+      
     </div>
-      <Footer />
+     <Footer />
     </>
   );
 }

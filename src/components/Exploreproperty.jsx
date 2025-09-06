@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react"; // heart icon
-import Viewproperty from "./Viewproperty";
+import ViewExplore from "./ViewExplore";
 
-export default function Property() {
+
+export default function Exploreroperty() {
   const [property, setProperty] = useState([]);
   const [favorites, setFavorites] = useState([]); // track favs
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function Property() {
       fetch("/properties.json")
         .then((res) => res.json())
         .then((data) => {
-          setProperty(data.slice(0, 6)); // limit to 6
+          setProperty(data.slice(0, 3)); // limit to 6
         });
     }
   }, []);
@@ -120,7 +121,7 @@ export default function Property() {
 
       {/* View More Section */}
       <div>
-        <Viewproperty />
+        <ViewExplore />
       </div>
     </div>
   );
