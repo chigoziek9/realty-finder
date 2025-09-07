@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import Message from "../components/message";
 
-import Viewproperty from "../components/Viewproperty";
 import Filters from "../components/Filters";
-import Settings from "../assets/feedsetting.png";
-import FeedNav from "../components/FeedNav";
+
 import Exploreproperty from "../components/Exploreproperty";
 import Footer from "../components/Footer";
 
