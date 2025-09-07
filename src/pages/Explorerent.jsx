@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Message from "../components/message";
 
 import Viewproperty from "../components/Viewproperty";
 import Filters from "../components/Filters";
@@ -104,6 +105,7 @@ export default function Explore() {
             <h1 className="mt-9 text-3xl p-8 font-semibold">Pet-friendly rentals In Lagos</h1>
             <Exploreproperty />
         </div>
+        <Message />
         
 
 

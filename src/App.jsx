@@ -70,8 +70,8 @@ export default function App() {
       {/* Main pages */}
       <Route path="/" element={<Home />} />
       <Route path="/help" element={<Help />} />
-      <Route path="/buy" element={<Buy />} />
-      <Route path="/buy/houses" element={<Houses />} />
+      <Route path="/buy/home" element={<Buy />} />
+      <Route path="/buy/land" element={<Houses />} />
       <Route path="/account" element={<Account />} />
       <Route path="/agent" element={<Agent />} />
       <Route path="/sell" element={<Sell />} />
