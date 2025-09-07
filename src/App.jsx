@@ -39,6 +39,9 @@ import PropertyRequestAlert from "./pages/PropertyRequestAlert";
 import AddPropertyRequestAlert from "./pages/AddPropertyRequestAlert";
 import Explore from "./pages/Explorerent";
 
+import MyPropertyAlerts from "./pages/MyPropertyAlerts";
+import MySavedProperty from "./pages/MySavedProperty";
+import AccountSettings from "./pages/AccountSettings";
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -119,8 +122,19 @@ export default function App() {
       <Route path="/rent" element={<Rent />} />
         <Route path="/rent-property" element={<RentProperty />} />
          <Route path="/property-request-alert" element={<PropertyRequestAlert />} />
-          <Route path="/add-property-request-alert" element={<AddPropertyRequestAlert />} />
-    </Routes>
+           {/* Default redirect */}
+      <Route path="/" element={<Navigate to="/property-request-alert" replace />} />
+
+      {/* Dashboard pages */}
+      <Route path="/property-request-alert" element={<PropertyRequestAlert />} />
+      <Route path="/my-property-alerts" element={<MyPropertyAlerts />} />
+      <Route path="/saved-properties" element={<MySavedProperty />} />
+      <Route path="/account-settings" element={<AccountSettings />} />
+
+      {/* Fallback */}
+      <Route path="*" element={<h1 className="p-10">404 - Page Not Found</h1>} />
+
+          </Routes>
     </>
     
   );
