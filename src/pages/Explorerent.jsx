@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Message from "../components/message";
+import Message from "../components/Message";
 
 import Viewproperty from "../components/Viewproperty";
 import Filters from "../components/Filters";
