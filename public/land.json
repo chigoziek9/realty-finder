@@ -2,8 +2,6 @@
   {
     "id": 1,
     "price": "₦1,200,000",
-    "beds": null,
-    "baths": null,
     "sqft": 500,
     "source": "RealtyFinder",
     "listed": "2 days ago",
@@ -15,8 +13,6 @@
   {
     "id": 2,
     "price": "₦950,000",
-    "beds": null,
-    "baths": null,
     "sqft": 450,
     "source": "HomeLink",
     "listed": "5 days ago",
@@ -28,8 +24,6 @@
   {
     "id": 3,
     "price": "₦2,500,000",
-    "beds": null,
-    "baths": null,
     "sqft": 800,
     "source": "EstateMaster",
     "listed": "1 day ago",
@@ -41,8 +35,6 @@
   {
     "id": 4,
     "price": "₦780,000",
-    "beds": null,
-    "baths": null,
     "sqft": 400,
     "source": "BudgetHomes",
     "listed": "3 days ago",
@@ -54,8 +46,6 @@
   {
     "id": 5,
     "price": "₦1,800,000",
-    "beds": null,
-    "baths": null,
     "sqft": 600,
     "source": "RealtyFinder",
     "listed": "4 days ago",
@@ -67,8 +57,6 @@
   {
     "id": 6,
     "price": "₦3,500,000",
-    "beds": null,
-    "baths": null,
     "sqft": 1200,
     "source": "EstateMaster",
     "listed": "12 hours ago",
@@ -80,8 +68,6 @@
   {
     "id": 7,
     "price": "₦650,000",
-    "beds": null,
-    "baths": null,
     "sqft": 350,
     "source": "BudgetHomes",
     "listed": "1 week ago",
@@ -93,8 +79,6 @@
   {
     "id": 8,
     "price": "₦2,200,000",
-    "beds": null,
-    "baths": null,
     "sqft": 700,
     "source": "RealtyFinder",
     "listed": "6 days ago",
@@ -106,8 +90,6 @@
   {
     "id": 9,
     "price": "₦1,150,000",
-    "beds": null,
-    "baths": null,
     "sqft": 500,
     "source": "HomeLink",
     "listed": "2 days ago",
@@ -119,8 +101,6 @@
   {
     "id": 10,
     "price": "₦890,000",
-    "beds": null,
-    "baths": null,
     "sqft": 380,
     "source": "BudgetHomes",
     "listed": "3 days ago",
@@ -132,8 +112,6 @@
   {
     "id": 11,
     "price": "₦1,600,000",
-    "beds": null,
-    "baths": null,
     "sqft": 550,
     "source": "RealtyFinder",
     "listed": "1 week ago",
@@ -145,8 +123,6 @@
   {
     "id": 12,
     "price": "₦700,000",
-    "beds": null,
-    "baths": null,
     "sqft": 320,
     "source": "BudgetHomes",
     "listed": "2 weeks ago",
@@ -158,8 +134,6 @@
   {
     "id": 13,
     "price": "₦2,800,000",
-    "beds": null,
-    "baths": null,
     "sqft": 900,
     "source": "EstateMaster",
     "listed": "10 hours ago",
@@ -171,8 +145,6 @@
   {
     "id": 14,
     "price": "₦980,000",
-    "beds": null,
-    "baths": null,
     "sqft": 400,
     "source": "HomeLink",
     "listed": "4 days ago",
@@ -184,8 +156,6 @@
   {
     "id": 15,
     "price": "₦1,300,000",
-    "beds": null,
-    "baths": null,
     "sqft": 600,
     "source": "RealtyFinder",
     "listed": "6 days ago",
@@ -197,8 +167,6 @@
   {
     "id": 16,
     "price": "₦750,000",
-    "beds": null,
-    "baths": null,
     "sqft": 350,
     "source": "BudgetHomes",
     "listed": "1 week ago",
@@ -210,8 +178,6 @@
   {
     "id": 17,
     "price": "₦2,000,000",
-    "beds": null,
-    "baths": null,
     "sqft": 700,
     "source": "HomeLink",
     "listed": "3 days ago",
@@ -223,8 +189,6 @@
   {
     "id": 18,
     "price": "₦880,000",
-    "beds": null,
-    "baths": null,
     "sqft": 400,
     "source": "BudgetHomes",
     "listed": "2 weeks ago",
@@ -236,8 +200,6 @@
   {
     "id": 19,
     "price": "₦1,700,000",
-    "beds": null,
-    "baths": null,
     "sqft": 650,
     "source": "EstateMaster",
     "listed": "5 days ago",
@@ -249,8 +211,6 @@
   {
     "id": 20,
     "price": "₦1,050,000",
-    "beds": null,
-    "baths": null,
     "sqft": 500,
     "source": "RealtyFinder",
     "listed": "8 days ago",
@@ -258,5 +218,115 @@
     "title": "Land in Calabar",
     "description": "500sqm dry land located close to Tinapa Business Resort.",
     "address": "Plot 14 Tinapa Road, Calabar"
+  },
+  {
+    "id": 21,
+    "price": "₦900,000",
+    "sqft": 360,
+    "source": "BudgetHomes",
+    "listed": "6 days ago",
+    "image": "https://images.pexels.com/photos/1643384/pexels-photo-1643384.jpeg",
+    "title": "Land in Awka",
+    "description": "360sqm land in a newly developing estate in Awka.",
+    "address": "Plot 22 Amawbia Layout, Awka"
+  },
+  {
+    "id": 22,
+    "price": "₦1,400,000",
+    "sqft": 550,
+    "source": "HomeLink",
+    "listed": "9 days ago",
+    "image": "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg",
+    "title": "Residential Plot in Jos",
+    "description": "550sqm dry land with good topography for building.",
+    "address": "Plot 12 Rayfield, Jos"
+  },
+  {
+    "id": 23,
+    "price": "₦2,400,000",
+    "sqft": 850,
+    "source": "EstateMaster",
+    "listed": "1 week ago",
+    "image": "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+    "title": "Luxury Land in Victoria Island",
+    "description": "850sqm premium land in a gated VI estate.",
+    "address": "Plot 6 Victoria Island, Lagos"
+  },
+  {
+    "id": 24,
+    "price": "₦800,000",
+    "sqft": 400,
+    "source": "BudgetHomes",
+    "listed": "2 weeks ago",
+    "image": "https://images.pexels.com/photos/164005/pexels-photo-164005.jpeg",
+    "title": "Residential Land in Ado-Ekiti",
+    "description": "400sqm cleared land ready for construction.",
+    "address": "Plot 11 Ikere Road, Ado-Ekiti"
+  },
+  {
+    "id": 25,
+    "price": "₦1,750,000",
+    "sqft": 620,
+    "source": "RealtyFinder",
+    "listed": "3 days ago",
+    "image": "https://images.pexels.com/photos/1643384/pexels-photo-1643384.jpeg",
+    "title": "Mixed-Use Land in Kaduna",
+    "description": "620sqm fenced land in Kaduna city center.",
+    "address": "Plot 30 Barnawa, Kaduna"
+  },
+  {
+    "id": 26,
+    "price": "₦1,100,000",
+    "sqft": 480,
+    "source": "HomeLink",
+    "listed": "5 days ago",
+    "image": "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+    "title": "Residential Land in Akure",
+    "description": "480sqm residential plot with good drainage.",
+    "address": "Plot 17 Alagbaka, Akure"
+  },
+  {
+    "id": 27,
+    "price": "₦2,900,000",
+    "sqft": 1000,
+    "source": "EstateMaster",
+    "listed": "2 days ago",
+    "image": "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+    "title": "Luxury Land in Asaba",
+    "description": "1000sqm land in Government Reserved Area, Asaba.",
+    "address": "Plot 44 GRA Phase 3, Asaba"
+  },
+  {
+    "id": 28,
+    "price": "₦950,000",
+    "sqft": 420,
+    "source": "BudgetHomes",
+    "listed": "1 week ago",
+    "image": "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+    "title": "Affordable Land in Minna",
+    "description": "420sqm plot close to Federal University of Technology, Minna.",
+    "address": "Plot 21 Bosso Road, Minna"
+  },
+  {
+    "id": 29,
+    "price": "₦1,900,000",
+    "sqft": 750,
+    "source": "RealtyFinder",
+    "listed": "4 days ago",
+    "image": "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+    "title": "Commercial Plot in Owerri",
+    "description": "750sqm commercial land in a prime business district.",
+    "address": "Plot 5 Douglas Road, Owerri"
+  },
+  {
+    "id": 30,
+    "price": "₦1,250,000",
+    "sqft": 520,
+    "source": "HomeLink",
+    "listed": "6 days ago",
+    "image": "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg",
+    "title": "Residential Plot in Makurdi",
+    "description": "520sqm plot in a peaceful neighborhood with good road access.",
+    "address": "Plot 13 Wadata Layout, Makurdi"
   }
 ]

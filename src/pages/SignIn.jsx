@@ -13,22 +13,40 @@ export default function SigninPage() {
   const navigate = useNavigate();
 
   // 🔹 Normal Email/Password Demo Login
-  const handleSubmit = (e) => {
-    e.preventDefault();
+// 🔹 Normal Email/Password Login
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!email || !password) {
-      setError("Please enter both email and password.");
-      return;
+  if (!email || !password) {
+    setError("Please enter both email and password.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // ✅ Save token & user info
+      localStorage.setItem("token", data.token); // adjust if backend uses `accessToken` or something else
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // ✅ Redirect after login
+      navigate("/");
+    } else {
+      setError(data.message || "Login failed. Please check your credentials.");
     }
+  } catch (err) {
+    console.error("Login error:", err);
+    setError("Something went wrong. Please try again.");
+  }
+};
 
-    // demo check
-    if (password !== "1234") {
-      setError("Incorrect password. Try again.");
-      return;
-    }
-
-    navigate("/");
-  };
 
   // 🔹 Google Sign In
   const handleGoogleSignIn = async () => {
