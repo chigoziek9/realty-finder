@@ -4,9 +4,17 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-
   plugins: [
     react(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://realtyfinder.onrender.com", // your backend
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 })

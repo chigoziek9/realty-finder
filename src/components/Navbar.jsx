@@ -32,7 +32,6 @@ export default function Navbar() {
       <div className="hidden md:flex items-center gap-8 ml-auto">
         <nav>
           <ul className="flex items-center gap-8 text-sm font-medium text-black">
-            
             {/* Buy Dropdown */}
             <li
               className="relative"
@@ -44,13 +43,22 @@ export default function Navbar() {
               </button>
               {menuOpen === "buy" && (
                 <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-40 z-50 max-h-60 overflow-y-auto">
-                  <Link to="/buy/home" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/home"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Home For Sale
                   </Link>
-                  <Link to="/buy/land" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/land"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Land For Sale
                   </Link>
-                  <Link to="/buy/apartments" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/home"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Recently Sold
                   </Link>
                 </div>
@@ -68,16 +76,28 @@ export default function Navbar() {
               </button>
               {menuOpen === "rent" && (
                 <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-44 z-50 max-h-60 overflow-y-auto">
-                  <Link to="/rent/short-let" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/home"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Apartments For Rent
                   </Link>
-                  <Link to="/rent/long-term" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/home"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     House For Rent
                   </Link>
-                  <Link to="/rent/condos" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/home"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Condos For Rent
                   </Link>
-                  <Link to="/rent/land" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/land"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Land For Rent
                   </Link>
                 </div>
@@ -91,21 +111,11 @@ export default function Navbar() {
               onMouseLeave={handleMouseLeave}
             >
               <button className="flex items-center hover:text-green-800">
-                Real estate agents <ChevronDown size={14} className="ml-1" />
+                <Link to="/agent" className="">
+                Real estate agents
+                </Link>
+           
               </button>
-              {menuOpen === "agents" && (
-                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-48 z-50 max-h-60 overflow-y-auto">
-                  <Link to="/agents/lagos" className="block px-4 py-2 hover:bg-gray-100">
-                    Lagos
-                  </Link>
-                  <Link to="/agents/abuja" className="block px-4 py-2 hover:bg-gray-100">
-                    Abuja
-                  </Link>
-                  <Link to="/agents/portharcourt" className="block px-4 py-2 hover:bg-gray-100">
-                    Port Harcourt
-                  </Link>
-                </div>
-              )}
             </li>
 
             {/* Feed */}
@@ -149,10 +159,16 @@ export default function Navbar() {
                 </button>
                 {menuOpen === "buy" && (
                   <div className="mt-2 bg-gray-50 rounded-md shadow-inner max-h-60 overflow-y-auto">
-                    <Link to="/buy/houses" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link
+                      to="/buy/houses"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
                       Houses
                     </Link>
-                    <Link to="/buy/apartments" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link
+                      to="/buy/apartments"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
                       Apartments
                     </Link>
                   </div>
@@ -162,17 +178,25 @@ export default function Navbar() {
               {/* Rent Dropdown */}
               <li>
                 <button
-                  onClick={() => setMenuOpen(menuOpen === "rent" ? null : "rent")}
+                  onClick={() =>
+                    setMenuOpen(menuOpen === "rent" ? null : "rent")
+                  }
                   className="flex items-center justify-between w-full hover:text-green-800"
                 >
                   Rent <ChevronDown size={14} />
                 </button>
                 {menuOpen === "rent" && (
                   <div className="mt-2 bg-gray-50 rounded-md shadow-inner max-h-60 overflow-y-auto">
-                    <Link to="/rent/short-let" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link
+                      to="/rent/short-let"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
                       Short Let
                     </Link>
-                    <Link to="/rent/long-term" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link
+                      to="/rent/long-term"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
                       Long Term
                     </Link>
                   </div>
@@ -182,17 +206,25 @@ export default function Navbar() {
               {/* Agents */}
               <li>
                 <button
-                  onClick={() => setMenuOpen(menuOpen === "agents" ? null : "agents")}
+                  onClick={() =>
+                    setMenuOpen(menuOpen === "agents" ? null : "agents")
+                  }
                   className="flex items-center justify-between w-full hover:text-green-800"
                 >
                   Real estate agents <ChevronDown size={14} />
                 </button>
                 {menuOpen === "agents" && (
                   <div className="mt-2 bg-gray-50 rounded-md shadow-inner max-h-60 overflow-y-auto">
-                    <Link to="/agents/lagos" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link
+                      to="/agents/lagos"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
                       Lagos
                     </Link>
-                    <Link to="/agents/abuja" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link
+                      to="/agents/abuja"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
                       Abuja
                     </Link>
                   </div>
@@ -201,7 +233,10 @@ export default function Navbar() {
 
               {/* Feed */}
               <li>
-                <Link to="/feed" className="hover:text-green-800 block px-4 py-2">
+                <Link
+                  to="/feed"
+                  className="hover:text-green-800 block px-4 py-2"
+                >
                   Feed
                 </Link>
               </li>
@@ -222,4 +257,3 @@ export default function Navbar() {
     </header>
   );
 }
-

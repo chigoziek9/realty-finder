@@ -77,14 +77,15 @@ export default function SignUp({ accountType: propAccountType }) {
     {
       text: "Password must not contain space or unicode characters.",
       valid:
-        !/\s/.test(formData.password) && /^[\x00-\x7F]*$/.test(formData.password),
+        !/\s/.test(formData.password) &&
+        /^[\x00-\x7F]*$/.test(formData.password),
     },
   ];
 
   const allValid = passwordRules.every((rule) => rule.valid);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!formData.agree) {
       alert("You must agree to the terms & conditions.");
       return;
@@ -98,10 +99,29 @@ export default function SignUp({ accountType: propAccountType }) {
       return;
     }
 
-    console.log("Form submitted:", formData);
+    try {
+      // ✅ Call API to register
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    // ✅ Redirect to EmailSMS page after signup
-    navigate("/email-sms");
+      const data = await response.json();
+
+      if (response.ok) {
+        // ✅ Save email for OTP verification
+        localStorage.setItem("email", formData.email);
+
+        alert("Registration successful! Please check your email for OTP.");
+        navigate("/otp-verification");
+      } else {
+        alert(data.message || "Registration failed.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -121,7 +141,9 @@ export default function SignUp({ accountType: propAccountType }) {
           {/* Logo + Title */}
           <div className="text-left">
             <img src={logo} alt="Logo" className="w-32 mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900">Get started now</h2>
+            <h2 className="text-3xl font-bold text-gray-900">
+              Get started now
+            </h2>
             <p className="mt-2 text-gray-600">
               {formData.accountType ? (
                 <span>
@@ -285,9 +307,7 @@ export default function SignUp({ accountType: propAccountType }) {
                 />
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
-                  }
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 text-gray-500"
                 >
                   {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
