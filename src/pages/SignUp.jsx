@@ -100,19 +100,22 @@ export default function SignUp({ accountType: propAccountType }) {
     }
 
     try {
-      // ✅ Call API to register
-      const response = await fetch("/api/auth/register", {
+      // ✅ Choose base URL depending on environment
+      const API_BASE =
+        import.meta.env.MODE === "development"
+          ? "/api" // will go through Vite proxy
+          : "https://realtyfinder.onrender.com"; // your Render backend
+
+      const response = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
       if (response.ok) {
-        // ✅ Save email for OTP verification
         localStorage.setItem("email", formData.email);
-
         alert("Registration successful! Please check your email for OTP.");
         navigate("/otp-verification");
       } else {
