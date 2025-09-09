@@ -14,6 +14,7 @@ export default defineConfig({
         target: "https://realtyfinder.onrender.com", // your backend
         changeOrigin: true,
         secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
