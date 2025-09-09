@@ -1,7 +1,7 @@
 // src/pages/MySavedProperty.jsx
 import { Heart, Clock, Bell, Settings, LogOut } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import profileImg from "../assets/profile.png";
+import profileImg from "../assets/profile 2.png";
 import cardImg from "../assets/card.png";
 import cardImg1 from "../assets/card 2.png";
 
