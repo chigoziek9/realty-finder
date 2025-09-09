@@ -1,7 +1,34 @@
 // src/pages/AddPropertyRequestAlert.jsx
+import { useState } from "react";
 import DashboardLayout from "../components/DashboardLayout";
 
 export default function AddPropertyRequestAlert() {
+  const [formData, setFormData] = useState({
+    category: "Any",
+    type: "Any",
+    subtype: "Any",
+    bedrooms: "Any",
+    state: "Any",
+    area: "Any",
+    minPrice: "Select Min",
+    maxPrice: "Select Max",
+    comments: "",
+    name: "",
+    accountType: "Individual",
+    phone: "",
+    email: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted:", formData);
+  };
+
   return (
     <DashboardLayout>
       {/* Breadcrumb */}
@@ -24,20 +51,35 @@ export default function AddPropertyRequestAlert() {
       <div className="mt-6 bg-white shadow rounded-lg p-6">
         <h2 className="text-lg font-semibold mb-4">Property Request Detail</h2>
 
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Category / Type / Subtype */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <select className="border rounded-lg p-2">
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className="border rounded-lg p-2"
+            >
               <option>Any</option>
               <option>Residential</option>
               <option>Commercial</option>
             </select>
-            <select className="border rounded-lg p-2">
+            <select
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              className="border rounded-lg p-2"
+            >
               <option>Any</option>
               <option>Rent</option>
               <option>Buy</option>
             </select>
-            <select className="border rounded-lg p-2">
+            <select
+              name="subtype"
+              value={formData.subtype}
+              onChange={handleChange}
+              className="border rounded-lg p-2"
+            >
               <option>Any</option>
               <option>Duplex</option>
               <option>Flat</option>
@@ -46,17 +88,32 @@ export default function AddPropertyRequestAlert() {
 
           {/* Bedrooms / State / Area */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <select className="border rounded-lg p-2">
+            <select
+              name="bedrooms"
+              value={formData.bedrooms}
+              onChange={handleChange}
+              className="border rounded-lg p-2"
+            >
               <option>Any</option>
               <option>1</option>
               <option>2</option>
             </select>
-            <select className="border rounded-lg p-2">
+            <select
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              className="border rounded-lg p-2"
+            >
               <option>Any</option>
               <option>Lagos</option>
               <option>Rivers</option>
             </select>
-            <select className="border rounded-lg p-2">
+            <select
+              name="area"
+              value={formData.area}
+              onChange={handleChange}
+              className="border rounded-lg p-2"
+            >
               <option>Any</option>
               <option>Ikeja</option>
               <option>Port Harcourt</option>
@@ -65,12 +122,22 @@ export default function AddPropertyRequestAlert() {
 
           {/* Min / Max Price */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <select className="border rounded-lg p-2">
+            <select
+              name="minPrice"
+              value={formData.minPrice}
+              onChange={handleChange}
+              className="border rounded-lg p-2"
+            >
               <option>Select Min</option>
               <option>₦100k</option>
               <option>₦500k</option>
             </select>
-            <select className="border rounded-lg p-2">
+            <select
+              name="maxPrice"
+              value={formData.maxPrice}
+              onChange={handleChange}
+              className="border rounded-lg p-2"
+            >
               <option>Select Max</option>
               <option>₦1m</option>
               <option>₦5m</option>
@@ -79,6 +146,9 @@ export default function AddPropertyRequestAlert() {
 
           {/* Comments */}
           <textarea
+            name="comments"
+            value={formData.comments}
+            onChange={handleChange}
             placeholder="Comments"
             className="w-full border rounded-lg p-2 h-24"
           ></textarea>
@@ -87,10 +157,18 @@ export default function AddPropertyRequestAlert() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               placeholder="Name"
               className="border rounded-lg p-2"
             />
-            <select className="border rounded-lg p-2">
+            <select
+              name="accountType"
+              value={formData.accountType}
+              onChange={handleChange}
+              className="border rounded-lg p-2"
+            >
               <option>Individual</option>
               <option>Property Owner</option>
               <option>Agent</option>
@@ -101,11 +179,17 @@ export default function AddPropertyRequestAlert() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
               placeholder="Enter phone number"
               className="border rounded-lg p-2"
             />
             <input
               type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Email"
               className="border rounded-lg p-2"
             />
