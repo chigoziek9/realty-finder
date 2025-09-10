@@ -78,6 +78,7 @@ export default function SignUp({ accountType: propAccountType }) {
       text: "Password must not contain space or unicode characters.",
       valid:
         !/\s/.test(formData.password) &&
+        // eslint-disable-next-line no-control-regex
         /^[\x00-\x7F]*$/.test(formData.password),
     },
   ];
@@ -101,10 +102,7 @@ export default function SignUp({ accountType: propAccountType }) {
 
     try {
       // ✅ Choose base URL depending on environment
-      const API_BASE =
-        import.meta.env.MODE === "development"
-          ? "/api" // will go through Vite proxy
-          : "https://realtyfinder.onrender.com"; // your Render backend
+      const API_BASE = "https://realtyfinder.onrender.com/api"; // your Render backend
 
       const response = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
