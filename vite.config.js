@@ -8,14 +8,14 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  server: {
-    proxy: {
-      "/api": {
-        target: "https://realtyfinder.onrender.com", // your backend
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ""),
-      },
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     "/api": {
+  //       target: "https://realtyfinder.onrender.com", // your backend
+  //       changeOrigin: true,
+  //       secure: false,
+  //       rewrite: (path) => path.replace(/^\/api/, ""),
+  //     },
+  //   },
+  // },
 })
