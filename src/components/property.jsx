@@ -75,7 +75,7 @@ export default function Property() {
 
             {/* Image */}
             <img
-              src={house.image}
+              src={house.images[0]}
               alt={house.title}
               className="w-full h-48 sm:h-56 md:h-64 object-cover mt-4"
             />
