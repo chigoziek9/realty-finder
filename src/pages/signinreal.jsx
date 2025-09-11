@@ -24,12 +24,13 @@ export default function SigninPage() {
 
     try {
       // ✅ Choose base URL depending on environment
-      const API_BASE =
-        import.meta.env.MODE ="https://realtyfinder.onrender.com/api"; // your Render backend
+      const API_BASE = (import.meta.env.MODE =
+        "https://realtyfinder.onrender.com/api"); // your Render backend
 
       const response = await fetch(`${API_BASE}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
