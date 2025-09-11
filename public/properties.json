@@ -7,7 +7,16 @@
     "sqft": 1931,
     "source": "RealtyFinder",
     "listed": "2 days ago",
-    "image": "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg"
+    ],
     "title": "Rustic Retreat Cottage",
     "description": "An elegant 3-bedroom, 2.5-bathroom townhouse in a gated community.",
     "address": "Plot 15 Lekki Phase 1, Lagos"
@@ -20,7 +29,16 @@
     "sqft": 1500,
     "source": "HomeLink",
     "listed": "5 days ago",
-    "image": "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg"
+    ],
     "title": "Modern Glass Haven",
     "description": "Contemporary 3-bed home with floor-to-ceiling windows and minimalist design.",
     "address": "Plot 21 Garki II, Abuja"
@@ -33,7 +51,16 @@
     "sqft": 3200,
     "source": "EstateMaster",
     "listed": "1 day ago",
-    "image": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+    ],
     "title": "Spacious Family Manor",
     "description": "A luxurious 5-bedroom estate with lush gardens and premium finishes.",
     "address": "Plot 3 Independence Layout, Enugu"
@@ -46,7 +73,16 @@
     "sqft": 1800,
     "source": "RealtyFinder",
     "listed": "3 days ago",
-    "image": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+    ],
     "title": "Cozy Brick Cottage",
     "description": "Quaint brick façade 3-bed cottage with a charming front porch.",
     "address": "Plot 7 Rumuola Road, Port Harcourt"
@@ -59,7 +95,16 @@
     "sqft": 2100,
     "source": "HomeLink",
     "listed": "4 days ago",
-    "image": "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg"
+    ],
     "title": "Suburban Family Home",
     "description": "Comfortable 4-bed house in a quiet suburban neighborhood.",
     "address": "Plot 12 Bodija Estate, Ibadan"
@@ -72,7 +117,16 @@
     "sqft": 4500,
     "source": "EstateMaster",
     "listed": "12 hours ago",
-    "image": "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg"
+    ],
     "title": "Luxury Mansion Retreat",
     "description": "Expansive 6-bed mansion, perfect for entertaining and relaxation.",
     "address": "Plot 45 Banana Island Road, Ikoyi, Lagos"
@@ -85,7 +139,16 @@
     "sqft": 1200,
     "source": "BudgetHomes",
     "listed": "1 week ago",
-    "image": "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg"
+    ],
     "title": "Compact Townhouse",
     "description": "Affordable 2-bed townhouse ideal for first-time buyers.",
     "address": "Plot 18 Abakiliki Road, Onitsha"
@@ -98,7 +161,16 @@
     "sqft": 2600,
     "source": "RealtyFinder",
     "listed": "6 days ago",
-    "image": "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg"
+    ],
     "title": "Elegant Colonial",
     "description": "Classic colonial-style 4-bed home with modern updates.",
     "address": "Plot 33 Asokoro Avenue, Abuja"
@@ -111,7 +183,16 @@
     "sqft": 3000,
     "source": "HomeLink",
     "listed": "2 days ago",
-    "image": "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg"
+    ],
     "title": "Modern Ranch Villa",
     "description": "One-story ranch villa with open floor plan and spacious yard.",
     "address": "Plot 9 Iwofe Road, Port Harcourt"
@@ -124,7 +205,16 @@
     "sqft": 1700,
     "source": "BudgetHomes",
     "listed": "3 days ago",
-    "image": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+    ],
     "title": "Mid-Century Modern",
     "description": "Stylish mid-century inspired home with clean lines and retro charm.",
     "address": "Plot 4 GRA Phase 2, Benin City"

@@ -102,9 +102,9 @@ export default function SignUp({ accountType: propAccountType }) {
 
     try {
       // ✅ Choose base URL depending on environment
-    
+      const API_BASE = "https://realtyfinder.onrender.com/api"; // your Render backend
 
-      const response = await fetch(`/api/auth/register`, {
+      const response = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
