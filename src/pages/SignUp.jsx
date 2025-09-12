@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import signupImage from "../assets/Frame 1.png";
 import logo from "../assets/logo.png";
+import API_BASE from "./utilz/api";
 
 export default function SignUp({ accountType: propAccountType }) {
   const navigate = useNavigate();
@@ -84,46 +85,45 @@ export default function SignUp({ accountType: propAccountType }) {
   ];
 
   const allValid = passwordRules.every((rule) => rule.valid);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!formData.agree) {
-      alert("You must agree to the terms & conditions.");
-      return;
+  if (!formData.agree) {
+    alert("You must agree to the terms & conditions.");
+    return;
+  }
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+  if (!allValid) {
+    alert("Password does not meet the requirements.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(formData), // ✅ send flat object
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (response.ok) {
+      localStorage.setItem("email", formData.email);
+      alert("Registration successful! Please check your email for OTP.");
+      navigate("/otp-verification");
+    } else {
+      alert(data.message || "Registration failed.");
     }
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    if (!allValid) {
-      alert("Password does not meet the requirements.");
-      return;
-    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Something went wrong. Please try again.");
+  }
+};
 
-    try {
-      // ✅ Choose base URL depending on environment
-    
-
-      const response = await fetch(`/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (response.ok) {
-        localStorage.setItem("email", formData.email);
-        alert("Registration successful! Please check your email for OTP.");
-        navigate("/otp-verification");
-      } else {
-        alert(data.message || "Registration failed.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Something went wrong. Please try again.");
-    }
-  };
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">

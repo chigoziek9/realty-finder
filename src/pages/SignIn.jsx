@@ -4,6 +4,10 @@ import { X } from "lucide-react";
 import houseImg from "../assets/Frame 1.png";
 import logoImg from "../assets/logo.png";
 import { signInWithGoogle } from "../firebase";
+import API_BASE from "./utilz/api";
+import { useContext } from "react";
+import { AuthContext } from "../AuthContext";
+
 
 export default function SigninPage() {
   const [email, setEmail] = useState("");
@@ -11,48 +15,39 @@ export default function SigninPage() {
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   // 🔹 Normal Email/Password Demo Login
   // 🔹 Normal Email/Password Login
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!email || !password) {
-      setError("Please enter both email and password.");
-      return;
+  if (!email || !password) {
+    setError("Please enter both email and password.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (response.ok) {
+      login(data.user, data.token); // 👈 update context + localStorage
+      navigate("/");
+    } else {
+      setError(data.message || "Login failed. Please check your credentials.");
     }
-
-    try {
-      // ✅ Choose base URL depending on environment
-      const API_BASE = (import.meta.env.MODE =
-        "https://realtyfinder.onrender.com/api"); // your Render backend
-
-      const response = await fetch(`${API_BASE}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (response.ok) {
-        // ✅ Save token & user info
-        localStorage.setItem("token", data.token); // adjust if backend uses accessToken or something else
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        // ✅ Redirect after login
-        navigate("/");
-      } else {
-        setError(
-          data.message || "Login failed. Please check your credentials."
-        );
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setError("Something went wrong. Please try again.");
-    }
-  };
+  } catch (error) {
+    console.error("Login error:", error);
+    setError("Something went wrong. Please try again.");
+  }
+};
 
   // 🔹 Google Sign In
   const handleGoogleSignIn = async () => {

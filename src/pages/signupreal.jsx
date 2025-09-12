@@ -107,6 +107,7 @@ export default function SignUp({ accountType: propAccountType }) {
       const response = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+         credentials: "include",
         body: JSON.stringify(formData),
       });
 
