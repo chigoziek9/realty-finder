@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react"; // heart icon
 import Viewproperty from "./Viewproperty";
+import FavoriteButton from "./FavoriteButton";
+
 
 export default function Property() {
   const [property, setProperty] = useState([]);
-  const [favorites, setFavorites] = useState([]); // track favs
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,11 +24,11 @@ export default function Property() {
     }
   }, []);
 
-  const toggleFavorite = (id) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((fav) => fav !== id) : [...prev, id]
-    );
-  };
+  //const toggleFavorite = (id) => {
+  //  setFavorites((prev) =>
+  //    prev.includes(id) ? prev.filter((fav) => fav !== id) : [...prev, id]
+//    );
+//  };
 
   if (property.length === 0) {
     return (
@@ -94,20 +96,8 @@ export default function Property() {
                 <p className="text-[#27513d] text-xs sm:text-sm leading-relaxed underline">
                   {house.address}
                 </p>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation(); // prevent card click
-                    toggleFavorite(house.id);
-                  }}
-                >
-                  <Heart
-                    className={`w-5 h-5 ${
-                      favorites.includes(house.id)
-                        ? "fill-red-500 text-red-500"
-                        : "text-gray-400"
-                    }`}
-                  />
-                </button>
+               
+                <FavoriteButton property={house} />
               </div>
 
               <p className="text-gray-400 text-xs mt-2 ">

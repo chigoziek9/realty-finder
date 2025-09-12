@@ -16,11 +16,15 @@ export default function SigninPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  
 
   // 🔹 Normal Email/Password Demo Login
   // 🔹 Normal Email/Password Login
   const handleSubmit = async (e) => {
   e.preventDefault();
+   setLoading(true);
+
 
   if (!email || !password) {
     setError("Please enter both email and password.");
@@ -42,10 +46,14 @@ export default function SigninPage() {
       navigate("/");
     } else {
       setError(data.message || "Login failed. Please check your credentials.");
+       setLoading(false); // ✅ stop spinner on error
+
     }
   } catch (error) {
     console.error("Login error:", error);
     setError("Something went wrong. Please try again.");
+     setLoading(false); // ✅ stop spinner on error
+
   }
 };
 
@@ -156,11 +164,42 @@ export default function SigninPage() {
 
           {/* Sign In Button */}
           <button
-            type="submit"
-            className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition"
-          >
-            Sign In
-          </button>
+              type="submit"
+              disabled={loading}
+              className={`w-full py-3 rounded-lg text-white font-semibold transition ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-green-700 hover:bg-green-800"
+              }`}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    />
+                  </svg>
+                  Signing In...
+                </div>
+              ) : (
+                "Sign In"
+              )}
+            </button>
         </form>
 
         {/* Divider */}

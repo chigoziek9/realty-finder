@@ -30,6 +30,7 @@ export default function SignUp({ accountType: propAccountType }) {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // ✅ Load accountType from localStorage if not passed as prop
   useEffect(() => {
@@ -85,45 +86,49 @@ export default function SignUp({ accountType: propAccountType }) {
   ];
 
   const allValid = passwordRules.every((rule) => rule.valid);
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  if (!formData.agree) {
-    alert("You must agree to the terms & conditions.");
-    return;
-  }
-  if (formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match!");
-    return;
-  }
-  if (!allValid) {
-    alert("Password does not meet the requirements.");
-    return;
-  }
-
-  try {
-    const response = await fetch(`${API_BASE}/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(formData), // ✅ send flat object
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (response.ok) {
-      localStorage.setItem("email", formData.email);
-      alert("Registration successful! Please check your email for OTP.");
-      navigate("/otp-verification");
-    } else {
-      alert(data.message || "Registration failed.");
+    if (!formData.agree) {
+      alert("You must agree to the terms & conditions.");
+      return;
     }
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Something went wrong. Please try again.");
-  }
-};
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    if (!allValid) {
+      alert("Password does not meet the requirements.");
+      return;
+    }
 
+    try {
+      const response = await fetch(`${API_BASE}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(formData), // ✅ send flat object
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok) {
+        localStorage.setItem("email", formData.email);
+        alert("Registration successful! Please check your email for OTP.");
+        navigate("/otp-verification");
+      } else {
+        alert(data.message || "Registration failed.");
+        setLoading(false); // ✅ stop spinner on error
+
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong. Please try again.");
+      setLoading(false); // ✅ stop spinner on error
+
+    }
+  };
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
@@ -337,14 +342,40 @@ const handleSubmit = async (e) => {
             {/* Submit */}
             <button
               type="submit"
-              disabled={!allValid}
-              className={`w-full py-3 rounded-lg font-semibold transition ${
-                allValid
-                  ? "bg-green-700 text-white hover:bg-green-800"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              disabled={loading}
+              className={`w-full py-3 rounded-lg text-white font-semibold transition ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-green-700 hover:bg-green-800"
               }`}
             >
-              Sign up
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    />
+                  </svg>
+                  Signing up...
+                </div>
+              ) : (
+                "Sign Up"
+              )}
             </button>
           </form>
 
