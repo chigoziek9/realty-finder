@@ -1,24 +1,63 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { signInWithPopup, signInWithRedirect, getRedirectResult } from "firebase/auth";
+import { auth, googleProvider } from "../firebaseConfig"; 
 import houseImg from "../assets/Frame 1.png";
 import logoImg from "../assets/logo.png";
 
 export default function SignInEmail() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ Loading state
   const navigate = useNavigate();
 
+  // ✅ Handle email OTP sign-in
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!email.includes("@")) {
       alert("Please enter a valid email address");
       return;
     }
-
-    // Send OTP process here...
-    // After sending, navigate to OTP page with email method
-    navigate("/otp-verification", { state: { method: "email" } });
+    navigate("/otp-verification", { state: { method: "email", email } });
   };
+
+  // ✅ Handle Google Sign-In (Popup for desktop, Redirect for mobile)
+  const handleGoogleSignIn = async () => {
+    try {
+      setLoading(true); // show spinner
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        await signInWithRedirect(auth, googleProvider);
+      } else {
+        const result = await signInWithPopup(auth, googleProvider);
+        console.log("User info:", result.user);
+        alert(`Welcome ${result.user.displayName}`);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error("Google Sign In failed:", error);
+      alert(`Google Sign In failed: ${error.message}`);
+    } finally {
+      setLoading(false); // hide spinner
+    }
+  };
+
+  // ✅ Handle redirect result after returning from Google
+  useEffect(() => {
+    setLoading(true);
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result?.user) {
+          console.log("Redirect sign-in success:", result.user);
+          alert(`Welcome ${result.user.displayName}`);
+          navigate("/dashboard");
+        }
+      })
+      .catch((error) => {
+        if (error) console.error("Redirect Sign-In failed:", error);
+      })
+      .finally(() => setLoading(false));
+  }, [navigate]);
 
   return (
     <div className="min-h-screen flex flex-col md:grid md:grid-cols-2">
@@ -66,6 +105,49 @@ export default function SignInEmail() {
             Continue
           </button>
         </form>
+
+        {/* Google Sign In */}
+        <div className="mt-6">
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            className={`w-full border border-gray-300 py-2 rounded-lg flex items-center justify-center gap-2 transition ${
+              loading ? "bg-gray-100 cursor-not-allowed" : "hover:bg-gray-50"
+            }`}
+          >
+            {loading ? (
+              <svg
+                className="animate-spin h-5 w-5 text-gray-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+                ></path>
+              </svg>
+            ) : (
+              <>
+                <img
+                  src="https://www.svgrepo.com/show/355037/google.svg"
+                  alt="Google"
+                  className="w-5 h-5"
+                />
+                <span className="text-gray-700">Continue with Google</span>
+              </>
+            )}
+          </button>
+        </div>
 
         {/* Link to Phone Sign In */}
         <p className="text-center text-sm text-gray-500 mt-4">
