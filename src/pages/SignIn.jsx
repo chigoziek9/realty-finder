@@ -98,7 +98,7 @@ export default function SigninPage() {
         <div className="flex items-center gap-2 mb-8">
           <img src={logoImg} alt="RealtyFinder" className="w-6 h-6" />
           <span className="text-xl font-semibold text-gray-900">
-            RealtyFinder
+            RealtyFinders
           </span>
         </div>
 
