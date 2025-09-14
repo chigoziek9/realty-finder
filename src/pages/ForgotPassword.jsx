@@ -6,13 +6,36 @@ import logoImg from "../assets/logo.png";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-  e.preventDefault();
-  navigate("/otp-verification");
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
+    try {
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // if your backend uses cookies
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok) {
+        alert("Password reset email sent. Please check your inbox.");
+        navigate("/otp-verification");
+      } else {
+        alert(data.message || "Failed to send reset email.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col md:grid md:grid-cols-2">
@@ -77,9 +100,14 @@ export default function ForgotPassword() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition"
+            disabled={loading}
+            className={`w-full py-2 rounded-lg text-white transition ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-700 hover:bg-green-800"
+            }`}
           >
-            Submit
+            {loading ? "Sending..." : "Submit"}
           </button>
         </form>
       </div>

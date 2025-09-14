@@ -13,7 +13,7 @@ export default function UserDropdown({ user, logout }) {
         className="flex items-center gap-2"
       >
         <img
-          src={user.profilePic || "https://via.placeholder.com/40"}
+          src={user?.profilePic || "https://via.placeholder.com/40"}
           alt="profile"
           className="w-9 h-9 rounded-full object-cover"
         />

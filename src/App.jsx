@@ -43,6 +43,7 @@ import MyPropertyAlerts from "./pages/MyPropertyAlerts";
 import MySavedProperty from "./pages/MySavedProperty";
 import AccountSettings from "./pages/AccountSettings";
 import Profile from "./pages/Profile";
+import FavoritesPage from "./pages/FavoritesPage";
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -137,7 +138,9 @@ export default function App() {
       {/* Fallback */}
       <Route path="*" element={<h1 className="p-10">404 - Page Not Found</h1>} />
       <Route path="/profile" element={<Profile />} />
+       <Route path="/favorites" element={<FavoritesPage />} />
           </Routes>
+         
     </>
     
   );

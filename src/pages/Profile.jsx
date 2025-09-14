@@ -2,9 +2,17 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import DashboardLayout from "../components/DashboardLayout";
+import { AuthContext } from "../AuthContext";
+import React, { useContext } from 'react';
+
+
+
 
 export default function AccountSettings() {
   const navigate = useNavigate();
+  const { updateProfilePic } = useContext(AuthContext);
+
+
 
   const [form, setForm] = useState({
     profileType: "Individual",
@@ -42,8 +50,14 @@ export default function AccountSettings() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", form);
-    // TODO: replace with API call (axios/fetch)
+    if (photo) {
+      updateProfilePic(photo);
+    }
+
+    console.log("Form submitted:", form);
+    navigate("/profile"); // or wherever you want
   };
+
 
   return (
     <DashboardLayout>
