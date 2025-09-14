@@ -104,11 +104,14 @@ export default function SignUp({ accountType: propAccountType }) {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/auth/register`, {
+      const API_BASE = "https://realtyfinder.onrender.com";
+      // or https://realty-finder.vercel.app if that's where backend is deployed
+
+      const response = await fetch(`${API_BASE}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify(formData), // ✅ send flat object
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json().catch(() => ({}));
@@ -120,13 +123,11 @@ export default function SignUp({ accountType: propAccountType }) {
       } else {
         alert(data.message || "Registration failed.");
         setLoading(false); // ✅ stop spinner on error
-
       }
     } catch (error) {
       console.error("Error:", error);
       alert("Something went wrong. Please try again.");
       setLoading(false); // ✅ stop spinner on error
-
     }
   };
 

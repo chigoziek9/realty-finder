@@ -32,12 +32,16 @@ export default function SigninPage() {
   }
 
   try {
-    const response = await fetch(`${API_BASE}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ email, password }),
-    });
+    
+      const API_BASE = "https://realtyfinder.onrender.com";
+      // or https://realty-finder.vercel.app if that's where backend is deployed
+
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({email, password}),
+      });
 
     const data = await response.json().catch(() => ({}));
 

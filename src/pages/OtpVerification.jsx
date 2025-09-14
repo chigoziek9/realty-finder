@@ -45,14 +45,15 @@ export default function VerifyOTP() {
     try {
       setLoading(true);
 
-      const res = await fetch(
-        "/api/auth/verify-otp",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, otp: enteredOtp }),
-        }
-      );
+      const API_BASE = "https://realtyfinder.onrender.com";
+      // or https://realty-finder.vercel.app if that's where backend is deployed
+
+      const res = await fetch(`${API_BASE}/api/auth/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, otp: enteredOtp }),
+      });
 
       const data = await res.json();
       console.log("OTP response:", data);
@@ -76,14 +77,11 @@ export default function VerifyOTP() {
     try {
       setResending(true);
 
-      const res = await fetch(
-        "/api/auth/resend-otp",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        }
-      );
+      const res = await fetch("/api/auth/resend-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
       const data = await res.json();
       if (res.ok) {
@@ -97,8 +95,6 @@ export default function VerifyOTP() {
     } finally {
       setResending(false);
     }
-    
-
   };
 
   return (
