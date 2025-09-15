@@ -44,6 +44,11 @@ import MySavedProperty from "./pages/MySavedProperty";
 import AccountSettings from "./pages/AccountSettings";
 import Profile from "./pages/Profile";
 import FavoritesPage from "./pages/FavoritesPage";
+import AgentsDashboard from "./pages/AgentDashboard";
+import AgentsClient from "./pages/AgentsClient";
+import AgentsDocument from "./pages/AgentsDocument";
+import AgentsProperty from "./pages/AgentsProperty";
+import AgentsTransaction from "./pages/AgentsTransaction";
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -139,6 +144,13 @@ export default function App() {
       <Route path="*" element={<h1 className="p-10">404 - Page Not Found</h1>} />
       <Route path="/profile" element={<Profile />} />
        <Route path="/favorites" element={<FavoritesPage />} />
+        <Route path="/agents-dashboard" element={<AgentsDashboard/>} />
+        <Route path="/agents-client" element={<AgentsClient/>} />
+         <Route path="/agents-document" element={<AgentsDocument/>} />
+          <Route path="/agents-property" element={<AgentsProperty/>} />
+           <Route path="/agents-transaction" element={<AgentsTransaction/>} />
+
+       
           </Routes>
          
     </>

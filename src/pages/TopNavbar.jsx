@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaBell } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function TopNavbar() {
   const [open, setOpen] = useState(false);
@@ -43,9 +44,17 @@ export default function TopNavbar() {
                   </li>
                 ))}
               </ul>
-              <div className="p-2 text-center text-sm text-green-700 font-medium border-t hover:bg-gray-50 cursor-pointer">
-                View all
+            
+              <div className="text-center border-t"> 
+                {" "}
+                <Link
+                  to="/notifications"
+                  className="p-2 text-center text-sm text-green-700 font-medium  hover:text-xl cursor-pointer"
+                >
+                  View All
+                </Link>
               </div>
+             
             </div>
           )}
         </div>
