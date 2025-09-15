@@ -33,10 +33,16 @@ export default function UserDropdown({ user, logout }) {
             Profile
           </Link>
           <Link
-            to="/settings"
+            to="/account-settings"
             className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
           >
             Settings
+          </Link>
+          <Link
+            to="/agents-dashboard"
+            className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
+          >
+            Agent Dashboard
           </Link>
           <button
             onClick={logout}
