@@ -12,15 +12,17 @@ export default function UserDropdown({ user, logout }) {
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center gap-2"
       >
+        
+        <span className="font-medium text-black">
+          {user.firstName} {user.lastName}
+        </span>
+        <ChevronDown size={16} />
+
         <img
           src={user?.profilePic || "https://via.placeholder.com/40"}
           alt="profile"
           className="w-9 h-9 rounded-full object-cover"
         />
-        <span className="font-medium text-black">
-          {user.firstName} {user.lastName}
-        </span>
-        <ChevronDown size={16} />
       </button>
 
       {/* Dropdown */}
