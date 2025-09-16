@@ -1,14 +1,45 @@
 import { Clock, Bell, Heart, Settings, LogOut, X, Trash2 } from "lucide-react";
-import profileImg from "../assets/profile.png";
+
 import { useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
+import { useContext } from "react";
+import Graph from "../components/Graph.jsx";
+import RecentActivity from "../components/RecentActivity";
+import InboxInquiry from "../components/InboxInquiry.jsx";
+
 
 export default function AgentsDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useContext(AuthContext);
 
   // Utility to check if a link is active
   const isActive = (path) =>
-    location.pathname === path ? "bg-green-800 font-medium" : "hover:bg-green-800";
+    location.pathname === path
+      ? "bg-white text-green-900 font-medium"
+      : "hover:bg-green-800";
+  const appointments = [
+    {
+      message:
+        "John smith has booked a property viewing on Tuesday, Aug 20 at 2:00pm. Please review thw details in your dashboard",
+      title: "New appointment booking",
+    },
+    {
+      message:
+        "Your scheduled appointment with John smith for Victoria island duplex on Friday, August 23 at am has been confirmed.",
+      title: "Appointment Confirmation",
+    },
+    {
+      message:
+        "John smith has rescheduled  the tour for banana island villa to Saturday, August 24 at 4:00pm. Updated details are available in your calendar.",
+      title: "New appointment booking",
+    },
+    {
+      message:
+        "John smith has rescheduled  the tour for banana island villa to Saturday, August 24 at 4:00pm. Updated details are available in your calendar.",
+      title: "Appointment cancellation",
+    },
+  ];
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -16,10 +47,10 @@ export default function AgentsDashboard() {
       <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
         <div>
           {/* Menu */}
-          <nav className="mt-6 space-y-1">
+          <nav className="mt-[85px] space-y-1">
             <button
               onClick={() => navigate("/agents-dashboard")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
                 "/agents-dashboard"
               )}`}
             >
@@ -29,7 +60,7 @@ export default function AgentsDashboard() {
 
             <button
               onClick={() => navigate("/agents-transaction")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
                 "/agents-transaction"
               )}`}
             >
@@ -39,25 +70,25 @@ export default function AgentsDashboard() {
 
             <button
               onClick={() => navigate("/agents-client")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
                 "/agents-client"
               )}`}
             >
               <Heart size={18} />
               <span>Clients</span>
             </button>
-             <button
+            <button
               onClick={() => navigate("/agents-property")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
                 "/agents-property"
               )}`}
             >
               <Heart size={18} />
               <span>Document Compliance</span>
             </button>
-             <button
+            <button
               onClick={() => navigate("/agents-document")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
                 "/agents-document"
               )}`}
             >
@@ -65,11 +96,9 @@ export default function AgentsDashboard() {
               <span>Property Management</span>
             </button>
 
-
-
             <button
               onClick={() => navigate("/account-settings")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
                 "/account-settings"
               )}`}
             >
@@ -83,13 +112,15 @@ export default function AgentsDashboard() {
         <div className="p-6 border-t border-green-800">
           <div className="flex items-center space-x-3">
             <img
-              src={profileImg}
-              alt="User Avatar"
-              className="w-10 h-10 rounded-full border"
+              src={user?.profilePic || "https://via.placeholder.com/40"}
+              alt="profile"
+              className="w-10 h-10 rounded-full object-cover border"
             />
-            <div>
-              <p className="font-medium">Charles Doe</p>
-              <p className="text-sm text-gray-300">email@gmail.com</p>
+            <div className="flex-colunm">
+              <p className="font-medium ">
+                {user?.firstName} {user?.lastName}
+              </p>
+              <p className="text-sm text-gray-300">{user?.email}</p>
             </div>
           </div>
           <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
@@ -100,66 +131,85 @@ export default function AgentsDashboard() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-8">
-        {/* Top Section */}
-        <div>
-          <h1 className="text-2xl font-bold flex items-center space-x-2">
-            <Clock className="text-green-900" size={22} />
-            <span>Property Request Alert</span>
-          </h1>
-          <p className="text-gray-600 mt-1">
-            View, manage and update all your properties in one place
-          </p>
+      <main className="flex-1 p-[60px]">
+        <div className="flex justify-between w-full">
+          <h1 className="mt-4 text-3xl">Hello {user?.firstName}</h1>
           <button
-            onClick={() => navigate("/add-property-request-alert")}
+            onClick={() => navigate("/agents-form")}
             className="mt-4 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
           >
-            + Add Property Request Alert
+            + List Property
           </button>
+       
+        </div>
+        <div className="flex gap-[27px]">
+          <div className="mt-[31px] inline-block border max-w-[240px ] w-[240px] h-[154px]  p-[19px] ">
+            <p className="">Total Listing </p>
+            <p className="text-5xl  font-bold mt-[13px]">48</p>
+
+            <p className="mt-[13.31px] mb-3">This Week</p>
+          </div>
+          <div className="mt-[31px] inline-block border max-w-[216px ] w-[240px] h-[154px]  p-[19px] ">
+            <p className="">Total Clients </p>
+            <p className="text-5xl  font-bold mt-[13px]">25</p>
+
+            <p className="mt-[13.31px] mb-3">This Week</p>
+          </div>
+          <div className="mt-[31px] inline-block border max-w-[216px ] w-[240px] h-[154px]  p-[19px] ">
+            <p className="">Total Inquiries </p>
+            <p className="text-5xl  font-bold mt-[13px]">45</p>
+
+            <p className="mt-[13.31px] mb-3">This Week</p>
+          </div>
+          <div className="mt-[31px] inline-block border max-w-[216px ] w-[240px] h-[154px]  p-[19px] ">
+            <p className="">Commision Earned </p>
+            <p className="text-5xl  font-bold mt-[13px]">0</p>
+
+            <p className="mt-[13.31px] mb-3">This Week</p>
+          </div>
         </div>
 
-        {/* Middle Section */}
-        <div className="mt-6">
-          {/* Queued Message */}
-          <div className="flex items-center justify-between bg-green-100 text-green-700 px-4 py-3 rounded-md">
-            <p>
-              Your request has been queued for review and will be posted after it
-              has been reviewed
-            </p>
-            <X size={18} className="cursor-pointer" />
-          </div>
-
-          {/* Result Count */}
-          <div className="mt-4 bg-gray-200 text-gray-700 px-4 py-2 rounded">
-            Result 1–1 of 1
+        {/* Graph left and right side */}
+        <div className="max-w-7xl mt-[24px] flex gap-[27px]">
+          <Graph />
+          <div>
+            <RecentActivity />
           </div>
         </div>
-
-        {/* Bottom Section */}
-        <div className="mt-6 bg-white shadow-md rounded-lg p-6">
-          <div className="space-y-3 text-sm">
-            <p>
-              <span className="font-semibold">Type:</span> Mini flats for rent
-            </p>
-            <p>
-              <span className="font-semibold">Bedrooms:</span> 5
-            </p>
-            <p>
-              <span className="font-semibold">Areas:</span> Rivers
-            </p>
-            <p>
-              <span className="font-semibold">Date:</span> 12th Aug. 2025
-            </p>
-            <p>
-              <span className="font-semibold">Status:</span>{" "}
-              <span className="text-yellow-600 font-medium">Awaiting Review</span>
-            </p>
+        <div className="flex gap-[27px] max-w-7xl">
+          <div className="max-w-2xl  w-full border rounded-xl mt-[27px]  bg-white">
+            {/* Section header (only once, not inside map) */}
+            <div className="flex justify-between mt-[27px] px-[20px] py-[12px]">
+              <h1 className="font-jakarta text-[30px] leading-[30px] font-bold">
+                Appointments
+              </h1>
+              <button className="font-jakarta text-[#28563a] text-[16px] font-medium hover:text-black transition">
+                View all
+              </button>
+            </div>
+            <hr className="border-t border-gray-400 mt-2" />{" "}
+            {/* List of appointments */}
+            {appointments.map((appointment, index) => (
+              <div className="flex">
+                <div key={index} className="px-[20px] py-[12px]">
+                  <p className="font-jakarta text-[#08110C]-700 text-[20px] font-semibold">
+                    {appointment.title}
+                  </p>
+                  <li>
+                    <p className="font-jakarta font-normal text-[14px] w-[500px] text-wrap leading-[21px] text-[#313131]">
+                      {appointment.message}
+                    </p>
+                  </li>
+                </div>
+                <button className="font-jakarta text-[#28563a] text-[16px] font-medium hover:text-black transition">
+                  See detail
+                </button>
+              </div>
+            ))}
           </div>
-
-          {/* Delete Button (text + icon) */}
-          <button className="mt-6 flex items-center gap-2 text-red-600 font-medium hover:text-red-800">
-            <Trash2 size={18} /> Delete
-          </button>
+          <div>
+            <InboxInquiry />
+          </div>
         </div>
       </main>
     </div>

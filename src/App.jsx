@@ -49,6 +49,10 @@ import AgentsClient from "./pages/AgentsClient";
 import AgentsDocument from "./pages/AgentsDocument";
 import AgentsProperty from "./pages/AgentsProperty";
 import AgentsTransaction from "./pages/AgentsTransaction";
+import AgentPropertyForm from "./components/AgentPropertyForm";
+import ResetOtpVerification from "./pages/ResetOtpVerification";
+import SetNewPassword from "./pages/SetNewPassword";
+import PasswordSuccess from "./pages/PasswordSuccess";
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -72,88 +76,106 @@ function ProtectedSignupRoute({ children }) {
 export default function App() {
   return (
     <>
-    <Navbar />
-    <Routes>
-      {/* 🔽 Ensures all paths become lowercase */}
-      <Route path="*" element={<LowercaseRedirect />} />
+      <Navbar />
+      <Routes>
+        {/* 🔽 Ensures all paths become lowercase */}
+        <Route path="*" element={<LowercaseRedirect />} />
 
-      {/* Main pages */}
-      <Route path="/" element={<Home />} />
-      <Route path="/help" element={<Help />} />
-      <Route path="/buy/home" element={<Buy />} />
-      <Route path="/buy/land" element={<Houses />} />
-      <Route path="/account" element={<Account />} />
-      <Route path="/agent" element={<Agent />} />
-      <Route path="/sell" element={<Sell />} />
-      <Route path="/feed" element={<Feed />} />
-      <Route path="/contact" element={<Contact />} />
+        {/* Main pages */}
+        <Route path="/" element={<Home />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/buy/home" element={<Buy />} />
+        <Route path="/buy/land" element={<Houses />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="/agent" element={<Agent />} />
+        <Route path="/sell" element={<Sell />} />
+        <Route path="/feed" element={<Feed />} />
+        <Route path="/contact" element={<Contact />} />
 
-      {/* Property routes */}
-      <Route path="/property/:id" element={<PropertyDetails />} />
-      <Route path="/newtomarket" element={<Newtomarket />} />
-      <Route path="/mostviewed" element={<MostViewed />} />
-      <Route path="/naturepage" element={<NaturePage />} />
-      <Route path="/explore" element={<Explore />} />
+        {/* Property routes */}
+        <Route path="/property/:id" element={<PropertyDetails />} />
+        <Route path="/newtomarket" element={<Newtomarket />} />
+        <Route path="/mostviewed" element={<MostViewed />} />
+        <Route path="/naturepage" element={<NaturePage />} />
+        <Route path="/explore" element={<Explore />} />
 
-      {/* Auth routes */}
-      <Route
-        path="/signup"
-        element={
-          <ProtectedSignupRoute>
-            <SignUp />
-          </ProtectedSignupRoute>
-        }
-      />
-      <Route path="/signup/phone" element={<PhoneSignup />} />
-      <Route path="/choose-account-type" element={<ChooseAccountType />} />
-      <Route path="/signin" element={<SigninPage />} />
-      <Route path="/phone-signin" element={<PhoneSigninPage />} />
-      <Route path="/signin-email" element={<SignInEmail />} />
-      <Route path="/signin-phone" element={<SignInPhone />} />
-      <Route path="/phone-signin-otp" element={<PhoneSigninOtp />} />
+        {/* Auth routes */}
+        <Route
+          path="/signup"
+          element={
+            <ProtectedSignupRoute>
+              <SignUp />
+            </ProtectedSignupRoute>
+          }
+        />
+        <Route path="/signup/phone" element={<PhoneSignup />} />
+        <Route path="/choose-account-type" element={<ChooseAccountType />} />
+        <Route path="/signin" element={<SigninPage />} />
+        <Route path="/phone-signin" element={<PhoneSigninPage />} />
+        <Route path="/signin-email" element={<SignInEmail />} />
+        <Route path="/signin-phone" element={<SignInPhone />} />
+        <Route path="/phone-signin-otp" element={<PhoneSigninOtp />} />
 
-      {/* Password reset flow */}
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/otp-verification" element={<OtpVerification />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/reset-success" element={<ResetPasswordSuccess />} />
+        {/* Password reset flow */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/otp-verification" element={<OtpVerification />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/reset-success" element={<ResetPasswordSuccess />} />
 
-      {/* Notifications & Settings */}
-      <Route path="/notifications" element={<Notifications />} />
-      <Route path="/email-sms" element={<EmailSms />} />
-      <Route path="/home-matches" element={<HomeMatches />} />
-      <Route path="/messages" element={<Messages />} />
-      <Route path="/saved-property" element={<SavedProperty />} />
-      <Route path="/home-tours" element={<Hometours />} />
-      <Route path="/home-report" element={<HomeReport />} />
-      <Route path="/rent" element={<Rent />} />
+        {/* Notifications & Settings */}
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/email-sms" element={<EmailSms />} />
+        <Route path="/home-matches" element={<HomeMatches />} />
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/saved-property" element={<SavedProperty />} />
+        <Route path="/home-tours" element={<Hometours />} />
+        <Route path="/home-report" element={<HomeReport />} />
+        <Route path="/rent" element={<Rent />} />
         <Route path="/rent-property" element={<RentProperty />} />
-         <Route path="/property-request-alert" element={<PropertyRequestAlert />} />
-           {/* Default redirect */}
-      <Route path="/" element={<Navigate to="/property-request-alert" replace />} />
+        <Route
+          path="/property-request-alert"
+          element={<PropertyRequestAlert />}
+        />
+        {/* Default redirect */}
+        <Route
+          path="/"
+          element={<Navigate to="/property-request-alert" replace />}
+        />
 
-      {/* Dashboard pages */}
-      <Route path="/property-request-alert" element={<PropertyRequestAlert />} />
-      
-      <Route path="/property-request-alert" element={<AddPropertyRequestAlert />} />
-      <Route path="/my-property-alerts" element={<MyPropertyAlerts />} />
-      <Route path="/saved-properties" element={<MySavedProperty />} />
-      <Route path="/account-settings" element={<AccountSettings />} />
+        {/* Dashboard pages */}
+        <Route
+          path="/property-request-alert"
+          element={<PropertyRequestAlert />}
+        />
 
-      {/* Fallback */}
-      <Route path="*" element={<h1 className="p-10">404 - Page Not Found</h1>} />
-      <Route path="/profile" element={<Profile />} />
-       <Route path="/favorites" element={<FavoritesPage />} />
-        <Route path="/agents-dashboard" element={<AgentsDashboard/>} />
-        <Route path="/agents-client" element={<AgentsClient/>} />
-         <Route path="/agents-document" element={<AgentsDocument/>} />
-          <Route path="/agents-property" element={<AgentsProperty/>} />
-           <Route path="/agents-transaction" element={<AgentsTransaction/>} />
+        <Route
+          path="/property-request-alert"
+          element={<AddPropertyRequestAlert />}
+        />
+        <Route path="/my-property-alerts" element={<MyPropertyAlerts />} />
+        <Route path="/saved-properties" element={<MySavedProperty />} />
+        <Route path="/account-settings" element={<AccountSettings />} />
 
-       
-          </Routes>
-         
+        {/* Fallback */}
+        <Route
+          path="*"
+          element={<h1 className="p-10">404 - Page Not Found</h1>}
+        />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
+        <Route path="/agents-dashboard" element={<AgentsDashboard />} />
+        <Route path="/agents-client" element={<AgentsClient />} />
+        <Route path="/agents-document" element={<AgentsDocument />} />
+        <Route path="/agents-property" element={<AgentsProperty />} />
+        <Route path="/agents-transaction" element={<AgentsTransaction />} />
+        <Route path="/agents-form" element={<AgentPropertyForm />} />
+        <Route
+          path="/Reset-Otp-Verification"
+          element={<ResetOtpVerification />}
+        />
+        <Route path="/set-new-password" element={<SetNewPassword />} />
+        <Route path="/password-success" element={<PasswordSuccess />} />
+      </Routes>
     </>
-    
   );
 }
