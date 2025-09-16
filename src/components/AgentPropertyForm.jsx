@@ -110,12 +110,16 @@ export default function AgentPropertyForm() {
 
       {/* Main Content */}
       <main className="flex-1 p-[60px]">
-         <div className="">
+        <div className="">
           <h1 className="text-3xl font-bold">List Property</h1>
-          <p className="mt-[16px]"> Showcase your property to thousands of buyers and <br /> renters. List today and get noticed fast.</p>
-           <button className="bg-green-900 text-white px-8 py-2 rounded hover:bg-green-800 transition mt-[32px]">
-              View Listed Property
-            </button>
+          <p className="mt-[16px]">
+            {" "}
+            Showcase your property to thousands of buyers and <br /> renters.
+            List today and get noticed fast.
+          </p>
+          <button className="bg-green-900 text-white px-8 py-2 rounded hover:bg-green-800 transition mt-[32px]">
+            View Listed Property
+          </button>
         </div>
         <div className="max-w-4xl  mt-[32px] bg-white p-6 rounded-lg shadow">
           {/* Basic Information */}
@@ -123,14 +127,17 @@ export default function AgentPropertyForm() {
             Basic information
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+          
             <input
               type="text"
               placeholder="Property title*"
               className="border rounded px-3 py-2"
             />
+           
             <select className="border rounded px-3 py-2">
               <option>Select an option</option>
             </select>
+           
             <input
               type="text"
               placeholder="Price"
@@ -150,21 +157,39 @@ export default function AgentPropertyForm() {
           </div>
 
           {/* Location */}
+          
           <h2 className="bg-gray-100 px-4 py-2 font-semibold mt-6">Location</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-            <input
-              type="text"
-              placeholder="Enter address"
-              className="border rounded px-3 py-2"
-            />
-            <select className="border rounded px-3 py-2">
-              <option>Choose state</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Postal code"
-              className="border rounded px-3 py-2"
-            />
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Email address
+              </label>
+              <input
+                type="email"
+                placeholder="Enter email address"
+                className="border rounded px-3 py-2"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                State
+              </label>
+              <select className="border rounded px-3 py-2">
+                <option>Select state</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Postal code
+              </label>
+              <input
+                type="text"
+                placeholder="Enter postal code"
+                className="border rounded px-3 py-2"
+              />
+            </div>
           </div>
 
           {/* Property Gallery */}
