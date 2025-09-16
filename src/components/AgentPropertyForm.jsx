@@ -110,14 +110,14 @@ export default function AgentPropertyForm() {
 
       {/* Main Content */}
       <main className="flex-1 p-[60px]">
-        <div>
-          <h1>List Property</h1>
-          <p className="mt-[8px]"> Showcase your property to thousands of buyers and renters. List today and get noticed fast.</p>
-           <button className="bg-green-900 text-white px-8 py-2 rounded hover:bg-green-800 transition mt-[16px]">
+         <div className="">
+          <h1 className="text-3xl font-bold">List Property</h1>
+          <p className="mt-[16px]"> Showcase your property to thousands of buyers and <br /> renters. List today and get noticed fast.</p>
+           <button className="bg-green-900 text-white px-8 py-2 rounded hover:bg-green-800 transition mt-[32px]">
               View Listed Property
             </button>
         </div>
-        <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow">
+        <div className="max-w-4xl  mt-[32px] bg-white p-6 rounded-lg shadow">
           {/* Basic Information */}
           <h2 className="bg-gray-100 px-4 py-2 font-semibold">
             Basic information
