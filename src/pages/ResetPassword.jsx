@@ -5,21 +5,70 @@ import houseImg from "../assets/Frame 1.png";
 import logoImg from "../assets/logo.png";
 
 export default function ResetPassword() {
-  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
+    const resetToken = localStorage.getItem("resetToken");
+
+    if (!resetToken) {
+      setError("Missing reset token. Please request a new password reset.");
+      return;
+    }
+
+    if (newPassword.trim().length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
 
-    // ✅ If passwords match, redirect to success page
-    navigate("/reset-success");
+    try {
+      setLoading(true);
+      setError("");
+      setSuccessMessage("");
+
+      const response = await fetch(
+        "https://realtyfinder.onrender.com/api/auth/reset-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            newPassword,
+            resetToken,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Something went wrong.");
+      }
+
+      setSuccessMessage("Password has been reset successfully!");
+      localStorage.removeItem("resetToken");
+
+      setTimeout(() => {
+        navigate("/reset-success");
+      }, 1500);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -56,11 +105,19 @@ export default function ResetPassword() {
           Set a new password for your account.
         </p>
 
+        {/* Error & Success Messages */}
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {successMessage && (
+          <p className="text-green-600 text-sm mb-4">{successMessage}</p>
+        )}
+
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium mb-1">New Password</label>
+            <label className="block text-sm font-medium mb-1">
+              New Password
+            </label>
             <div className="relative">
               <Lock
                 size={18}
@@ -70,8 +127,9 @@ export default function ResetPassword() {
                 type="password"
                 className="w-full border rounded-lg pl-10 pr-3 py-2 focus:ring-2 focus:ring-green-600"
                 placeholder="Enter new password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -92,19 +150,18 @@ export default function ResetPassword() {
                 placeholder="Confirm new password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                required
               />
             </div>
           </div>
 
-          {/* Error Message */}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-
           {/* Submit */}
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition"
           >
-            Reset Password
+            {loading ? "Saving..." : "Reset Password"}
           </button>
         </form>
       </div>

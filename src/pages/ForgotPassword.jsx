@@ -14,18 +14,22 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/auth/forgot-password", {
+     const API_BASE = "https://realtyfinder.onrender.com";
+      // or https://realty-finder.vercel.app if that's where backend is deployed
+
+      const response = await fetch(`${API_BASE}/api/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // if your backend uses cookies
-        body: JSON.stringify({ email }),
+        credentials: "include",
+        body: JSON.stringify({email}),
       });
 
-      const data = await response.json().catch(() => ({}));
-
+    const data = await response.json().catch(() => ({}));
       if (response.ok) {
+        localStorage.setItem("resetToken", data.resetToken); // save for next step
         alert("Password reset email sent. Please check your inbox.");
-        navigate("/otp-verification");
+        navigate("/reset-otp-verification", { state: { email } });
+
       } else {
         alert(data.message || "Failed to send reset email.");
       }

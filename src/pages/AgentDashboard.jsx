@@ -7,6 +7,7 @@ import Graph from "../components/Graph.jsx";
 import RecentActivity from "../components/RecentActivity";
 import InboxInquiry from "../components/InboxInquiry.jsx";
 
+
 export default function AgentsDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -134,11 +135,12 @@ export default function AgentsDashboard() {
         <div className="flex justify-between w-full">
           <h1 className="mt-4 text-3xl">Hello {user?.firstName}</h1>
           <button
-            onClick={() => navigate("/add-property-request-alert")}
+            onClick={() => navigate("/agents-form")}
             className="mt-4 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
           >
             + List Property
           </button>
+       
         </div>
         <div className="flex gap-[27px]">
           <div className="mt-[31px] inline-block border max-w-[240px ] w-[240px] h-[154px]  p-[19px] ">
@@ -204,7 +206,6 @@ export default function AgentsDashboard() {
                 </button>
               </div>
             ))}
-            
           </div>
           <div>
             <InboxInquiry />
