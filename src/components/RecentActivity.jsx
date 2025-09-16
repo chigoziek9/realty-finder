@@ -1,4 +1,4 @@
-import { RotateCcw } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 
 const activities = [
   {
@@ -44,7 +44,8 @@ export default function RecentActivity() {
               <p className="text-sm">{activity.message}</p>
               <p className="text-xs text-gray-500">{activity.time}</p>
             </div>
-            <RotateCcw className="text-green-800 bg-green-100 rounded-full p-1 w-7 h-7" />
+            <button><MessageSquare className="text-green-800 bg-[#FFFFFF] rounded-full p-1 w-7 h-7" /></button>
+           
           </div>
         ))}
       </div>
