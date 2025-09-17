@@ -1,36 +1,37 @@
 // AuthContext.jsx
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useContext } from "react";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    // load from localStorage if available
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  const login = (userData) => {
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || null;
+  });
+
+  const login = (userData, tokenValue) => {
     setUser(userData);
+    setToken(tokenValue);
     localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", tokenValue);
   };
 
   const logout = () => {
     setUser(null);
+    setToken(null);
     localStorage.removeItem("user");
-  };
-
-  const updateProfilePic = (photoURL) => {
-    if (user) {
-      const updatedUser = { ...user, profilePic: photoURL };
-      setUser(updatedUser);
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-    }
+    localStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateProfilePic }}>
+    <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
+
+export const useAuth = () => useContext(AuthContext);

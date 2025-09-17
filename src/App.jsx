@@ -53,6 +53,7 @@ import AgentPropertyForm from "./components/AgentPropertyForm";
 import ResetOtpVerification from "./pages/ResetOtpVerification";
 import SetNewPassword from "./pages/SetNewPassword";
 import PasswordSuccess from "./pages/PasswordSuccess";
+import ProtectedRoute from "./components/ProtectedRoute";
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -137,44 +138,107 @@ export default function App() {
           element={<PropertyRequestAlert />}
         />
         {/* Default redirect */}
-        <Route
-          path="/"
-          element={<Navigate to="/property-request-alert" replace />}
-        />
-
-        {/* Dashboard pages */}
-        <Route
-          path="/property-request-alert"
-          element={<PropertyRequestAlert />}
-        />
-
-        <Route
-          path="/property-request-alert"
-          element={<AddPropertyRequestAlert />}
-        />
-        <Route path="/my-property-alerts" element={<MyPropertyAlerts />} />
-        <Route path="/saved-properties" element={<MySavedProperty />} />
-        <Route path="/account-settings" element={<AccountSettings />} />
 
         {/* Fallback */}
         <Route
           path="*"
           element={<h1 className="p-10">404 - Page Not Found</h1>}
         />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/favorites" element={<FavoritesPage />} />
-        <Route path="/agents-dashboard" element={<AgentsDashboard />} />
-        <Route path="/agents-client" element={<AgentsClient />} />
-        <Route path="/agents-document" element={<AgentsDocument />} />
-        <Route path="/agents-property" element={<AgentsProperty />} />
-        <Route path="/agents-transaction" element={<AgentsTransaction />} />
-        <Route path="/agents-form" element={<AgentPropertyForm />} />
+
         <Route
           path="/Reset-Otp-Verification"
           element={<ResetOtpVerification />}
         />
         <Route path="/set-new-password" element={<SetNewPassword />} />
         <Route path="/password-success" element={<PasswordSuccess />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agents-dashboard"
+          element={
+            <ProtectedRoute>
+              <AgentsDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agents-client"
+          element={
+            <ProtectedRoute>
+              <AgentsClient />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agents-document"
+          element={
+            <ProtectedRoute>
+              <AgentsDocument />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agents-property"
+          element={
+            <ProtectedRoute>
+              <AgentsProperty />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agents-transaction"
+          element={
+            <ProtectedRoute>
+              <AgentsTransaction />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agents-form"
+          element={
+            <ProtectedRoute>
+              <AgentPropertyForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/property-request-alert"
+          element={
+            <ProtectedRoute>
+              <PropertyRequestAlert />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-property-alerts"
+          element={
+            <ProtectedRoute>
+              <MyPropertyAlerts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/saved-properties"
+          element={
+            <ProtectedRoute>
+              <MySavedProperty />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/account-settings"
+          element={
+            <ProtectedRoute>
+              <AccountSettings />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

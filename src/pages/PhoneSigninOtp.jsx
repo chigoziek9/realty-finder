@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { auth, setUpRecaptcha } from "../firebase";
 import logo from "../assets/logo.png";
 
 export default function PhoneSigninOtp() {
@@ -39,20 +38,20 @@ export default function PhoneSigninOtp() {
     }
   };
 
-  const handleResend = async () => {
-    if (!phone) return alert("Phone number missing.");
-    try {
-      setLoading(true);
-      const confirmation = await setUpRecaptcha(phone);
-      window.confirmationResult = confirmation; // store new result
-      alert("📲 A new OTP has been sent to your phone.");
-    } catch (err) {
-      console.error("❌ Resend Error:", err);
-      alert("Failed to resend OTP. Try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+//  const handleResend = async () => {
+//    if (!phone) return alert("Phone number missing.");
+//    try {
+//       setLoading(true);
+  //     const confirmation = await setUpRecaptcha(phone);
+  //     window.confirmationResult = confirmation; // store new result
+  //     alert("📲 A new OTP has been sent to your phone.");
+  //   } catch (err) {
+  //     console.error("❌ Resend Error:", err);
+  //     alert("Failed to resend OTP. Try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+//   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
@@ -105,7 +104,7 @@ export default function PhoneSigninOtp() {
           Didn’t receive the code?{" "}
           <button
             type="button"
-            onClick={handleResend}
+           //  onClick={handleResend}
             disabled={loading}
             className="text-green-700 font-semibold hover:underline disabled:opacity-50"
           >

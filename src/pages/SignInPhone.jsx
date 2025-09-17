@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { setUpRecaptcha } from "../firebase"; // ✅ import
+
 import houseImg from "../assets/Frame 1.png";
 import logoImg from "../assets/logo.png";
 
@@ -21,11 +21,11 @@ export default function SignInPhone() {
 
     try {
       setLoading(true);
-      const confirmationResult = await setUpRecaptcha(phone);
+    //  const confirmationResult = await setUpRecaptcha(phone);
       setLoading(false);
 
       // ✅ Save confirmation to localStorage or state
-      window.confirmationResult = confirmationResult;
+    //  window.confirmationResult = confirmationResult;
 
       navigate("/otp-verification", { state: { phone } });
     } catch (err) {

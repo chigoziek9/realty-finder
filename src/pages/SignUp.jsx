@@ -14,6 +14,7 @@ import {
 import signupImage from "../assets/Frame 1.png";
 import logo from "../assets/logo.png";
 import API_BASE from "./utilz/api";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 
 export default function SignUp({ accountType: propAccountType }) {
   const navigate = useNavigate();
@@ -80,33 +81,33 @@ export default function SignUp({ accountType: propAccountType }) {
       text: "Password must not contain space or unicode characters.",
       valid:
         !/\s/.test(formData.password) &&
-        // eslint-disable-next-line no-control-regex
         /^[\x00-\x7F]*$/.test(formData.password),
     },
   ];
 
   const allValid = passwordRules.every((rule) => rule.valid);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     if (!formData.agree) {
       alert("You must agree to the terms & conditions.");
+      setLoading(false);
       return;
     }
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
+      setLoading(false);
       return;
     }
     if (!allValid) {
       alert("Password does not meet the requirements.");
+      setLoading(false);
       return;
     }
 
     try {
-      const API_BASE = "https://realtyfinder.onrender.com";
-      // or https://realty-finder.vercel.app if that's where backend is deployed
-
       const response = await fetch(`${API_BASE}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -122,12 +123,12 @@ export default function SignUp({ accountType: propAccountType }) {
         navigate("/otp-verification");
       } else {
         alert(data.message || "Registration failed.");
-        setLoading(false); // ✅ stop spinner on error
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
       alert("Something went wrong. Please try again.");
-      setLoading(false); // ✅ stop spinner on error
+      setLoading(false);
     }
   };
 
@@ -274,7 +275,7 @@ export default function SignUp({ accountType: propAccountType }) {
                 </button>
               </div>
 
-              {/* ✅ Password Rules */}
+              {/* Password Rules */}
               <div className="mt-3 bg-gray-50 border border-gray-200 rounded-lg p-4 text-xs leading-5">
                 <ul className="space-y-1">
                   {passwordRules.map((rule, idx) => (
@@ -380,19 +381,13 @@ export default function SignUp({ accountType: propAccountType }) {
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="flex items-center my-4">
-            <hr className="flex-grow border-gray-300" />
-            <span className="px-3 text-gray-500 text-sm">or</span>
-            <hr className="flex-grow border-gray-300" />
-          </div>
-
-          {/* Social Sign Up */}
-          <div className="space-y-3">
+          {/* Phone Signup Only */}
+          <div className="space-y-3 mt-4">
             <button className="w-full flex items-center justify-center gap-2 border rounded-lg py-3 hover:bg-gray-50 transition">
               <FaGoogle className="text-red-500" /> Sign up with Google
             </button>
-
+            {/* <GoogleSignInButton /> */}
+            <GoogleSignInButton />
             <Link to="/signup/phone">
               <button className="w-full flex items-center justify-center gap-2 border rounded-lg py-3 hover:bg-gray-50 transition">
                 <FaPhone className="text-green-600" /> Sign up with Phone

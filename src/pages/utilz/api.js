@@ -5,3 +5,5 @@ const API_BASE =
     : "https://realtyfinder.onrender.com/api"; // ✅ full backend URL in production
 
 export default API_BASE;
+
+
