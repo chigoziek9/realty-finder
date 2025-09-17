@@ -23,43 +23,42 @@ export default function SigninPage() {
   // 🔹 Normal Email/Password Login
   const handleSubmit = async (e) => {
   e.preventDefault();
-   setLoading(true);
-
+  setLoading(true);
 
   if (!email || !password) {
     setError("Please enter both email and password.");
+    setLoading(false);
     return;
   }
 
   try {
-    
-      const API_BASE = "https://realtyfinder.onrender.com";
-      // or https://realty-finder.vercel.app if that's where backend is deployed
+    const API_BASE = "https://realtyfinder.onrender.com";
 
-      const response = await fetch(`${API_BASE}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({email, password}),
-      });
+    const response = await fetch(`${API_BASE}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    });
 
     const data = await response.json().catch(() => ({}));
 
-    if (response.ok) {
-      login(data.user, data.token); // 👈 update context + localStorage
+    if (response.ok && data.token) {
+      // ✅ Save user in localStorage + token in cookie (via AuthContext)
+      login(data.user, data.token);
+
       navigate("/");
     } else {
       setError(data.message || "Login failed. Please check your credentials.");
-       setLoading(false); // ✅ stop spinner on error
-
+      setLoading(false);
     }
   } catch (error) {
     console.error("Login error:", error);
     setError("Something went wrong. Please try again.");
-     setLoading(false); // ✅ stop spinner on error
-
+    setLoading(false);
   }
 };
+
 
   // 🔹 Google Sign In
   //const handleGoogleSignIn = async () => {

@@ -94,7 +94,15 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
 
         {/* Property routes */}
-        <Route path="/property/:id" element={<PropertyDetails />} />
+        
+        <Route
+          path="/property/:id"
+          element={
+            <ProtectedRoute>
+              <PropertyDetails/>
+            </ProtectedRoute>
+          }
+        />
         <Route path="/newtomarket" element={<Newtomarket />} />
         <Route path="/mostviewed" element={<MostViewed />} />
         <Route path="/naturepage" element={<NaturePage />} />
@@ -133,10 +141,16 @@ export default function App() {
         <Route path="/home-report" element={<HomeReport />} />
         <Route path="/rent" element={<Rent />} />
         <Route path="/rent-property" element={<RentProperty />} />
+       
         <Route
           path="/property-request-alert"
-          element={<PropertyRequestAlert />}
+          element={
+            <ProtectedRoute>
+              <PropertyRequestAlert/>
+            </ProtectedRoute>
+          }
         />
+        
         {/* Default redirect */}
 
         {/* Fallback */}
