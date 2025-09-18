@@ -1,19 +1,71 @@
 import { useState } from "react";
 import { Clock, Bell, Heart, Settings, LogOut } from "lucide-react";
-import profileImg from "../assets/profile.png";
+import { useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
 
 export default function PropertyManagement() {
   const [filter, setFilter] = useState("Active");
   const [sort, setSort] = useState("Date added");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useContext(AuthContext);
+
+  const isActive = (path) =>
+    location.pathname === path
+      ? "bg-white text-green-900 font-medium"
+      : "hover:bg-green-800";
 
   const properties = [
-    { id: 1, name: "3 bedroom flat/apartment with bq", status: "Pending", price: "₦1,500,000", img: "https://via.placeholder.com/60" },
-    { id: 2, name: "1 bedroom flat/apartment with bq", status: "Live", price: "₦3,500,000", img: "https://via.placeholder.com/60" },
-    { id: 3, name: "7 bedroom flat/apartment with bq", status: "Sold", price: "₦1,500,000", img: "https://via.placeholder.com/60" },
-    { id: 4, name: "2 bedroom flat/apartment with bq", status: "Live", price: "₦2,500,000", img: "https://via.placeholder.com/60" },
-    { id: 5, name: "3 bedroom flat/apartment with bq", status: "Live", price: "₦1,800,000", img: "https://via.placeholder.com/60" },
-    { id: 6, name: "3 bedroom flat/apartment with bq", status: "Live", price: "₦8,500,000", img: "https://via.placeholder.com/60" },
-    { id: 7, name: "3 bedroom flat/apartment with bq", status: "Sold", price: "₦6,500,000", img: "https://via.placeholder.com/60" },
+    {
+      id: 1,
+      name: "3 bedroom flat/apartment with bq",
+      status: "Pending",
+      price: "₦1,500,000",
+      img: "https://via.placeholder.com/60",
+    },
+    {
+      id: 2,
+      name: "1 bedroom flat/apartment with bq",
+      status: "Live",
+      price: "₦3,500,000",
+      img: "https://via.placeholder.com/60",
+    },
+    {
+      id: 3,
+      name: "7 bedroom flat/apartment with bq",
+      status: "Sold",
+      price: "₦1,500,000",
+      img: "https://via.placeholder.com/60",
+    },
+    {
+      id: 4,
+      name: "2 bedroom flat/apartment with bq",
+      status: "Live",
+      price: "₦2,500,000",
+      img: "https://via.placeholder.com/60",
+    },
+    {
+      id: 5,
+      name: "3 bedroom flat/apartment with bq",
+      status: "Live",
+      price: "₦1,800,000",
+      img: "https://via.placeholder.com/60",
+    },
+    {
+      id: 6,
+      name: "3 bedroom flat/apartment with bq",
+      status: "Live",
+      price: "₦8,500,000",
+      img: "https://via.placeholder.com/60",
+    },
+    {
+      id: 7,
+      name: "3 bedroom flat/apartment with bq",
+      status: "Sold",
+      price: "₦6,500,000",
+      img: "https://via.placeholder.com/60",
+    },
   ];
 
   const statusColors = {
@@ -25,43 +77,83 @@ export default function PropertyManagement() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-72 bg-green-900 text-white flex flex-col justify-between">
+      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
         <div>
-          <nav className="mt-6 space-y-1">
-            <button className="flex w-full items-center space-x-3 px-6 py-3 hover:bg-green-800">
+          {/* Menu */}
+          <nav className="mt-[85px] space-y-1">
+            <button
+              onClick={() => navigate("/agents-dashboard")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
+                "/agents-dashboard"
+              )}`}
+            >
               <Clock size={18} />
-              <span>Dashboard overview</span>
+              <span>Dashboard Overview</span>
             </button>
-            <button className="flex w-full items-center space-x-3 px-6 py-3 hover:bg-green-800">
+
+            <button
+              onClick={() => navigate("/agents-transaction")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
+                "/agents-transaction"
+              )}`}
+            >
               <Bell size={18} />
               <span>Transaction & Commission</span>
             </button>
-            <button className="flex w-full items-center space-x-3 px-6 py-3 hover:bg-green-800">
+
+            <button
+              onClick={() => navigate("/agents-client")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
+                "/agents-client"
+              )}`}
+            >
               <Heart size={18} />
               <span>Clients</span>
             </button>
-            <button className="flex w-full items-center space-x-3 px-6 py-3 hover:bg-green-800">
+            <button
+              onClick={() => navigate("/agents-document")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/agents-document"
+              )}`}
+            >
               <Heart size={18} />
-              <span>Document compliance</span>
+              <span>Document Compliance</span>
             </button>
-            <button className="flex w-full items-center space-x-3 px-6 py-3 bg-green-800">
+             <button
+              onClick={() => navigate("/agents-property")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/agents-property"
+              )}`}
+            >
               <Heart size={18} />
-              <span>Property management</span>
+              <span>Property Management</span>
             </button>
-            <button className="flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 hover:bg-green-800">
+
+            <button
+              onClick={() => navigate("/account-settings")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
+                "/account-settings"
+              )}`}
+            >
               <Settings size={18} />
-              <span>Account settings</span>
+              <span>Account Settings</span>
             </button>
           </nav>
         </div>
 
-        {/* User */}
+        {/* User Info */}
         <div className="p-6 border-t border-green-800">
           <div className="flex items-center space-x-3">
-            <img src={profileImg} alt="User Avatar" className="w-10 h-10 rounded-full border" />
-            <div>
-              <p className="font-medium">Charles Doe</p>
-              <p className="text-sm text-gray-300">email@gmail.com</p>
+            <img
+              src={user?.profilePic || "https://via.placeholder.com/40"}
+              alt="profile"
+              className="w-10 h-10 rounded-full object-cover border"
+            />
+            <div className="flex-colunm">
+              <p className="font-medium ">
+                {user?.firstName} {user?.lastName}
+              </p>
+              <p className="text-sm text-gray-300">{user?.email}</p>
             </div>
           </div>
           <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
@@ -78,7 +170,8 @@ export default function PropertyManagement() {
           <div>
             <h1 className="text-2xl font-bold">Property management</h1>
             <p className="text-gray-600 mt-1">
-              Effortlessly organize, update and monitor all your property listings.
+              Effortlessly organize, update and monitor all your property
+              listings.
             </p>
           </div>
           <button className="mt-4 md:mt-0 px-4 py-2 bg-green-700 text-white rounded-lg shadow hover:bg-green-800">
@@ -133,11 +226,19 @@ export default function PropertyManagement() {
                     <input type="checkbox" />
                   </td>
                   <td className="p-3 flex items-center gap-3">
-                    <img src={p.img} alt={p.name} className="w-14 h-10 rounded-md object-cover" />
+                    <img
+                      src={p.img}
+                      alt={p.name}
+                      className="w-14 h-10 rounded-md object-cover"
+                    />
                     {p.name}
                   </td>
                   <td className="p-3">
-                    <span className={`px-3 py-1 rounded-full text-xs ${statusColors[p.status]}`}>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs ${
+                        statusColors[p.status]
+                      }`}
+                    >
                       {p.status}
                     </span>
                   </td>
@@ -158,14 +259,15 @@ export default function PropertyManagement() {
               <div>
                 <p className="font-medium">New appointment booking</p>
                 <p className="text-gray-600">
-                  John smith has booked a property viewing on Tuesday, Aug 20 at 2:00pm.
+                  John smith has booked a property viewing on Tuesday, Aug 20 at
+                  2:00pm.
                 </p>
               </div>
               <div>
                 <p className="font-medium">Appointment Confirmation</p>
                 <p className="text-gray-600">
-                  Your scheduled appointment with John smith for Victoria island duplex on Friday,
-                  Aug 23 at 11am has been confirmed.
+                  Your scheduled appointment with John smith for Victoria island
+                  duplex on Friday, Aug 23 at 11am has been confirmed.
                 </p>
               </div>
             </div>
@@ -176,16 +278,20 @@ export default function PropertyManagement() {
             <h2 className="font-semibold mb-4">Performance overview</h2>
             <ul className="space-y-2 text-sm">
               <li className="flex justify-between">
-                <span>Total listings managed</span> <span className="font-medium">12</span>
+                <span>Total listings managed</span>{" "}
+                <span className="font-medium">12</span>
               </li>
               <li className="flex justify-between">
-                <span>Active listings</span> <span className="font-medium">8</span>
+                <span>Active listings</span>{" "}
+                <span className="font-medium">8</span>
               </li>
               <li className="flex justify-between">
-                <span>Pending/expired listings</span> <span className="font-medium">4</span>
+                <span>Pending/expired listings</span>{" "}
+                <span className="font-medium">4</span>
               </li>
               <li className="flex justify-between">
-                <span>Average views per listings</span> <span className="font-medium">2.1k</span>
+                <span>Average views per listings</span>{" "}
+                <span className="font-medium">2.1k</span>
               </li>
             </ul>
           </div>

@@ -7,7 +7,6 @@ import Graph from "../components/Graph.jsx";
 import RecentActivity from "../components/RecentActivity";
 import InboxInquiry from "../components/InboxInquiry.jsx";
 
-
 export default function AgentsDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -78,18 +77,18 @@ export default function AgentsDashboard() {
               <span>Clients</span>
             </button>
             <button
-              onClick={() => navigate("/agents-property")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
-                "/agents-property"
+              onClick={() => navigate("/agents-document")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/agents-document"
               )}`}
             >
               <Heart size={18} />
               <span>Document Compliance</span>
             </button>
             <button
-              onClick={() => navigate("/agents-document")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
-                "/agents-document"
+              onClick={() => navigate("/agents-property")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/agents-property"
               )}`}
             >
               <Heart size={18} />
@@ -140,7 +139,6 @@ export default function AgentsDashboard() {
           >
             + List Property
           </button>
-       
         </div>
         <div className="flex gap-[27px]">
           <div className="mt-[31px] inline-block border max-w-[240px ] w-[240px] h-[154px]  p-[19px] ">
