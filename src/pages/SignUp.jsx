@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import signupImage from "../assets/Frame 1.png";
 import logo from "../assets/logo.png";
-import API_BASE from "./utilz/api";
+
 import GoogleSignInButton from "../components/GoogleSignInButton";
 
 export default function SignUp({ accountType: propAccountType }) {
@@ -108,6 +108,8 @@ export default function SignUp({ accountType: propAccountType }) {
     }
 
     try {
+       const API_BASE = "https://realtyfinder.onrender.com";
+
       const response = await fetch(`${API_BASE}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
