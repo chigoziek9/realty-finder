@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import houseImg from "../assets/Frame 1.png";
 import logoImg from "../assets/logo.png";
-import { signInWithGoogle } from "../firebase";
 import API_BASE from "./utilz/api";
 import { useContext } from "react";
 import { AuthContext } from "../AuthContext";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 
 
 export default function SigninPage() {
@@ -23,55 +23,54 @@ export default function SigninPage() {
   // 🔹 Normal Email/Password Login
   const handleSubmit = async (e) => {
   e.preventDefault();
-   setLoading(true);
-
+  setLoading(true);
 
   if (!email || !password) {
     setError("Please enter both email and password.");
+    setLoading(false);
     return;
   }
 
   try {
-    
-      const API_BASE = "https://realtyfinder.onrender.com";
-      // or https://realty-finder.vercel.app if that's where backend is deployed
+    const API_BASE = "https://realtyfinder.onrender.com";
 
-      const response = await fetch(`${API_BASE}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({email, password}),
-      });
+    const response = await fetch(`${API_BASE}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    });
 
     const data = await response.json().catch(() => ({}));
 
-    if (response.ok) {
-      login(data.user, data.token); // 👈 update context + localStorage
+    if (response.ok && data.token) {
+      // ✅ Save user in localStorage + token in cookie (via AuthContext)
+      login(data.user, data.token);
+
       navigate("/");
     } else {
       setError(data.message || "Login failed. Please check your credentials.");
-       setLoading(false); // ✅ stop spinner on error
-
+      setLoading(false);
     }
   } catch (error) {
     console.error("Login error:", error);
     setError("Something went wrong. Please try again.");
-     setLoading(false); // ✅ stop spinner on error
-
+    setLoading(false);
   }
 };
 
+
   // 🔹 Google Sign In
-  const handleGoogleSignIn = async () => {
-    try {
-      const user = await signInWithGoogle();
-      alert(`Welcome ${user.displayName}!`);
-      navigate("/"); // ✅ Redirect after login
-    } catch (err) {
-      console.error("Google Sign In failed:", err);
-      setError("Google Sign In failed. Please try again.");
-    }
-  };
+  //const handleGoogleSignIn = async () => {
+   // try {
+   //   const user = await signInWithGoogle();
+    //  alert(`Welcome ${user.displayName}!`);
+    //  navigate("/"); // ✅ Redirect after login
+   // } catch (err) {
+    //  console.error("Google Sign In failed:", err);
+   //   setError("Google Sign In failed. Please try again.");
+   // }
+//  };
 
   return (
     <div className="min-h-screen flex flex-col md:grid md:grid-cols-2">
@@ -215,7 +214,7 @@ export default function SigninPage() {
 
         {/* Google Sign In */}
         <button
-          onClick={handleGoogleSignIn}
+         // onClick={handleGoogleSignIn}
           className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50 transition"
         >
           <img
@@ -225,6 +224,8 @@ export default function SigninPage() {
           />
           Sign in with Google
         </button>
+        {/* <GoogleSignInButton /> */}
+        <GoogleSignInButton />
 
         {/* Continue with Phone (no input, just button) */}
         <button
