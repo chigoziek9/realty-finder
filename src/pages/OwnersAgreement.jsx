@@ -81,7 +81,7 @@ export default function OwnersAgreement() {
               )}`}
             >
               <Settings size={18} />
-              <span>Account Settings</span>
+              <span>AccountSettings</span>
             </button>
           </nav>
         </div>
