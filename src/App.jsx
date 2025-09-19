@@ -1,4 +1,7 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
+import OAuthSuccess from "./pages/OAuthSuccess";
+
 import Home from "./pages/Home";
 import Help from "./pages/Help";
 import Buy from "./pages/Buy";
@@ -54,6 +57,13 @@ import ResetOtpVerification from "./pages/ResetOtpVerification";
 import SetNewPassword from "./pages/SetNewPassword";
 import PasswordSuccess from "./pages/PasswordSuccess";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AgentSettings from "./pages/AgentSettings";
+import OwnersDashboard from "./pages/OwnersDashboard";
+import OwnersDocuments from "./pages/OwnersDocuments";
+import OwnersAgreement from "./pages/OwnersAgreement";
+import OwnersAccountSettings from "./pages/OwnersAccountSettings";
+import OwnersPropertyListings from "./pages/OwnersPropertyListings";
+import OwnersPropertySaved from "./pages/OwnersPropertySaved";
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -150,6 +160,64 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+         <Route
+          path="/agent-settings"
+          element={
+            <ProtectedRoute>
+              <AgentSettings/>
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/owners-dashboard"
+          element={
+            <ProtectedRoute>
+              <OwnersDashboard/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/owners-documents"
+          element={
+            <ProtectedRoute>
+              <OwnersDocuments/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/owners-agreement"
+          element={
+            <ProtectedRoute>
+              <OwnersAgreement/>
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/owners-settings"
+          element={
+            <ProtectedRoute>
+              <OwnersAccountSettings/>
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/owners-listings"
+          element={
+            <ProtectedRoute>
+              <OwnersPropertyListings/>
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/owners-saved-property"
+          element={
+            <ProtectedRoute>
+              <OwnersPropertySaved/>
+            </ProtectedRoute>
+          }
+        />
+        
+        
         
         {/* Default redirect */}
 

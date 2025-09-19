@@ -46,6 +46,13 @@ export default function UserDropdown({ user, logout }) {
           >
             Agent Dashboard
           </Link>
+          <Link
+            to="/owners-dashboard"
+            className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
+          >
+            Owners Dashboard
+          </Link>
+          
           <button
             onClick={logout}
             className="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100"

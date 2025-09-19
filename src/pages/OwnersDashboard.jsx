@@ -1,13 +1,13 @@
 import { Clock, Bell, Heart, Settings, LogOut, X, Trash2 } from "lucide-react";
 
 import { useNavigate, useLocation } from "react-router-dom";
-import { AuthContext } from "../AuthContext";
+import { AuthContext } from "../AuthContext.jsx";
 import { useContext } from "react";
 import Graph from "../components/Graph.jsx";
-import RecentActivity from "../components/RecentActivity";
+import RecentActivity from "../components/RecentActivity.jsx";
 import InboxInquiry from "../components/InboxInquiry.jsx";
 
-export default function AgentsDashboard() {
+export default function OwnersDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useContext(AuthContext);
@@ -48,57 +48,57 @@ export default function AgentsDashboard() {
           {/* Menu */}
           <nav className="mt-[85px] space-y-1">
             <button
-              onClick={() => navigate("/agents-dashboard")}
+              onClick={() => navigate("/owners-dashboard")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
-                "/agents-dashboard"
+                "/owners-dashboard"
               )}`}
             >
               <Clock size={18} />
-              <span>Dashboard Overview</span>
+              <span>Dashboard </span>
             </button>
 
             <button
-              onClick={() => navigate("/agents-transaction")}
+              onClick={() => navigate("/owners-listings")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
-                "/agents-transaction"
+                "/owners-listings"
               )}`}
             >
               <Bell size={18} />
-              <span>Transaction & Commission</span>
+              <span>My-Listings</span>
             </button>
 
             <button
-              onClick={() => navigate("/agents-client")}
+              onClick={() => navigate("/owners-saved-property")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
-                "/agents-client"
+                "/owners-saved-property"
               )}`}
             >
               <Heart size={18} />
-              <span>Clients</span>
+              <span>My saved property</span>
             </button>
             <button
-              onClick={() => navigate("/agents-document")}
+              onClick={() => navigate("/owners-documents")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
-                "/agents-document"
+                "/owners-documents"
               )}`}
             >
               <Heart size={18} />
-              <span>Document Compliance</span>
+              <span>My-documents</span>
             </button>
             <button
-              onClick={() => navigate("/agents-property")}
+              onClick={() => navigate("/owners-agreement")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
-                "/agents-property"
+                "/owners-agreement"
               )}`}
             >
               <Heart size={18} />
-              <span>Property Management</span>
+              <span>New tenancy agreement</span>
             </button>
 
             <button
-              onClick={() => navigate("/agent-settings")}
+              onClick={() => navigate("/owners-settings")}
               className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
-                "/agent-settings"
+                "/owners-settings"
               )}`}
             >
               <Settings size={18} />

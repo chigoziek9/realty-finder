@@ -203,9 +203,9 @@ export default function AgentsTransaction() {
                </button>
    
                <button
-                 onClick={() => navigate("/account-settings")}
+                 onClick={() => navigate("/agent-settings")}
                  className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
-                   "/account-settings"
+                   "/agent-settings"
                  )}`}
                >
                  <Settings size={18} />
