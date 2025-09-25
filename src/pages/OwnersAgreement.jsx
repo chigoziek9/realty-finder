@@ -1,7 +1,9 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext.jsx";
 import { useContext, useState } from "react";
-import { Heart, Settings, LogOut, FileText } from "lucide-react";
+import { Heart, Settings, LogOut, FileText, Clock, Bell } from "lucide-react";
+
+
 
 export default function NewTenancyAgreement() {
   const navigate = useNavigate();
@@ -29,62 +31,75 @@ export default function NewTenancyAgreement() {
     location.pathname === path ? "bg-green-800 font-semibold" : "";
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-green-900 text-white flex flex-col">
-        <div className="p-6 text-2xl font-bold border-b border-green-800">
-          RealtyFinder
+      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
+        <div>
+          {/* Menu */}
+          <nav className="mt-[85px] space-y-1">
+            <button
+              onClick={() => navigate("/owners-dashboard")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
+                "/owners-dashboard"
+              )}`}
+            >
+              <Clock size={18} />
+              <span>Dashboard</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/owners-listings")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
+                "/owners-listings"
+              )}`}
+            >
+              <Bell size={18} />
+              <span>My Listings</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/owners-saved-property")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
+                "/owners-saved-property"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>My saved property</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/owners-documents")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/owners-documents"
+              )}`}
+            >
+              <FileText size={18} />
+              <span>My documents</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/owners-agreement")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/owners-agreement"
+              )}`}
+            >
+              <FileText size={18} />
+              <span>New tenancy agreement</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/owners-settings")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
+                "/owners-settings"
+              )}`}
+            >
+              <Settings size={18} />
+              <span>Account settings</span>
+            </button>
+          </nav>
         </div>
-        <nav className="flex-1 px-4 py-6 space-y-2">
-          <button
-            onClick={() => navigate("/dashboard")}
-            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left hover:bg-green-800 ${isActive(
-              "/dashboard"
-            )}`}
-          >
-            <FileText size={18} /> Dashboard
-          </button>
-          <button
-            onClick={() => navigate("/my-listings")}
-            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left hover:bg-green-800 ${isActive(
-              "/my-listings"
-            )}`}
-          >
-            <FileText size={18} /> My Listings
-          </button>
-          <button
-            onClick={() => navigate("/saved-properties")}
-            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left hover:bg-green-800 ${isActive(
-              "/saved-properties"
-            )}`}
-          >
-            <Heart size={18} /> My Saved Property
-          </button>
-          <button
-            onClick={() => navigate("/documents")}
-            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left hover:bg-green-800 ${isActive(
-              "/documents"
-            )}`}
-          >
-            <FileText size={18} /> My Documents
-          </button>
-          <button
-            onClick={() => navigate("/new-tenancy-agreement")}
-            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left ${isActive(
-              "/new-tenancy-agreement"
-            )}`}
-          >
-            <FileText size={18} /> New Tenancy Agreement
-          </button>
-          <button
-            onClick={() => navigate("/owners-settings")}
-            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left hover:bg-green-800 ${isActive(
-              "/owners-settings"
-            )}`}
-          >
-            <Settings size={18} /> Account Settings
-          </button>
-        </nav>
+
+        {/* User Info */}
         <div className="p-6 border-t border-green-800">
           <div className="flex items-center space-x-3">
             <img
@@ -92,19 +107,19 @@ export default function NewTenancyAgreement() {
               alt="profile"
               className="w-10 h-10 rounded-full object-cover border"
             />
-            <div className="flex flex-col">
-              <p className="font-medium">{user?.name || "Charles Doe"}</p>
-              <p className="text-sm text-gray-300">
-                {user?.email || "email@gmail.com"}
+            <div>
+              <p className="font-medium">
+                {user?.firstName} {user?.lastName}
               </p>
+              <p className="text-sm text-gray-300">{user?.email}</p>
             </div>
           </div>
-          <button className="flex items-center gap-2 mt-3 text-sm hover:text-red-400">
-            <LogOut size={16} /> Logout
+          <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
+            <LogOut size={18} />
+            <span>Logout</span>
           </button>
         </div>
       </aside>
-
       {/* Main Content */}
       <main className="flex-1 p-10 overflow-y-auto">
         {/* Page Title */}
