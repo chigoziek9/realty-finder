@@ -24,6 +24,10 @@ export default function NewTenancyAgreement() {
     });
   };
 
+  // Helper for active sidebar button
+  const isActive = (path) =>
+    location.pathname === path ? "bg-green-800 font-semibold" : "";
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
@@ -32,28 +36,69 @@ export default function NewTenancyAgreement() {
           RealtyFinder
         </div>
         <nav className="flex-1 px-4 py-6 space-y-2">
-          <button className="flex items-center gap-2 hover:bg-green-800 px-3 py-2 rounded w-full text-left">
+          <button
+            onClick={() => navigate("/dashboard")}
+            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left hover:bg-green-800 ${isActive(
+              "/dashboard"
+            )}`}
+          >
             <FileText size={18} /> Dashboard
           </button>
-          <button className="flex items-center gap-2 hover:bg-green-800 px-3 py-2 rounded w-full text-left">
+          <button
+            onClick={() => navigate("/my-listings")}
+            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left hover:bg-green-800 ${isActive(
+              "/my-listings"
+            )}`}
+          >
             <FileText size={18} /> My Listings
           </button>
-          <button className="flex items-center gap-2 hover:bg-green-800 px-3 py-2 rounded w-full text-left">
+          <button
+            onClick={() => navigate("/saved-properties")}
+            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left hover:bg-green-800 ${isActive(
+              "/saved-properties"
+            )}`}
+          >
             <Heart size={18} /> My Saved Property
           </button>
-          <button className="flex items-center gap-2 hover:bg-green-800 px-3 py-2 rounded w-full text-left">
-            <FileText size={18} /> My documents
+          <button
+            onClick={() => navigate("/documents")}
+            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left hover:bg-green-800 ${isActive(
+              "/documents"
+            )}`}
+          >
+            <FileText size={18} /> My Documents
           </button>
-          <button className="flex items-center gap-2 bg-green-800 px-3 py-2 rounded w-full text-left font-semibold">
-            <FileText size={18} /> New tenancy agreement
+          <button
+            onClick={() => navigate("/new-tenancy-agreement")}
+            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left ${isActive(
+              "/new-tenancy-agreement"
+            )}`}
+          >
+            <FileText size={18} /> New Tenancy Agreement
           </button>
-          <button className="flex items-center gap-2 hover:bg-green-800 px-3 py-2 rounded w-full text-left">
-            <Settings size={18} /> Account settings
+          <button
+            onClick={() => navigate("/owners-settings")}
+            className={`flex items-center gap-2 px-3 py-2 rounded w-full text-left hover:bg-green-800 ${isActive(
+              "/owners-settings"
+            )}`}
+          >
+            <Settings size={18} /> Account Settings
           </button>
         </nav>
-        <div className="p-4 border-t border-green-800">
-          <p className="text-sm font-medium">{user?.name || "Charles Doe"}</p>
-          <p className="text-xs text-gray-300">{user?.email || "email@gmail.com"}</p>
+        <div className="p-6 border-t border-green-800">
+          <div className="flex items-center space-x-3">
+            <img
+              src={user?.profilePic || "https://via.placeholder.com/40"}
+              alt="profile"
+              className="w-10 h-10 rounded-full object-cover border"
+            />
+            <div className="flex flex-col">
+              <p className="font-medium">{user?.name || "Charles Doe"}</p>
+              <p className="text-sm text-gray-300">
+                {user?.email || "email@gmail.com"}
+              </p>
+            </div>
+          </div>
           <button className="flex items-center gap-2 mt-3 text-sm hover:text-red-400">
             <LogOut size={16} /> Logout
           </button>
@@ -64,7 +109,7 @@ export default function NewTenancyAgreement() {
       <main className="flex-1 p-10 overflow-y-auto">
         {/* Page Title */}
         <h1 className="text-2xl font-bold mb-2 text-gray-800">
-          Create tenancy agreement
+          Create Tenancy Agreement
         </h1>
         <p className="text-sm text-gray-500 mb-6">
           Generate and customize rental agreements in minutes.
@@ -114,7 +159,8 @@ export default function NewTenancyAgreement() {
               Tenancy details
             </h3>
             <p className="text-sm text-gray-500 mb-4">
-              Please provide the tenancy details. The information you enter will appear on the agreement.
+              Please provide the tenancy details. The information you enter will
+              appear on the agreement.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <select className="border rounded-lg p-3 w-full">
@@ -162,15 +208,42 @@ export default function NewTenancyAgreement() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
-                ["Social conduct claus", "Will the tenant be allowed to sublet the property?"],
-                ["Guarantor required", "Is a guarantor required for this tenancy?"],
-                ["Subletting prohibited", "Is the tenant prohibited from subletting the property?"],
-                ["Structural modifications prohibited", "Is the tenant prohibited from making any structural modifications to the property?"],
-                ["Parking allocated", "Will the tenant have an allocated parking space at the property?"],
-                ["Pets prohibited", "Is the tenant prohibited from keeping pets on the property?"],
-                ["Tenant responsible for own property insurance", "Is the tenant responsible for insuring their personal property on the premises?"],
-                ["Tenancy renewal allowed", "Does the tenant have the right to renew the tenancy for an additional term?"],
-                ["Rent review allowed", "Does the landlord have the right to review and adjust the rent amount?"],
+                [
+                  "Social conduct clause",
+                  "Will the tenant be allowed to sublet the property?",
+                ],
+                [
+                  "Guarantor required",
+                  "Is a guarantor required for this tenancy?",
+                ],
+                [
+                  "Subletting prohibited",
+                  "Is the tenant prohibited from subletting the property?",
+                ],
+                [
+                  "Structural modifications prohibited",
+                  "Is the tenant prohibited from making any structural modifications to the property?",
+                ],
+                [
+                  "Parking allocated",
+                  "Will the tenant have an allocated parking space at the property?",
+                ],
+                [
+                  "Pets prohibited",
+                  "Is the tenant prohibited from keeping pets on the property?",
+                ],
+                [
+                  "Tenant responsible for own property insurance",
+                  "Is the tenant responsible for insuring their personal property on the premises?",
+                ],
+                [
+                  "Tenancy renewal allowed",
+                  "Does the tenant have the right to renew the tenancy for an additional term?",
+                ],
+                [
+                  "Rent review allowed",
+                  "Does the landlord have the right to review and adjust the rent amount?",
+                ],
               ].map(([title, desc], i) => (
                 <label key={i} className="flex items-start gap-2">
                   <input type="checkbox" className="mt-1" />
@@ -235,35 +308,6 @@ export default function NewTenancyAgreement() {
             >
               Create
             </button>
-<<<<<<< hero-section
-            <button
-              onClick={() => navigate("/owners-settings")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
-                "/owners-settings"
-              )}`}
-            >
-              <Settings size={18} />
-              <span>Account owner Settings</span>
-            </button>
-          </nav>
-        </div>
-
-        {/* User Info */}
-        <div className="p-6 border-t border-green-800">
-          <div className="flex items-center space-x-3">
-            <img
-              src={user?.profilePic || "https://via.placeholder.com/40"}
-              alt="profile"
-              className="w-10 h-10 rounded-full object-cover border"
-            />
-            <div className="flex-colunm">
-              <p className="font-medium ">
-                {user?.firstName} {user?.lastName}
-              </p>
-              <p className="text-sm text-gray-300">{user?.email}</p>
-            </div>
-=======
->>>>>>> dev-branch
           </div>
         </form>
       </main>
