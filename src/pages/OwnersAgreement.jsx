@@ -83,6 +83,15 @@ export default function OwnersAgreement() {
               <Settings size={18} />
               <span>Account owner Settings</span>
             </button>
+            <button
+              onClick={() => navigate("/owners-settings")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
+                "/owners-settings"
+              )}`}
+            >
+              <Settings size={18} />
+              <span>Account owner Settings</span>
+            </button>
           </nav>
         </div>
 
