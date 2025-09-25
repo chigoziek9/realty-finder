@@ -1,11 +1,25 @@
-import { Clock, Bell, Heart, Settings, LogOut, X, Trash2 } from "lucide-react";
-
+import {
+  Clock,
+  Bell,
+  Heart,
+  Settings,
+  LogOut,
+  Edit,
+  EyeOff,
+  Trash2,
+  MapPin,
+  BedDouble,
+  Bath,
+  Ruler,
+} from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext.jsx";
 import { useContext } from "react";
-import Graph from "../components/Graph.jsx";
-import RecentActivity from "../components/RecentActivity.jsx";
-import InboxInquiry from "../components/InboxInquiry.jsx";
+
+// Import your listing images
+import List1 from "../assets/List 1.png";
+import List2 from "../assets/List 2.png";
+import List3 from "../assets/List 3.png";
 
 export default function OwnersPropertyListings() {
   const navigate = useNavigate();
@@ -17,28 +31,52 @@ export default function OwnersPropertyListings() {
     location.pathname === path
       ? "bg-white text-green-900 font-medium"
       : "hover:bg-green-800";
-  const appointments = [
+
+  // Example listings with different images
+  const listings = [
     {
-      message:
-        "John smith has booked a property viewing on Tuesday, Aug 20 at 2:00pm. Please review thw details in your dashboard",
-      title: "New appointment booking",
+      id: 1,
+      title: "Home in Coral Gables",
+      address: "Jeronimo Drive, Coral Gables, FL 33146, Enugu",
+      beds: 4,
+      baths: 4,
+      sqft: 3800,
+      price: "₦850,000",
+      status: "Live",
+      date: "March 8, 2025",
+      image: List3, // first listing uses List 3
     },
     {
-      message:
-        "Your scheduled appointment with John smith for Victoria island duplex on Friday, August 23 at am has been confirmed.",
-      title: "Appointment Confirmation",
+      id: 2,
+      title: "Home in Coral Gables",
+      address: "Jeronimo Drive, Coral Gables, FL 33146, Enugu",
+      beds: 4,
+      baths: 4,
+      sqft: 3800,
+      price: "₦850,000",
+      status: "Pending",
+      date: "March 8, 2025",
+      image: List1, // second listing uses List 1
     },
     {
-      message:
-        "John smith has rescheduled  the tour for banana island villa to Saturday, August 24 at 4:00pm. Updated details are available in your calendar.",
-      title: "New appointment booking",
-    },
-    {
-      message:
-        "John smith has rescheduled  the tour for banana island villa to Saturday, August 24 at 4:00pm. Updated details are available in your calendar.",
-      title: "Appointment cancellation",
+      id: 3,
+      title: "Home in Coral Gables",
+      address: "Jeronimo Drive, Coral Gables, FL 33146, Enugu",
+      beds: 4,
+      baths: 4,
+      sqft: 3800,
+      price: "₦850,000",
+      status: "Rejected",
+      date: "March 8, 2025",
+      image: List2, // third listing uses List 2
     },
   ];
+
+  const statusColors = {
+    Live: "bg-green-100 text-green-700",
+    Pending: "bg-yellow-100 text-yellow-700",
+    Rejected: "bg-red-100 text-red-700",
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -49,17 +87,17 @@ export default function OwnersPropertyListings() {
           <nav className="mt-[85px] space-y-1">
             <button
               onClick={() => navigate("/owners-dashboard")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
                 "/owners-dashboard"
               )}`}
             >
               <Clock size={18} />
-              <span>Dashboard </span>
+              <span>Dashboard</span>
             </button>
 
             <button
               onClick={() => navigate("/owners-listings")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
                 "/owners-listings"
               )}`}
             >
@@ -69,13 +107,14 @@ export default function OwnersPropertyListings() {
 
             <button
               onClick={() => navigate("/owners-saved-property")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
                 "/owners-saved-property"
               )}`}
             >
               <Heart size={18} />
               <span>My saved property</span>
             </button>
+
             <button
               onClick={() => navigate("/owners-documents")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
@@ -83,8 +122,9 @@ export default function OwnersPropertyListings() {
               )}`}
             >
               <Heart size={18} />
-              <span>My-documents</span>
+              <span>My documents</span>
             </button>
+
             <button
               onClick={() => navigate("/owners-agreement")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
@@ -97,7 +137,7 @@ export default function OwnersPropertyListings() {
 
             <button
               onClick={() => navigate("/owners-settings")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
                 "/owners-settings"
               )}`}
             >
@@ -115,8 +155,8 @@ export default function OwnersPropertyListings() {
               alt="profile"
               className="w-10 h-10 rounded-full object-cover border"
             />
-            <div className="flex-colunm">
-              <p className="font-medium ">
+            <div>
+              <p className="font-medium">
                 {user?.firstName} {user?.lastName}
               </p>
               <p className="text-sm text-gray-300">{user?.email}</p>
@@ -130,84 +170,84 @@ export default function OwnersPropertyListings() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-[60px]">
-        <div className="flex justify-between w-full">
-          <h1 className="mt-4 text-3xl">Hello {user?.firstName}</h1>
-          <button
-            onClick={() => navigate("/agents-form")}
-            className="mt-4 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
-          >
-            + List Property
-          </button>
-        </div>
-        <div className="flex gap-[27px]">
-          <div className="mt-[31px] inline-block border max-w-[240px ] w-[240px] h-[154px]  p-[19px] ">
-            <p className="">Total Listing </p>
-            <p className="text-5xl  font-bold mt-[13px]">48</p>
+      <main className="flex-1 p-8">
+        {/* Header */}
+        <h1 className="text-2xl font-bold">My listings</h1>
+        <p className="text-gray-600 mt-1">
+          View, manage, and update all your properties in one place.
+        </p>
+        <button
+          onClick={() => navigate("/agents-form")}
+          className="mt-4 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
+        >
+          + List property
+        </button>
 
-            <p className="mt-[13.31px] mb-3">This Week</p>
-          </div>
-          <div className="mt-[31px] inline-block border max-w-[216px ] w-[240px] h-[154px]  p-[19px] ">
-            <p className="">Total Clients </p>
-            <p className="text-5xl  font-bold mt-[13px]">25</p>
+        {/* Listings */}
+        <h2 className="font-semibold mt-8 mb-4">My Listings</h2>
+        <div className="space-y-6">
+          {listings.map((listing) => (
+            <div
+              key={listing.id}
+              className="bg-white rounded-xl shadow p-4 flex items-center gap-6"
+            >
+              {/* Left image */}
+              <img
+                src={listing.image}
+                alt={listing.title}
+                className="w-60 h-40 rounded-lg object-cover"
+              />
 
-            <p className="mt-[13.31px] mb-3">This Week</p>
-          </div>
-          <div className="mt-[31px] inline-block border max-w-[216px ] w-[240px] h-[154px]  p-[19px] ">
-            <p className="">Total Inquiries </p>
-            <p className="text-5xl  font-bold mt-[13px]">45</p>
-
-            <p className="mt-[13.31px] mb-3">This Week</p>
-          </div>
-          <div className="mt-[31px] inline-block border max-w-[216px ] w-[240px] h-[154px]  p-[19px] ">
-            <p className="">Commision Earned </p>
-            <p className="text-5xl  font-bold mt-[13px]">0</p>
-
-            <p className="mt-[13.31px] mb-3">This Week</p>
-          </div>
-        </div>
-
-        {/* Graph left and right side */}
-        <div className="max-w-7xl mt-[24px] flex gap-[27px]">
-          <Graph />
-          <div>
-            <RecentActivity />
-          </div>
-        </div>
-        <div className="flex gap-[27px] max-w-7xl">
-          <div className="max-w-2xl  w-full border rounded-xl mt-[27px]  bg-white">
-            {/* Section header (only once, not inside map) */}
-            <div className="flex justify-between mt-[27px] px-[20px] py-[12px]">
-              <h1 className="font-jakarta text-[30px] leading-[30px] font-bold">
-                Appointments
-              </h1>
-              <button className="font-jakarta text-[#28563a] text-[16px] font-medium hover:text-black transition">
-                View all
-              </button>
-            </div>
-            <hr className="border-t border-gray-400 mt-2" />{" "}
-            {/* List of appointments */}
-            {appointments.map((appointment, index) => (
-              <div className="flex">
-                <div key={index} className="px-[20px] py-[12px]">
-                  <p className="font-jakarta text-[#08110C]-700 text-[20px] font-semibold">
-                    {appointment.title}
-                  </p>
-                  <li>
-                    <p className="font-jakarta font-normal text-[14px] w-[500px] text-wrap leading-[21px] text-[#313131]">
-                      {appointment.message}
+              {/* Right content */}
+              <div className="flex-1">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-semibold text-lg">{listing.title}</p>
+                    <p className="flex items-center text-gray-600 text-sm mt-1">
+                      <MapPin size={16} className="mr-1" /> {listing.address}
                     </p>
-                  </li>
+                    <div className="flex items-center text-gray-600 text-sm mt-2 space-x-4">
+                      <span className="flex items-center">
+                        <BedDouble size={16} className="mr-1" /> {listing.beds}
+                      </span>
+                      <span className="flex items-center">
+                        <Bath size={16} className="mr-1" /> {listing.baths}
+                      </span>
+                      <span className="flex items-center">
+                        <Ruler size={16} className="mr-1" /> {listing.sqft} sq ft
+                      </span>
+                    </div>
+                    <p className="text-green-800 font-bold text-lg mt-2">
+                      {listing.price}
+                    </p>
+                  </div>
+
+                  {/* Status badge */}
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[listing.status]}`}
+                  >
+                    {listing.status}
+                  </span>
                 </div>
-                <button className="font-jakarta text-[#28563a] text-[16px] font-medium hover:text-black transition">
-                  See detail
-                </button>
+
+                {/* Actions */}
+                <div className="flex items-center space-x-3 mt-4">
+                  <button className="flex items-center space-x-1 border px-3 py-1 rounded-lg text-sm hover:bg-gray-50">
+                    <Edit size={16} /> <span>Edit</span>
+                  </button>
+                  <button className="flex items-center space-x-1 border px-3 py-1 rounded-lg text-sm hover:bg-gray-50">
+                    <EyeOff size={16} /> <span>Hide</span>
+                  </button>
+                  <button className="flex items-center space-x-1 border px-3 py-1 rounded-lg text-sm text-red-600 hover:bg-gray-50">
+                    <Trash2 size={16} /> <span>Delete</span>
+                  </button>
+                  <p className="text-sm text-gray-500 ml-auto">
+                    Added: {listing.date}
+                  </p>
+                </div>
               </div>
-            ))}
-          </div>
-          <div>
-            <InboxInquiry />
-          </div>
+            </div>
+          ))}
         </div>
       </main>
     </div>
