@@ -235,6 +235,35 @@ export default function NewTenancyAgreement() {
             >
               Create
             </button>
+<<<<<<< hero-section
+            <button
+              onClick={() => navigate("/owners-settings")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
+                "/owners-settings"
+              )}`}
+            >
+              <Settings size={18} />
+              <span>Account owner Settings</span>
+            </button>
+          </nav>
+        </div>
+
+        {/* User Info */}
+        <div className="p-6 border-t border-green-800">
+          <div className="flex items-center space-x-3">
+            <img
+              src={user?.profilePic || "https://via.placeholder.com/40"}
+              alt="profile"
+              className="w-10 h-10 rounded-full object-cover border"
+            />
+            <div className="flex-colunm">
+              <p className="font-medium ">
+                {user?.firstName} {user?.lastName}
+              </p>
+              <p className="text-sm text-gray-300">{user?.email}</p>
+            </div>
+=======
+>>>>>>> dev-branch
           </div>
         </form>
       </main>
