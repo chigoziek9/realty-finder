@@ -12,9 +12,9 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext.jsx";
 import { useContext } from "react";
-import List1 from "../assets/List 1.png";
-import List2 from "../assets/List 2.png";
-import List3 from "../assets/List 3.png";
+import List1 from "../assets/list1.png";
+import List2 from "../assets/list2.png";
+import List3 from "../assets/list3.png";
 
 const savedProperties = [
   {

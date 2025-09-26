@@ -17,9 +17,9 @@ import { AuthContext } from "../AuthContext.jsx";
 import { useContext } from "react";
 
 // Import your listing images
-import List1 from "../assets/list 1.png";
-import List2 from "../assets/list 2.png";
-import List3 from "../assets/list 3.png";
+import List1 from "../assets/list1.png";
+import List2 from "../assets/list2.png";
+import List3 from "../assets/list3.png";
 
 export default function OwnersPropertyListings() {
   const navigate = useNavigate();
