@@ -1,39 +1,32 @@
-// src/pages/AccountSettings.jsx
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import DashboardLayout from "../components/DashboardLayout";
 import { AuthContext } from "../AuthContext";
-import React, { useContext } from 'react';
-
-
-
+import React from "react";
 
 export default function AccountSettings() {
   const navigate = useNavigate();
-  const { updateProfilePic } = useContext(AuthContext);
+  const { updateProfile } = useContext(AuthContext);
 
-
-
-  const [form, setForm] = useState({
+  const initialForm = {
     profileType: "Individual",
     firstName: "",
     middleName: "",
     lastName: "",
     companyName: "",
-    street: "",
+    address: "",
     state: "",
     email: "",
     phone: "",
-    mobile: "",
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
     facebook: "",
     twitter: "",
     linkedin: "",
-  });
+    profilePhoto: null,
+  };
 
-  const [photo, setPhoto] = useState(null);
+  const [form, setForm] = useState(initialForm);
+  const [preview, setPreview] = useState(null);
+  const [file, setFile] = useState(null); // store actual file
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,21 +36,26 @@ export default function AccountSettings() {
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setPhoto(URL.createObjectURL(file));
+      setFile(file);
+      setPreview(URL.createObjectURL(file)); // for image preview
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", form);
-    if (photo) {
-      updateProfilePic(photo);
+
+    const formData = new FormData();
+    for (const key in form) {
+      formData.append(key, form[key]);
+    }
+    if (file) {
+      formData.append("profilePhoto", file);
     }
 
-    console.log("Form submitted:", form);
-    navigate("/profile"); // or wherever you want
-  };
+    await updateProfile(formData);
 
+    navigate("/profile");
+  };
 
   return (
     <DashboardLayout>
@@ -88,18 +86,20 @@ export default function AccountSettings() {
 
           {/* Radio options */}
           <div className="flex items-center gap-6 mb-8">
-            {["Individual", "Property owner", "Real estate agent"].map((type) => (
-              <label key={type} className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="profileType"
-                  value={type}
-                  checked={form.profileType === type}
-                  onChange={handleChange}
-                />
-                <span>{type}</span>
-              </label>
-            ))}
+            {["Individual", "Property owner", "Real estate agent"].map(
+              (type) => (
+                <label key={type} className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="profileType"
+                    value={type}
+                    checked={form.profileType === type}
+                    onChange={handleChange}
+                  />
+                  <span>{type}</span>
+                </label>
+              )
+            )}
           </div>
 
           {/* Profile photo + fields */}
@@ -107,7 +107,7 @@ export default function AccountSettings() {
             {/* Profile photo */}
             <div className="flex flex-col items-center">
               <img
-                src={photo || "https://via.placeholder.com/400"}
+                src={preview || "https://via.placeholder.com/400"}
                 alt="Profile"
                 className="w-32 h-32 rounded-full object-cover"
               />
@@ -115,6 +115,7 @@ export default function AccountSettings() {
                 Change photo
                 <input
                   type="file"
+                  name="profilePhoto"
                   accept="image/*"
                   className="hidden"
                   onChange={handlePhotoChange}
@@ -161,10 +162,10 @@ export default function AccountSettings() {
               />
               <input
                 type="text"
-                name="street"
-                value={form.street}
+                name="address"
+                value={form.address}
                 onChange={handleChange}
-                placeholder="Street"
+                placeholder="Address"
                 className="border rounded-lg p-3 w-full"
               />
               <input
@@ -194,48 +195,11 @@ export default function AccountSettings() {
                 placeholder="Phone"
                 className="border rounded-lg p-3 w-full"
               />
-              <input
-                type="text"
-                name="mobile"
-                value={form.mobile}
-                onChange={handleChange}
-                placeholder="Mobile"
-                className="border rounded-lg p-3 w-full"
-              />
             </div>
           </div>
 
           {/* Profile detail + socials */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-            {/* Profile detail */}
-            <div>
-              <h3 className="font-medium mb-4">Profile detail</h3>
-              <input
-                type="password"
-                name="currentPassword"
-                value={form.currentPassword}
-                onChange={handleChange}
-                placeholder="Current password"
-                className="border rounded-lg p-3 w-full mb-4"
-              />
-              <input
-                type="password"
-                name="newPassword"
-                value={form.newPassword}
-                onChange={handleChange}
-                placeholder="New password"
-                className="border rounded-lg p-3 w-full mb-4"
-              />
-              <input
-                type="password"
-                name="confirmPassword"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                placeholder="Confirm new password"
-                className="border rounded-lg p-3 w-full"
-              />
-            </div>
-
             {/* Socials */}
             <div>
               <h3 className="font-medium mb-4">Socials</h3>
@@ -271,7 +235,7 @@ export default function AccountSettings() {
             <button
               type="button"
               className="px-6 py-3 rounded-lg border"
-              onClick={() => setForm({})}
+              onClick={() => setForm(initialForm)}
             >
               Cancel
             </button>

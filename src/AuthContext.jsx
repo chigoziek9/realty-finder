@@ -15,24 +15,50 @@ export function AuthProvider({ children }) {
     return Cookies.get("token") || null;
   });
 
-  // Update profile picture
-  const updateProfilePic = (fileUrl) => {
+  // ✅ Update whole profile (not just picture)
+  const updateProfile = async (formData) => {
+    try {
+      const res = await fetch("https://your-api.com/api/profile/update", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, // send token if API needs auth
+        },
+        body: formData, // FormData so image uploads work
+      });
+
+      if (!res.ok) throw new Error("Failed to update profile");
+
+      const updatedUser = await res.json();
+
+      // Update global state + localStorage
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      return updatedUser;
+    } catch (err) {
+      console.error("Profile update failed:", err);
+      throw err;
+    }
+  };
+
+  // ✅ (kept for backwards compatibility)
+  const updateProfilePhoto = (fileUrl) => {
     setUser((prevUser) => {
-      const updatedUser = { ...prevUser, profilePic: fileUrl };
+      const updatedUser = { ...prevUser, profilePhoto: fileUrl };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       return updatedUser;
     });
   };
 
-  // Login: save user to localStorage and token to cookie
+  // Login: save user + token
   const login = (userData, tokenValue) => {
     setUser(userData);
     setToken(tokenValue);
     localStorage.setItem("user", JSON.stringify(userData));
-    Cookies.set("token", tokenValue, { expires: 7 }); // token expires in 7 days
+    Cookies.set("token", tokenValue, { expires: 7 });
   };
 
-  // Logout: clear both
+  // Logout: clear all
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -42,7 +68,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout, updateProfilePic }}
+      value={{ user, token, login, logout, updateProfile, updateProfilePhoto }}
     >
       {children}
     </AuthContext.Provider>

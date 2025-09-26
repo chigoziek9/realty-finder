@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { BrowserRouter as Router } from "react-router-dom";
-import OAuthSuccess from "./pages/OAuthSuccess";
+
 
 import Home from "./pages/Home";
 import Help from "./pages/Help";
@@ -64,6 +64,8 @@ import OwnersAgreement from "./pages/OwnersAgreement";
 import OwnersAccountSettings from "./pages/OwnersAccountSettings";
 import OwnersPropertyListings from "./pages/OwnersPropertyListings";
 import OwnersPropertySaved from "./pages/OwnersPropertySaved";
+import AgentsList from "./components/AgentsList";
+import OAuthSuccess from "./pages/OAuthSuccess";
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -104,12 +106,12 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
 
         {/* Property routes */}
-        
+
         <Route
           path="/property/:id"
           element={
             <ProtectedRoute>
-              <PropertyDetails/>
+              <PropertyDetails />
             </ProtectedRoute>
           }
         />
@@ -151,28 +153,39 @@ export default function App() {
         <Route path="/home-report" element={<HomeReport />} />
         <Route path="/rent" element={<Rent />} />
         <Route path="/rent-property" element={<RentProperty />} />
-       
+
         <Route
           path="/property-request-alert"
           element={
             <ProtectedRoute>
-              <PropertyRequestAlert/>
+              <PropertyRequestAlert />
             </ProtectedRoute>
           }
         />
-         <Route
+
+        <Route
+          path="/agents-listed-property"
+          element={
+            <ProtectedRoute>
+              <AgentsList />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/oauth-success" element={<OAuthSuccess />} />
+        <Route
           path="/agent-settings"
           element={
             <ProtectedRoute>
-              <AgentSettings/>
+              <AgentSettings />
             </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/owners-dashboard"
           element={
             <ProtectedRoute>
-              <OwnersDashboard/>
+              <OwnersDashboard />
             </ProtectedRoute>
           }
         />
@@ -180,7 +193,7 @@ export default function App() {
           path="/owners-documents"
           element={
             <ProtectedRoute>
-              <OwnersDocuments/>
+              <OwnersDocuments />
             </ProtectedRoute>
           }
         />
@@ -188,37 +201,35 @@ export default function App() {
           path="/owners-agreement"
           element={
             <ProtectedRoute>
-              <OwnersAgreement/>
+              <OwnersAgreement />
             </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/owners-settings"
           element={
             <ProtectedRoute>
-              <OwnersAccountSettings/>
+              <OwnersAccountSettings />
             </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/owners-listings"
           element={
             <ProtectedRoute>
-              <OwnersPropertyListings/>
+              <OwnersPropertyListings />
             </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/owners-saved-property"
           element={
             <ProtectedRoute>
-              <OwnersPropertySaved/>
+              <OwnersPropertySaved />
             </ProtectedRoute>
           }
         />
-        
-        
-        
+
         {/* Default redirect */}
 
         {/* Fallback */}
