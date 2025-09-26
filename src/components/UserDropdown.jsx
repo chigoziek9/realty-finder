@@ -19,7 +19,7 @@ export default function UserDropdown({ user, logout }) {
         <ChevronDown size={16} />
 
         <img
-          src={user?.profilePic || "https://via.placeholder.com/40"}
+          src={user?.profilePhoto || "https://via.placeholder.com/40"}
           alt="profile"
           className="w-9 h-9 rounded-full object-cover"
         />

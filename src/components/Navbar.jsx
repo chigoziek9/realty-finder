@@ -54,13 +54,22 @@ export default function Navbar() {
               </button>
               {menuOpen === "buy" && (
                 <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-40 z-50 max-h-60 overflow-y-auto">
-                  <Link to="/buy/home" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/home"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Home For Sale
                   </Link>
-                  <Link to="/buy/land" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/land"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Land For Sale
                   </Link>
-                  <Link to="/buy/home" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/home"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Recently Sold
                   </Link>
                 </div>
@@ -78,16 +87,28 @@ export default function Navbar() {
               </button>
               {menuOpen === "rent" && (
                 <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-44 z-50 max-h-60 overflow-y-auto">
-                  <Link to="/buy/home" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/home"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Apartments For Rent
                   </Link>
-                  <Link to="/buy/home" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/home"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     House For Rent
                   </Link>
-                  <Link to="/buy/home" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/home"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Condos For Rent
                   </Link>
-                  <Link to="/buy/land" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link
+                    to="/buy/land"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
                     Land For Rent
                   </Link>
                 </div>
@@ -153,7 +174,13 @@ export default function Navbar() {
             </div>
 
             {/* User Dropdown */}
-            <UserDropdown user={user} logout={logout} />
+            <UserDropdown
+              user={{
+                name: `${user?.firstName || ""} ${user?.lastName || ""}`,
+                photo: user?.profilePhoto || "/default-avatar.png",
+              }}
+              logout={logout}
+            />
           </div>
         ) : (
           <Link

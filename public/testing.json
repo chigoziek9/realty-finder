@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "Home in Coral Gables",
+    "address": "Jeronimo Drive, Coral Gables, FL 33146, Enugu",
+    "beds": 4,
+    "baths": 4.5,
+    "sqft": 3800,
+    "price": "₦850,000",
+    "status": "Live",
+    "dateAdded": "March 8, 2025",
+    "image": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+  },
+  {
+    "id": 2,
+    "title": "Modern Duplex in Independence Layout",
+    "address": "Independence Layout, Enugu, Nigeria",
+    "beds": 5,
+    "baths": 5,
+    "sqft": 4200,
+    "price": "₦1,200,000",
+    "status": "Pending",
+    "dateAdded": "March 12, 2025",
+    "image": "https://images.pexels.com/photos/259600/pexels-photo-259600.jpeg"
+  },
+  {
+    "id": 3,
+    "title": "Luxury Villa in Lekki Phase 1",
+    "address": "Admiralty Way, Lekki Phase 1, Lagos",
+    "beds": 6,
+    "baths": 6.5,
+    "sqft": 5500,
+    "price": "₦3,800,000",
+    "status": "Rejected",
+    "dateAdded": "March 14, 2025",
+    "image": "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg"
+  },
+  {
+    "id": 4,
+    "title": "Cozy Apartment in GRA",
+    "address": "GRA, Port Harcourt, Rivers State",
+    "beds": 3,
+    "baths": 3,
+    "sqft": 2200,
+    "price": "₦600,000",
+    "status": "Live",
+    "dateAdded": "March 18, 2025",
+    "image": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+  },
+  {
+    "id": 5,
+    "title": "Beachfront Bungalow",
+    "address": "Victoria Island, Lagos, Nigeria",
+    "beds": 4,
+    "baths": 4,
+    "sqft": 3500,
+    "price": "₦2,500,000",
+    "status": "Pending",
+    "dateAdded": "March 20, 2025",
+    "image": "https://images.pexels.com/photos/210617/pexels-photo-210617.jpeg"
+  }
+]
