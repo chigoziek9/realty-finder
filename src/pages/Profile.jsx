@@ -3,20 +3,20 @@ import { useState, useContext } from "react";
 import DashboardLayout from "../components/DashboardLayout";
 import { AuthContext } from "../AuthContext";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function AccountSettings() {
   const navigate = useNavigate();
   const { updateProfile } = useContext(AuthContext);
 
   const initialForm = {
-   // profileType: "Individual",//
     firstName: "",
     middleName: "",
     lastName: "",
     companyName: "",
     address: "",
     state: "",
-    email: "",
+    email: "", // backend does not expect this in update payload
     phone: "",
     facebook: "",
     twitter: "",
@@ -26,7 +26,7 @@ export default function AccountSettings() {
 
   const [form, setForm] = useState(initialForm);
   const [preview, setPreview] = useState(null);
-  const [file, setFile] = useState(null); // store actual file
+  const [file, setFile] = useState(null); // actual file object
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,31 +34,37 @@ export default function AccountSettings() {
   };
 
   const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFile(file);
-      setPreview(URL.createObjectURL(file)); // for image preview
+    const selected = e.target.files[0];
+    if (selected) {
+      setFile(selected);
+      setPreview(URL.createObjectURL(selected));
     }
   };
-const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    const exclude = ["facebook", "twitter", "linkedin", "profilePhoto", "email"];
+
+    // exclude socials & photo, append other fields
+    const exclude = ["facebook", "twitter", "linkedin", "profilePhoto"];
     for (const key in form) {
       if (!exclude.includes(key) && form[key]) {
         formData.append(key, form[key]);
       }
     }
 
+    // append socials individually (backend expects this format)
     if (form.facebook) formData.append("socials[facebook]", form.facebook);
     if (form.twitter) formData.append("socials[twitter]", form.twitter);
     if (form.linkedin) formData.append("socials[linkedin]", form.linkedin);
 
+    // append photo if selected
     if (file) {
       formData.append("profilePhoto", file);
     }
 
+    // debug payload
     for (let [k, v] of formData.entries()) {
       console.log(k, v);
     }
@@ -94,25 +100,6 @@ const handleSubmit = async (e) => {
         >
           <h2 className="text-lg font-medium mb-6">Edit your profile</h2>
 
-          {/* Radio options */}
-          <div className="flex items-center gap-6 mb-8">
-            {["Individual", "Property owner", "Real estate agent"].map(
-              (type) => (
-                <label key={type} className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="profileType"
-                    value={type}
-                    checked={form.profileType === type}
-                    onChange={handleChange}
-                  />
-                  <span>{type}</span>
-                </label>
-              )
-            )}
-          </div>
-
-          {/* Profile photo + fields */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Profile photo */}
             <div className="flex flex-col items-center">
@@ -185,6 +172,7 @@ const handleSubmit = async (e) => {
                 onChange={handleChange}
                 placeholder="Email address"
                 className="border rounded-lg p-3 w-full"
+                disabled
               />
               <select
                 name="state"
@@ -192,7 +180,7 @@ const handleSubmit = async (e) => {
                 onChange={handleChange}
                 className="border rounded-lg p-3 w-full"
               >
-                <option value="">Choose an option</option>
+                <option value="">State</option>
                 <option value="Lagos">Lagos</option>
                 <option value="Abuja">Abuja</option>
                 <option value="Enugu">Enugu</option>
@@ -208,9 +196,8 @@ const handleSubmit = async (e) => {
             </div>
           </div>
 
-          {/* Profile detail + socials */}
+          {/* Socials */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-            {/* Socials */}
             <div>
               <h3 className="font-medium mb-4">Socials</h3>
               <input
@@ -239,6 +226,15 @@ const handleSubmit = async (e) => {
               />
             </div>
           </div>
+         <div className="mt-10">
+          <Link
+            to="/forgot-password"
+            className="px-5 py-2 bg-green-900 mt-6 text-white rounded-xl hover:bg-green-800"
+          >
+           Reset Password
+          </Link>
+         </div>
+          
 
           {/* Actions */}
           <div className="flex justify-end gap-4 mt-10">

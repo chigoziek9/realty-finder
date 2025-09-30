@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { useContext } from "react";
 import DocumentCompliance from "../components/DocumentCompliance.jsx";
+import UserManagement from "./AdminUser.jsx";
 
 export default function AdminUserMgt() {
   const navigate = useNavigate();
@@ -98,6 +99,7 @@ const isActive = (path) =>
       {/* Main Content */}
       <main className="flex-1 p-8">
         {/* Top Section */}
+        <UserManagement/>
        
         
       </main>

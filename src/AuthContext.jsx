@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
     return Cookies.get("token") || null;
   });
 
-  // ✅ Update whole profile (including accountType, profile, etc.)
+  // ✅ Update whole profile (including photo, socials, etc.)
   const updateProfile = async (formData) => {
     try {
       const res = await fetch(
@@ -23,9 +23,9 @@ export function AuthProvider({ children }) {
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${token}`, // send token if API needs auth
+            Authorization: `Bearer ${token}`, // send token if API requires it
           },
-          body: formData, // FormData so image uploads work
+          body: formData, // must be FormData so images can upload
         }
       );
 
@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
       const resData = await res.json();
       if (!resData.success) throw new Error("Profile update failed");
 
-      const updatedUser = resData.data; // ✅ only the user object
+      const updatedUser = resData.data; // backend sends updated user inside `data`
 
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -50,7 +50,7 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // ✅ Update profile photo helper
+  // ✅ Update only profile photo locally
   const updateProfilePhoto = (fileUrl) => {
     setUser((prevUser) => {
       const updatedUser = { ...prevUser, profilePhoto: fileUrl };
@@ -59,27 +59,27 @@ export function AuthProvider({ children }) {
     });
   };
 
-  // ✅ Login: unwrap `data` if backend wraps it
+  // ✅ Login: unwrap `data` if backend wraps response
   const login = (responseUser, tokenValue) => {
     const userData =
       responseUser?.data && responseUser.success
         ? responseUser.data
-        : responseUser; // handle both { success, data } and raw object
+        : responseUser;
 
-    // ✅ Ensure accountType is always stored
-    const userWithType = {
+    // ✅ Always store role if present
+    const userWithRole = {
       ...userData,
-      accountType: userData?.accountType || localStorage.getItem("accountType"),
+      role: userData?.role || localStorage.getItem("role"),
     };
 
-    setUser(userWithType);
+    setUser(userWithRole);
     setToken(tokenValue);
 
-    localStorage.setItem("user", JSON.stringify(userWithType));
+    localStorage.setItem("user", JSON.stringify(userWithRole));
     Cookies.set("token", tokenValue, { expires: 7 });
   };
 
-  // ✅ Logout: clear all
+  // ✅ Logout: clear everything
   const logout = () => {
     setUser(null);
     setToken(null);
