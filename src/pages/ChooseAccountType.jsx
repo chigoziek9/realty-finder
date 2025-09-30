@@ -9,13 +9,14 @@ const accountTypes = [
   { id: "individual", title: "Individual", image: individualImg },
   { id: "owner", title: "Property Owner", image: ownerImg },
   { id: "agent", title: "Real Estate Agent", image: agentImg },
+  { id: "admin", title: "Admin", image: agentImg },
 ];
 
 export default function ChooseAccountType() {
   const [selected, setSelected] = useState(null);
   const navigate = useNavigate();
 
-  // ✅ Load saved account type on mount
+  // ✅ Load saved account type when component mounts
   useEffect(() => {
     const savedType = localStorage.getItem("accountType");
     if (savedType) {
@@ -23,14 +24,17 @@ export default function ChooseAccountType() {
     }
   }, []);
 
+  // ✅ When user clicks a type, update state & localStorage immediately
   const handleSelect = (typeId) => {
     setSelected(typeId);
-    localStorage.setItem("accountType", typeId); // ✅ save immediately
+    localStorage.setItem("accountType", typeId);
   };
 
+  // ✅ Continue button goes to signup
   const handleContinue = () => {
     if (!selected) return;
-    navigate("/signup"); // ✅ redirect to signup page
+    localStorage.setItem("accountType", selected); // ensure latest choice is saved
+    navigate("/signup");
   };
 
   return (

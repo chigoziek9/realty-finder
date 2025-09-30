@@ -12,9 +12,8 @@ export default function UserDropdown({ user, logout }) {
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center gap-2"
       >
-        
         <span className="font-medium text-black">
-          {user.firstName} {user.lastName}
+          {user?.firstName} {user?.lastName}
         </span>
         <ChevronDown size={16} />
 
@@ -28,11 +27,18 @@ export default function UserDropdown({ user, logout }) {
       {/* Dropdown */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+          {/* Always visible */}
           <Link
             to="/profile"
             className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
           >
             Profile
+          </Link>
+           <Link
+            to="/admin-dashboard"
+            className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
+          >
+            Admin Dashboard
           </Link>
           <Link
             to="/account-settings"
@@ -40,19 +46,35 @@ export default function UserDropdown({ user, logout }) {
           >
             Settings
           </Link>
-          <Link
-            to="/agents-dashboard"
-            className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
-          >
-            Agent Dashboard
-          </Link>
-          <Link
-            to="/owners-dashboard"
-            className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
-          >
-            Owners Dashboard
-          </Link>
-          
+
+          {/* Conditional dashboards */}
+          {user?.accountType === "agent" && (
+            <Link
+              to="/agents-dashboard"
+              className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
+            >
+              Agent Dashboard
+            </Link>
+          )}
+
+          {user?.accountType === "owner" && (
+            <Link
+              to="/owners-dashboard"
+              className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
+            >
+              Owners Dashboard
+            </Link>
+          )}
+
+          {user?.accountType === "individual" && (
+            <Link
+              to="/individual-dashboard"
+              className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
+            >
+              My Dashboard
+            </Link>
+          )}
+
           <button
             onClick={logout}
             className="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100"

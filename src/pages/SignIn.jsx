@@ -46,6 +46,7 @@ export default function SigninPage() {
     if (response.ok && data.token) {
       // ✅ Save user in localStorage + token in cookie (via AuthContext)
       login(data.user, data.token);
+      
 
       navigate("/");
     } else {
