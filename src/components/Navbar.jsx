@@ -41,6 +41,7 @@ export default function Navbar() {
 
       {/* Desktop Nav */}
       <div className="hidden md:flex items-center gap-8 ml-auto">
+        {/* Public navigation (always visible) */}
         <nav>
           <ul className="flex items-center gap-8 text-sm font-medium text-black">
             {/* Buy Dropdown */}
@@ -54,22 +55,13 @@ export default function Navbar() {
               </button>
               {menuOpen === "buy" && (
                 <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-40 z-50 max-h-60 overflow-y-auto">
-                  <Link
-                    to="/buy/home"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                  <Link to="/buy/home" className="block px-4 py-2 hover:bg-gray-100">
                     Home For Sale
                   </Link>
-                  <Link
-                    to="/buy/land"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                  <Link to="/buy/land" className="block px-4 py-2 hover:bg-gray-100">
                     Land For Sale
                   </Link>
-                  <Link
-                    to="/buy/home"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                  <Link to="/buy/recent" className="block px-4 py-2 hover:bg-gray-100">
                     Recently Sold
                   </Link>
                 </div>
@@ -87,40 +79,30 @@ export default function Navbar() {
               </button>
               {menuOpen === "rent" && (
                 <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-44 z-50 max-h-60 overflow-y-auto">
-                  <Link
-                    to="/buy/home"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                  <Link to="/rent/apartments" className="block px-4 py-2 hover:bg-gray-100">
                     Apartments For Rent
                   </Link>
-                  <Link
-                    to="/buy/home"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    House For Rent
+                  <Link to="/rent/houses" className="block px-4 py-2 hover:bg-gray-100">
+                    Houses For Rent
                   </Link>
-                  <Link
-                    to="/buy/home"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                  <Link to="/rent/condos" className="block px-4 py-2 hover:bg-gray-100">
                     Condos For Rent
                   </Link>
-                  <Link
-                    to="/buy/land"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                  <Link to="/rent/land" className="block px-4 py-2 hover:bg-gray-100">
                     Land For Rent
                   </Link>
                 </div>
               )}
             </li>
 
-            {/* Agents */}
-            <li>
-              <Link to="/agent" className="hover:text-green-800">
-                Real estate agents
-              </Link>
-            </li>
+            {/* Agent link (visible only to individuals & owners) */}
+            {user?.accountType !== "agent" && (
+              <li>
+                <Link to="/agent" className="hover:text-green-800">
+                  Real estate agents
+                </Link>
+              </li>
+            )}
 
             {/* Feed */}
             <li>
@@ -144,23 +126,16 @@ export default function Navbar() {
                 <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
               </button>
 
-              {/* Dropdown */}
               {open && (
                 <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                  <div className="p-3 border-b font-semibold text-gray-700">
-                    Notifications
-                  </div>
+                  <div className="p-3 border-b font-semibold text-gray-700">Notifications</div>
                   <ul className="max-h-60 overflow-y-auto">
                     {notifications.map((n) => (
-                      <li
-                        key={n.id}
-                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      >
+                      <li key={n.id} className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                         {n.text}
                       </li>
                     ))}
                   </ul>
-
                   <div className="text-center border-t">
                     <Link
                       to="/notifications"
@@ -174,13 +149,7 @@ export default function Navbar() {
             </div>
 
             {/* User Dropdown */}
-            <UserDropdown
-              user={{
-                name: `${user?.firstName || ""} ${user?.lastName || ""}`,
-                photo: user?.profilePhoto || "/default-avatar.png",
-              }}
-              logout={logout}
-            />
+            <UserDropdown user={user} logout={logout} />
           </div>
         ) : (
           <Link

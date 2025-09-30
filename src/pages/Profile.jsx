@@ -9,7 +9,7 @@ export default function AccountSettings() {
   const { updateProfile } = useContext(AuthContext);
 
   const initialForm = {
-    profileType: "Individual",
+   // profileType: "Individual",//
     firstName: "",
     middleName: "",
     lastName: "",
@@ -40,20 +40,30 @@ export default function AccountSettings() {
       setPreview(URL.createObjectURL(file)); // for image preview
     }
   };
-
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
+    const exclude = ["facebook", "twitter", "linkedin", "profilePhoto", "email"];
     for (const key in form) {
-      formData.append(key, form[key]);
+      if (!exclude.includes(key) && form[key]) {
+        formData.append(key, form[key]);
+      }
     }
+
+    if (form.facebook) formData.append("socials[facebook]", form.facebook);
+    if (form.twitter) formData.append("socials[twitter]", form.twitter);
+    if (form.linkedin) formData.append("socials[linkedin]", form.linkedin);
+
     if (file) {
       formData.append("profilePhoto", file);
     }
 
-    await updateProfile(formData);
+    for (let [k, v] of formData.entries()) {
+      console.log(k, v);
+    }
 
+    await updateProfile(formData);
     navigate("/profile");
   };
 

@@ -15,22 +15,31 @@ export function AuthProvider({ children }) {
     return Cookies.get("token") || null;
   });
 
-  // ✅ Update whole profile (not just picture)
+  // ✅ Update whole profile (including accountType, profile, etc.)
   const updateProfile = async (formData) => {
     try {
-      const res = await fetch("https://your-api.com/api/profile/update", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`, // send token if API needs auth
-        },
-        body: formData, // FormData so image uploads work
-      });
+      const res = await fetch(
+        "https://realtyfinder.onrender.com/api/profile/update-profile",
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`, // send token if API needs auth
+          },
+          body: formData, // FormData so image uploads work
+        }
+      );
 
-      if (!res.ok) throw new Error("Failed to update profile");
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Server response:", text);
+        throw new Error("Failed to update profile");
+      }
 
-      const updatedUser = await res.json();
+      const resData = await res.json();
+      if (!resData.success) throw new Error("Profile update failed");
 
-      // Update global state + localStorage
+      const updatedUser = resData.data; // ✅ only the user object
+
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
@@ -41,7 +50,7 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // ✅ (kept for backwards compatibility)
+  // ✅ Update profile photo helper
   const updateProfilePhoto = (fileUrl) => {
     setUser((prevUser) => {
       const updatedUser = { ...prevUser, profilePhoto: fileUrl };
@@ -50,15 +59,27 @@ export function AuthProvider({ children }) {
     });
   };
 
-  // Login: save user + token
-  const login = (userData, tokenValue) => {
-    setUser(userData);
+  // ✅ Login: unwrap `data` if backend wraps it
+  const login = (responseUser, tokenValue) => {
+    const userData =
+      responseUser?.data && responseUser.success
+        ? responseUser.data
+        : responseUser; // handle both { success, data } and raw object
+
+    // ✅ Ensure accountType is always stored
+    const userWithType = {
+      ...userData,
+      accountType: userData?.accountType || localStorage.getItem("accountType"),
+    };
+
+    setUser(userWithType);
     setToken(tokenValue);
-    localStorage.setItem("user", JSON.stringify(userData));
+
+    localStorage.setItem("user", JSON.stringify(userWithType));
     Cookies.set("token", tokenValue, { expires: 7 });
   };
 
-  // Logout: clear all
+  // ✅ Logout: clear all
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -68,7 +89,14 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout, updateProfile, updateProfilePhoto }}
+      value={{
+        user,
+        token,
+        login,
+        logout,
+        updateProfile,
+        updateProfilePhoto,
+      }}
     >
       {children}
     </AuthContext.Provider>

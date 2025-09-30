@@ -1,17 +1,29 @@
 // src/pages/MySavedProperty.jsx
-import { Heart, Clock, Bell, Settings, LogOut } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import {
+  Clock,
+  Bell,
+  Heart,
+  Settings,
+  LogOut,
+  MapPin,
+  BedDouble,
+  Bath,
+  Ruler,
+} from "lucide-react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import profileImg from "../assets/profile 2.png";
-import { Link } from "react-router-dom";
 import { useFavorites } from "../FavoriteContext";
 import FavoriteButton from "../components/FavoriteButton";
-import { FaArrowLeft } from 'react-icons/fa'; // or the correct icon family
-
 
 export default function MySavedProperty() {
   const navigate = useNavigate();
   const location = useLocation();
   const { favorites } = useFavorites();
+
+  const isActive = (path) =>
+    location.pathname === path
+      ? "bg-white text-green-900 font-medium"
+      : "hover:bg-green-800";
 
   if (favorites.length === 0) {
     return (
@@ -20,22 +32,17 @@ export default function MySavedProperty() {
       </p>
     );
   }
-    
-
-  const isActive = (path) =>
-    location.pathname === path
-      ? "bg-green-800 font-medium"
-      : "hover:bg-green-800";
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-green-900 text-white flex flex-col justify-between">
+      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
         <div>
-          <nav className="mt-6 space-y-1">
+          {/* Menu */}
+          <nav className="mt-[85px] space-y-1">
             <button
               onClick={() => navigate("/property-request-alert")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
                 "/property-request-alert"
               )}`}
             >
@@ -45,7 +52,7 @@ export default function MySavedProperty() {
 
             <button
               onClick={() => navigate("/my-property-alerts")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
                 "/my-property-alerts"
               )}`}
             >
@@ -55,7 +62,7 @@ export default function MySavedProperty() {
 
             <button
               onClick={() => navigate("/saved-properties")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
                 "/saved-properties"
               )}`}
             >
@@ -65,7 +72,7 @@ export default function MySavedProperty() {
 
             <button
               onClick={() => navigate("/account-settings")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
                 "/account-settings"
               )}`}
             >
@@ -81,7 +88,7 @@ export default function MySavedProperty() {
             <img
               src={profileImg}
               alt="User Avatar"
-              className="w-10 h-10 rounded-full border"
+              className="w-10 h-10 rounded-full border object-cover"
             />
             <div>
               <p className="font-medium">Charles Doe</p>
@@ -97,80 +104,64 @@ export default function MySavedProperty() {
 
       {/* Main Content */}
       <main className="flex-1 p-8">
-        {/* Page Title */}
-        <h1 className="text-2xl font-bold">My Saved Property</h1>
+        {/* Header */}
+        <h1 className="text-2xl font-bold">My Saved Properties</h1>
         <p className="text-gray-600 mt-1">
-          View, manage, and update all your properties in one place.
+          View, manage, and update all your saved properties in one place.
         </p>
 
-        {/* Result Count */}
-        <div className="mt-4 bg-gray-200 text-gray-700 px-4 py-2 rounded">
-          Result 1–2 of 2
-        </div>
-
-        {/* Promo Section */}
-        <div className="mt-6 bg-white shadow rounded-lg p-6 flex items-center gap-6">
-          <img
-            src="https://img.icons8.com/?size=100&id=HhCcFvF6CK5y&format=png&color=000000"
-            alt="Agent"
-            className="w-20 h-20"
-          />
-          <div>
-            <h2 className="text-lg font-bold">
-              Meet with a local RealtyFinder agent
-            </h2>
-            <p className="text-gray-600 mt-1">
-              RealtyFinder Agents help you win, delivering full service while
-              closing 2 times more deals on average than traditional agents.
-            </p>
-            <div className="mt-5">
-              <Link
-                to="/agent"
-                className="mt-8 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
-              >
-                Find an agent in my area
-              </Link>
-            </div>
-          </div>
-        </div>
-
         {/* Saved Properties */}
-        <div className="px-4 sm:px-8 md:px-12 mt-8">
-              <h2 className="text-2xl font-bold mb-6">My Favorites</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {favorites.map((house) => (
-                  <div
-                    key={house.id}
-                    onClick={() => navigate(`/property/${house.id}`)}
-                    className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer"
-                  >
-                    <img
-                      src={house.images[0]}
-                      alt={house.title}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold">{house.title}</h3>
-                      <p className="text-gray-500">{house.address}</p>
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="text-green-700 font-medium">
-                          {house.price}
+        <h2 className="font-semibold mt-8 mb-4">My Favorites</h2>
+        <div className="space-y-6">
+          {favorites.map((house) => (
+            <div
+              key={house.id}
+              className="bg-white rounded-xl shadow p-4 flex items-center gap-6"
+            >
+              {/* Left image */}
+              <img
+                src={house.images[0]}
+                alt={house.title}
+                className="w-60 h-40 rounded-lg object-cover"
+              />
+
+              {/* Right content */}
+              <div className="flex-1">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-semibold text-lg">{house.title}</p>
+                    <p className="flex items-center text-gray-600 text-sm mt-1">
+                      <MapPin size={16} className="mr-1" /> {house.address}
+                    </p>
+                    <div className="flex items-center text-gray-600 text-sm mt-2 space-x-4">
+                      {house.beds && (
+                        <span className="flex items-center">
+                          <BedDouble size={16} className="mr-1" /> {house.beds}
                         </span>
-                        <FavoriteButton property={house} />
-                      </div>
+                      )}
+                      {house.baths && (
+                        <span className="flex items-center">
+                          <Bath size={16} className="mr-1" /> {house.baths}
+                        </span>
+                      )}
+                      {house.sqft && (
+                        <span className="flex items-center">
+                          <Ruler size={16} className="mr-1" /> {house.sqft} sq ft
+                        </span>
+                      )}
                     </div>
+                    <p className="text-green-800 font-bold text-lg mt-2">
+                      {house.price}
+                    </p>
                   </div>
-                ))}
-                {/* <Link
-                    to="/favorites"
-                    className="flex items-center text-gray-600 hover:text-gray-900"
-                  >
-                    <FaArrowLeft className="w-5 h-5 mr-1" />
-                    <span className="text-sm">FAvorites</span>
-                    
-                  </Link>*/}
+
+                  {/* Favorite action */}
+                  <FavoriteButton property={house} />
+                </div>
               </div>
             </div>
+          ))}
+        </div>
       </main>
     </div>
   );

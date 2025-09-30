@@ -273,9 +273,13 @@ export default function OwnersDashboard() {
       </aside>
 
       {/* Content wrapper */}
-      <div className="flex-1 lg:pl-72">
-        {/* header */}
-        <header className="flex items-center justify-between px-6 py-6 bg-white border-b">
+      <div className="">
+       
+
+        {/* main content */}
+        <main className="p-6">
+           {/* header */}
+        <header className="flex items-center justify-between px-6 py-6 bg-white border-b mb-4">
           <div className="flex items-center gap-4">
             <button className="lg:hidden p-2 rounded hover:bg-gray-100" onClick={() => setSidebarOpen(true)}>
               <Menu size={20} />
@@ -291,9 +295,6 @@ export default function OwnersDashboard() {
             <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm">{(user?.firstName || "Merit").slice(0, 2).toUpperCase()}</div>
           </div>
         </header>
-
-        {/* main content */}
-        <main className="p-6">
           {/* stat cards: 3 from screenshot */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white rounded-lg p-6 shadow">

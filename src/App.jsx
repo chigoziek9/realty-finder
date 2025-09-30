@@ -66,6 +66,11 @@ import OwnersPropertyListings from "./pages/OwnersPropertyListings";
 import OwnersPropertySaved from "./pages/OwnersPropertySaved";
 import AgentsList from "./components/AgentsList";
 import OAuthSuccess from "./pages/OAuthSuccess";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminUserMgt from "./pages/AdminUserMgt";
+import AdminPropertyMgt from "./pages/AdminPropertyMgt";
+import AdminPayments from "./pages/AdminPayments";
+import AdminAgentMgt from "./pages/AdminAgentMgt"
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -129,6 +134,47 @@ export default function App() {
             </ProtectedSignupRoute>
           }
         />
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedSignupRoute>
+              <AdminDashboard />
+            </ProtectedSignupRoute>
+          }
+        />
+        <Route
+          path="/admin-user-mgt"
+          element={
+            <ProtectedSignupRoute>
+              <AdminUserMgt />
+            </ProtectedSignupRoute>
+          }
+        />
+         <Route
+          path="/admin-property-mgt"
+          element={
+            <ProtectedSignupRoute>
+              <AdminPropertyMgt />
+            </ProtectedSignupRoute>
+          }
+        />
+         <Route
+          path="/admin-agents-mgt"
+          element={
+            <ProtectedSignupRoute>
+              <AdminAgentMgt />
+            </ProtectedSignupRoute>
+          }
+        />
+         <Route
+          path="/admin-payments-transactions"
+          element={
+            <ProtectedSignupRoute>
+              <AdminPayments />
+            </ProtectedSignupRoute>
+          }
+        />
+        
         <Route path="/signup/phone" element={<PhoneSignup />} />
         <Route path="/choose-account-type" element={<ChooseAccountType />} />
         <Route path="/signin" element={<SigninPage />} />

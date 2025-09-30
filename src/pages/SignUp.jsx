@@ -33,7 +33,7 @@ export default function SignUp({ accountType: propAccountType }) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Load accountType from localStorage if not passed as prop
+  // ✅ Load accountType from localStorage or redirect
   useEffect(() => {
     if (!formData.accountType) {
       const savedType = localStorage.getItem("accountType");
@@ -45,17 +45,17 @@ export default function SignUp({ accountType: propAccountType }) {
     }
   }, [formData.accountType, navigate]);
 
+  // ✅ Handle all form input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
   // ✅ Allow user to re-select account type
   const handleChangeType = () => {
-    localStorage.removeItem("accountType");
     navigate("/choose-account-type");
   };
 
@@ -108,7 +108,7 @@ export default function SignUp({ accountType: propAccountType }) {
     }
 
     try {
-       const API_BASE = "https://realtyfinder.onrender.com";
+      const API_BASE = "https://realtyfinder.onrender.com";
 
       const response = await fetch(`${API_BASE}/api/auth/register`, {
         method: "POST",
@@ -121,6 +121,7 @@ export default function SignUp({ accountType: propAccountType }) {
 
       if (response.ok) {
         localStorage.setItem("email", formData.email);
+        localStorage.setItem("accountType", formData.accountType); 
         alert("Registration successful! Please check your email for OTP.");
         navigate("/otp-verification");
       } else {
@@ -383,12 +384,11 @@ export default function SignUp({ accountType: propAccountType }) {
             </button>
           </form>
 
-          {/* Phone Signup Only */}
+          {/* Other Signup Options */}
           <div className="space-y-3 mt-4">
             <button className="w-full flex items-center justify-center gap-2 border rounded-lg py-3 hover:bg-gray-50 transition">
               <FaGoogle className="text-red-500" /> Sign up with Google
             </button>
-            {/* <GoogleSignInButton /> */}
             <GoogleSignInButton />
             <Link to="/signup/phone">
               <button className="w-full flex items-center justify-center gap-2 border rounded-lg py-3 hover:bg-gray-50 transition">
