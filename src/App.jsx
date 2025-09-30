@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 
-
 import Home from "./pages/Home";
 import Help from "./pages/Help";
 import Buy from "./pages/Buy";
@@ -70,7 +69,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserMgt from "./pages/AdminUserMgt";
 import AdminPropertyMgt from "./pages/AdminPropertyMgt";
 import AdminPayments from "./pages/AdminPayments";
-import AdminAgentMgt from "./pages/AdminAgentMgt"
+import AdminAgentMgt from "./pages/AdminAgentMgt";
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -126,55 +125,48 @@ export default function App() {
         <Route path="/explore" element={<Explore />} />
 
         {/* Auth routes */}
-        <Route
-          path="/signup"
-          element={
-            <ProtectedSignupRoute>
-              <SignUp />
-            </ProtectedSignupRoute>
-          }
-        />
+        <Route path="/signup" element={<SignUp />} />
         <Route
           path="/admin-dashboard"
           element={
-            <ProtectedSignupRoute>
+            <ProtectedRoute>
               <AdminDashboard />
-            </ProtectedSignupRoute>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/admin-user-mgt"
           element={
-            <ProtectedSignupRoute>
+            <ProtectedRoute>
               <AdminUserMgt />
-            </ProtectedSignupRoute>
+            </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/admin-property-mgt"
           element={
-            <ProtectedSignupRoute>
+            <ProtectedRoute>
               <AdminPropertyMgt />
-            </ProtectedSignupRoute>
+            </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/admin-agents-mgt"
           element={
-            <ProtectedSignupRoute>
+            <ProtectedRoute>
               <AdminAgentMgt />
-            </ProtectedSignupRoute>
+            </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/admin-payments-transactions"
           element={
-            <ProtectedSignupRoute>
+            <ProtectedRoute>
               <AdminPayments />
-            </ProtectedSignupRoute>
+            </ProtectedRoute>
           }
         />
-        
+
         <Route path="/signup/phone" element={<PhoneSignup />} />
         <Route path="/choose-account-type" element={<ChooseAccountType />} />
         <Route path="/signin" element={<SigninPage />} />

@@ -48,7 +48,7 @@ export default function UserDropdown({ user, logout }) {
           </Link>
 
           {/* Conditional dashboards */}
-          {user?.accountType === "agent" && (
+          {user?.role === "agent" && (
             <Link
               to="/agents-dashboard"
               className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
@@ -57,7 +57,7 @@ export default function UserDropdown({ user, logout }) {
             </Link>
           )}
 
-          {user?.accountType === "owner" && (
+          {user?.role === "owner" && (
             <Link
               to="/owners-dashboard"
               className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
@@ -66,7 +66,7 @@ export default function UserDropdown({ user, logout }) {
             </Link>
           )}
 
-          {user?.accountType === "individual" && (
+          {user?.role === "individual" && (
             <Link
               to="/individual-dashboard"
               className="block px-4 py-2 text-sm text-black hover:bg-gray-100"

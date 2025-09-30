@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   FaUser,
   FaEnvelope,
@@ -13,11 +13,15 @@ import {
 } from "react-icons/fa";
 import signupImage from "../assets/Frame 1.png";
 import logo from "../assets/logo.png";
-
 import GoogleSignInButton from "../components/GoogleSignInButton";
 
-export default function SignUp({ accountType: propAccountType }) {
+export default function SignUp() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // ✅ role comes directly from router state
+  const roleFromState = location.state?.role || "";
+
   const [formData, setFormData] = useState({
     firstName: "",
     middleName: "",
@@ -26,26 +30,21 @@ export default function SignUp({ accountType: propAccountType }) {
     password: "",
     confirmPassword: "",
     agree: false,
-    accountType: propAccountType || "",
+    role: roleFromState, // ✅ pre-fill role
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Load accountType from localStorage or redirect
+  // ✅ If no role was passed, redirect back
   useEffect(() => {
-    if (!formData.accountType) {
-      const savedType = localStorage.getItem("accountType");
-      if (savedType) {
-        setFormData((prev) => ({ ...prev, accountType: savedType }));
-      } else {
-        navigate("/choose-account-type");
-      }
+    if (!roleFromState) {
+      navigate("/choose-account-type");
     }
-  }, [formData.accountType, navigate]);
+  }, [roleFromState, navigate]);
 
-  // ✅ Handle all form input changes
+  // Handle all form changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -54,12 +53,12 @@ export default function SignUp({ accountType: propAccountType }) {
     }));
   };
 
-  // ✅ Allow user to re-select account type
+  // Change role if user clicks "Change"
   const handleChangeType = () => {
     navigate("/choose-account-type");
   };
 
-  // ✅ Password validation rules
+  // Password validation rules
   const passwordRules = [
     {
       text: "Password must be at least 8 characters long.",
@@ -78,7 +77,7 @@ export default function SignUp({ accountType: propAccountType }) {
       valid: /[0-9\W]/.test(formData.password),
     },
     {
-      text: "Password must not contain space or unicode characters.",
+      text: "Password must not contain spaces or unicode characters.",
       valid:
         !/\s/.test(formData.password) &&
         /^[\x00-\x7F]*$/.test(formData.password),
@@ -87,6 +86,7 @@ export default function SignUp({ accountType: propAccountType }) {
 
   const allValid = passwordRules.every((rule) => rule.valid);
 
+  // Handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -120,8 +120,6 @@ export default function SignUp({ accountType: propAccountType }) {
       const data = await response.json().catch(() => ({}));
 
       if (response.ok) {
-        localStorage.setItem("email", formData.email);
-        localStorage.setItem("accountType", formData.accountType); 
         alert("Registration successful! Please check your email for OTP.");
         navigate("/otp-verification");
       } else {
@@ -152,15 +150,13 @@ export default function SignUp({ accountType: propAccountType }) {
           {/* Logo + Title */}
           <div className="text-left">
             <img src={logo} alt="Logo" className="w-32 mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900">
-              Get started now
-            </h2>
+            <h2 className="text-3xl font-bold text-gray-900">Get started now</h2>
             <p className="mt-2 text-gray-600">
-              {formData.accountType ? (
+              {formData.role ? (
                 <span>
                   Create your{" "}
                   <span className="font-semibold capitalize">
-                    {formData.accountType}
+                    {formData.role}
                   </span>{" "}
                   account
                   <button
@@ -176,7 +172,7 @@ export default function SignUp({ accountType: propAccountType }) {
             </p>
           </div>
 
-          {/* Form */}
+          {/* Signup Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* First Name */}
             <div>
@@ -318,7 +314,9 @@ export default function SignUp({ accountType: propAccountType }) {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
                   className="absolute right-3 text-gray-500"
                 >
                   {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}

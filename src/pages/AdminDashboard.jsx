@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { useContext } from "react";
 import DocumentCompliance from "../components/DocumentCompliance.jsx";
+import Dashboard from "./AdminDashContent.jsx";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -98,7 +99,7 @@ const isActive = (path) =>
       {/* Main Content */}
       <main className="flex-1 p-8">
         {/* Top Section */}
-       
+       <Dashboard />
         
       </main>
     </div>

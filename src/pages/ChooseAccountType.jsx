@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
 import individualImg from "../assets/Individual.png";
@@ -16,25 +16,15 @@ export default function ChooseAccountType() {
   const [selected, setSelected] = useState(null);
   const navigate = useNavigate();
 
-  // ✅ Load saved account type when component mounts
-  useEffect(() => {
-    const savedType = localStorage.getItem("accountType");
-    if (savedType) {
-      setSelected(savedType);
-    }
-  }, []);
-
-  // ✅ When user clicks a type, update state & localStorage immediately
-  const handleSelect = (typeId) => {
-    setSelected(typeId);
-    localStorage.setItem("accountType", typeId);
+  // ✅ When user clicks a type, update local state only
+  const handleSelect = (roleId) => {
+    setSelected(roleId);
   };
 
-  // ✅ Continue button goes to signup
+  // ✅ Continue button passes role to signup via navigation state
   const handleContinue = () => {
     if (!selected) return;
-    localStorage.setItem("accountType", selected); // ensure latest choice is saved
-    navigate("/signup");
+    navigate("/signup", { state: { role: selected } });
   };
 
   return (
