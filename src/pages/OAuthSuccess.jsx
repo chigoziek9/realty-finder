@@ -14,6 +14,7 @@ export default function OAuthSuccess() {
       // Save token for later API requests
       Cookies.set("token", token, { expires: 7 });
       localStorage.setItem("token", token);
+      console.log(token)
 
       // Redirect to dashboard or home
       navigate("/dashboard");
