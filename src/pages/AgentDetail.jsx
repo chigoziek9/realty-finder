@@ -127,9 +127,15 @@ export default function AgentDetail() {
 
       {/* Main Content */}
       <main className="flex-1 p-8">
-        {/* Breadcrumb */}
+        {/* ✅ Breadcrumb with clickable back */}
         <div className="text-sm text-gray-500 mb-4">
-          Estate agent management <span className="mx-2">›</span>{" "}
+          <span
+            className="cursor-pointer text-green-700 font-semibold hover:underline"
+            onClick={() => navigate("/admin-agents-mgt")}
+          >
+            Estate agent management
+          </span>
+          <span className="mx-2">›</span>
           <span className="text-green-800 font-medium">Adanna Chukwu</span>
         </div>
 
