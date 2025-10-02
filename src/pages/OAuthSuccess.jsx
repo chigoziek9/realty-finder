@@ -21,5 +21,5 @@ export default function OAuthSuccess() {
     }
   }, [navigate]);
 
-  return <p>Logging you in...</p>;
+  return <p>Logging you in to RealtyFinder...</p>;
 }
