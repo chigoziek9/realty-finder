@@ -70,6 +70,8 @@ import AdminUserMgt from "./pages/AdminUserMgt";
 import AdminPropertyMgt from "./pages/AdminPropertyMgt";
 import AdminPayments from "./pages/AdminPayments";
 import AdminAgentMgt from "./pages/AdminAgentMgt";
+import AgentDetail from "./pages/AgentDetail"
+
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -370,6 +372,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/admin-agent-detail" element={<AgentDetail />} />
+
       </Routes>
     </>
   );
