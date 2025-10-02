@@ -1,7 +1,9 @@
+// src/pages/OAuthSuccess.jsx
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const OAuthSuccess = () => {
+export default function OAuthSuccess() {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -9,16 +11,15 @@ const OAuthSuccess = () => {
     const token = params.get("token");
 
     if (token) {
-      console.log({token})
-      localStorage.setItem("authToken", token);
-      navigate("/agents-dashboard");
+      // Save token for later API requests
+      Cookies.set("token", token, { expires: 7 });
+      localStorage.setItem("token", token);
+      console.log(token)
 
-    } else {
-      navigate("/signin");
+      // Redirect to dashboard or home
+      navigate("/dashboard");
     }
   }, [navigate]);
 
   return <p>Logging you in...</p>;
-};
-
-export default OAuthSuccess;
+}
