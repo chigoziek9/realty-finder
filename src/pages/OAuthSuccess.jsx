@@ -17,7 +17,7 @@ export default function OAuthSuccess() {
       console.log(token)
 
       // Redirect to dashboard or home
-      navigate("/dashboard");
+      navigate("/owners-dashboard");
     }
   }, [navigate]);
 
