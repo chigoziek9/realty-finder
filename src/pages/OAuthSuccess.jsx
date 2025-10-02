@@ -9,8 +9,10 @@ const OAuthSuccess = () => {
     const token = params.get("token");
 
     if (token) {
+      console.log({token})
       localStorage.setItem("authToken", token);
       navigate("/agents-dashboard");
+
     } else {
       navigate("/signin");
     }
