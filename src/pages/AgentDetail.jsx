@@ -170,7 +170,12 @@ export default function AgentDetail() {
               <p className="text-gray-600">
                 <span className="font-medium">Total Customers:</span> 25
               </p>
-              <button className="mt-3 bg-green-800 text-white px-4 py-2 rounded-md hover:bg-green-700">
+
+              {/* ✅ Fixed button with navigation */}
+              <button
+                onClick={() => navigate("/reassign-area")}
+                className="mt-3 bg-green-800 text-white px-4 py-2 rounded-md hover:bg-green-700"
+              >
                 Re-Assign Area
               </button>
             </div>

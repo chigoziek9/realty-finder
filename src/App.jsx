@@ -71,6 +71,7 @@ import AdminPropertyMgt from "./pages/AdminPropertyMgt";
 import AdminPayments from "./pages/AdminPayments";
 import AdminAgentMgt from "./pages/AdminAgentMgt";
 import AgentDetail from "./pages/AgentDetail"
+import ReassignArea from "./pages/ReassignArea";
 
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
@@ -373,7 +374,7 @@ export default function App() {
           }
         />
         <Route path="/admin-agent-detail" element={<AgentDetail />} />
-
+          <Route path="/reassign-area" element={<ReassignArea />} />
       </Routes>
     </>
   );
