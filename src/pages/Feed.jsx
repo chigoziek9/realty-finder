@@ -104,8 +104,7 @@ export default function Feed() {
 
         {/* nav */}
         <FeedNav />
-        <FaArrowLeft />
-
+      
         {/* footer message */}
         <div className="text-center py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#f3f3f3] mt-4">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black leading-tight">
@@ -115,14 +114,14 @@ export default function Feed() {
             Check back shortly for the latest listings.
           </p>
         </div>
-        <DatePicker />
-        <Link
+        {/* <DatePicker />
+       <Link
           to="/favorites"
           className="flex items-center text-gray-600 hover:text-gray-900"
         >
           <FaArrowLeft className="w-5 h-5 mr-1" />
           <span className="text-sm">FAvorites</span>
-        </Link>
+        </Link>*/}
       </div>
       <Footer />
     </>

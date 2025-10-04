@@ -121,7 +121,9 @@ export default function SignUp() {
 
       if (response.ok) {
         alert("Registration successful! Please check your email for OTP.");
-        navigate("/otp-verification");
+
+        // ✅ Pass email to OTP page through router state
+        navigate("/otp-verification", { state: { email: formData.email } });
       } else {
         alert(data.message || "Registration failed.");
         setLoading(false);

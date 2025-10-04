@@ -8,6 +8,7 @@ import FAQSection from "../components/FAQSection";
 import CTASection from "../components/CTASections";
 import Footer from "../components/Footer";
 import HeroCarousel from "../components/HeroCarousel";
+import Good from "../assets/Goodcheck.png"
 export default function Home() {
   return (
     <>
@@ -19,7 +20,9 @@ export default function Home() {
       <div className="mt-12 sm:mt-16 px-4">
         <div className="flex justify-center">
           <div className="border border-b-black px-4 sm:px-6 py-1 rounded-3xl flex items-center gap-2">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gray-300"></div>
+            <div className="">
+              <img src={Good} alt="" />
+            </div>
             <h1 className="text-sm sm:text-base p-1 sm:p-2">Featured Listings</h1>
           </div>
         </div>

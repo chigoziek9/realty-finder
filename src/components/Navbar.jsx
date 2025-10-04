@@ -59,7 +59,7 @@ export default function Navbar() {
                     to="/buy/home"
                     className="block px-4 py-2 hover:bg-gray-100"
                   >
-                    Home For Sale
+                    House For Sale
                   </Link>
                   <Link
                     to="/buy/land"
@@ -87,12 +87,12 @@ export default function Navbar() {
                 Rent <ChevronDown size={14} className="ml-1" />
               </button>
               {menuOpen === "rent" && (
-                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-44 z-50 max-h-60 overflow-y-auto">
+                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-55 z-50 max-h-60 overflow-y-auto">
                   <Link
                     to="/rent/apartments"
                     className="block px-4 py-2 hover:bg-gray-100"
                   >
-                    Apartments For Rent
+                    Apartments / Condos For Rent
                   </Link>
                   <Link
                     to="/rent/houses"
@@ -100,12 +100,7 @@ export default function Navbar() {
                   >
                     Houses For Rent
                   </Link>
-                  <Link
-                    to="/rent/condos"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Condos For Rent
-                  </Link>
+                 
                   <Link
                     to="/rent/land"
                     className="block px-4 py-2 hover:bg-gray-100"

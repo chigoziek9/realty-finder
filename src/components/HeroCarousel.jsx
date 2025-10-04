@@ -37,7 +37,7 @@ export default function HeroCarousel() {
       </Swiper>
 
       {/* Overlay content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white z-10 px-4">
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white z-20 px-4">
         <h1 className="text-5xl font-bold mb-4">
           Live Green, Live Luxuriously.
         </h1>
@@ -47,8 +47,7 @@ export default function HeroCarousel() {
         </p>
 
         {/* Search Bar */}
-        {/* Search Bar */}
-        <div className="flex flex-col sm:flex-row items-stretch bg-white rounded-2xl shadow-md w-full max-w-lg relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row items-stretch bg-white rounded-2xl shadow-md w-full max-w-lg relative overflow-visible">
           {/* Dropdown */}
           <div className="relative w-full sm:w-auto">
             <button

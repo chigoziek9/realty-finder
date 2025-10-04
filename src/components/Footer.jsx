@@ -6,7 +6,8 @@ import {
   FaInstagram,
   FaLinkedinIn,
 } from "react-icons/fa";
-import logoImg from "../assets/NavLogo.png"; 
+
+import footerlogo from "../assets/footerlogo.png"
 
 export default function Footer() {
   return (
@@ -17,11 +18,11 @@ export default function Footer() {
         <div>
           <div className="flex items-center space-x-2 mb-6">
             <img
-              src={logoImg}
+              src={footerlogo}
               alt="RealtyFinder Logo"
-              className="w-10 h-10 object-contain"
+            
             />
-            <span className="text-2xl font-bold">RealtyFinder</span>
+            
           </div>
 
           <div className="flex space-x-3 mb-6">
