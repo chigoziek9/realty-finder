@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Mail } from "lucide-react";
 import houseImg from "../assets/Frame 1.png";
 import logoImg from "../assets/logo.png";
@@ -11,9 +11,10 @@ export default function VerifyOTP() {
   const [resending, setResending] = useState(false);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // ✅ Get saved email from localStorage
-  const email = localStorage.getItem("email");
+  // ✅ Get email passed from signup
+  const email = location.state?.email || "";
 
   const handleChange = (element, index) => {
     if (isNaN(element.value)) return false;
@@ -46,7 +47,6 @@ export default function VerifyOTP() {
       setLoading(true);
 
       const API_BASE = "https://realtyfinder.onrender.com";
-      // or https://realty-finder.vercel.app if that's where backend is deployed
 
       const res = await fetch(`${API_BASE}/api/auth/verify-otp`, {
         method: "POST",
@@ -77,7 +77,8 @@ export default function VerifyOTP() {
     try {
       setResending(true);
 
-      const res = await fetch("/api/auth/resend-otp", {
+      const API_BASE = "https://realtyfinder.onrender.com";
+      const res = await fetch(`${API_BASE}/api/auth/resend-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -145,45 +146,46 @@ export default function VerifyOTP() {
               <input
                 key={index}
                 type="text"
+                name="otp"
                 maxLength="1"
                 value={data}
                 onChange={(e) => handleChange(e.target, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 ref={(el) => (inputRefs.current[index] = el)}
-                className={`w-12 h-12 text-center text-lg border rounded-lg focus:ring-2 ${
-                  error
-                    ? "border-red-500 focus:ring-red-500"
-                    : "focus:ring-green-600"
-                }`}
+                className="w-12 h-12 text-center border border-gray-300 rounded-md focus:outline-none focus:border-green-600 text-lg"
               />
             ))}
           </div>
 
+          {error && (
+            <p className="text-red-600 text-center mb-4">
+              Invalid OTP. Please try again.
+            </p>
+          )}
+
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition"
+            className={`w-full py-3 rounded-lg text-white font-semibold transition ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-700 hover:bg-green-800"
+            }`}
           >
-            {loading ? "Verifying..." : "Verify"}
+            {loading ? "Verifying..." : "Verify OTP"}
           </button>
         </form>
 
-        {error && (
-          <p className="text-red-500 text-sm text-center mt-2">
-            Invalid OTP. Please try again.
-          </p>
-        )}
-
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <div className="mt-6 text-center text-sm text-gray-600">
           Didn’t receive the code?{" "}
           <button
             onClick={handleResend}
             disabled={resending}
-            className="text-green-700 font-medium hover:underline"
+            className="text-green-600 font-medium hover:underline"
           >
-            {resending ? "Resending..." : "Resend code"}
+            {resending ? "Resending..." : "Resend OTP"}
           </button>
-        </p>
+        </div>
       </div>
     </div>
   );
