@@ -68,10 +68,10 @@ export default function UserDropdown({ user, logout }) {
 
           {user?.role === "individual" && (
             <Link
-              to="/individual-dashboard"
+              to="/owners-dashboard"
               className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
             >
-              My Dashboard
+              My owners testing Dashboard
             </Link>
           )}
 
