@@ -35,7 +35,7 @@ export default function OAuthSuccess() {
         }
       } catch (err) {
         console.error("Invalid token:", err);
-        navigate("/signin");
+        navigate("/agents-dashboard");
       }
     } else {
       navigate("/signin");
