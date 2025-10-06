@@ -80,12 +80,20 @@ export function AuthProvider({ children }) {
   };
 
   // ✅ Logout: clear everything
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("user");
-    Cookies.remove("token");
-  };
+ const logout = () => {
+  setUser(null);
+  setToken(null);
+  localStorage.removeItem("user");
+  Cookies.remove("token");
+
+  // ✅ Force Google session logout
+  try {
+    fetch("https://accounts.google.com/logout", { mode: "no-cors" });
+  } catch (err) {
+    console.error("Google logout failed:", err);
+  }
+};
+
 
   return (
     <AuthContext.Provider
