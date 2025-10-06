@@ -213,18 +213,7 @@ export default function SigninPage() {
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
-        {/* Google Sign In */}
-        <button
-         // onClick={handleGoogleSignIn}
-          className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50 transition"
-        >
-          <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            alt="Google"
-            className="w-5 h-5"
-          />
-          Sign in with Google
-        </button>
+      
         {/* <GoogleSignInButton /> */}
         <GoogleSignInButton />
 
