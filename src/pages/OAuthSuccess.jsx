@@ -31,7 +31,7 @@ export default function OAuthSuccess() {
         } else if (decodedUser.role === "admin") {
           navigate("/admin-dashboard");
         } else {
-          navigate("/owners-dashboard");
+          navigate("/agents-dashboard");
         }
       } catch (err) {
         console.error("Invalid token:", err);
