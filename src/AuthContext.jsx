@@ -1,21 +1,37 @@
-import { createContext, useState, useContext } from "react";
+// src/AuthContext.jsx
+import { createContext, useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  // Load user from localStorage
+  // 🔹 Load user from localStorage (if exists)
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  // Load token from cookie
-  const [token, setToken] = useState(() => {
-    return Cookies.get("token") || null;
-  });
+  // 🔹 Load token from cookies (if exists)
+  const [token, setToken] = useState(() => Cookies.get("token") || null);
 
-  // ✅ Update whole profile (including photo, socials, etc.)
+  // 🔹 Automatically restore user from token if missing (e.g., after OAuth redirect)
+  useEffect(() => {
+    const cookieToken = Cookies.get("token");
+    if (!user && cookieToken) {
+      try {
+        const decodedUser = jwtDecode(cookieToken);
+        setUser(decodedUser);
+        setToken(cookieToken);
+        localStorage.setItem("user", JSON.stringify(decodedUser));
+      } catch (err) {
+        console.error("Failed to decode token:", err);
+        Cookies.remove("token");
+      }
+    }
+  }, [user]);
+
+  // ✅ Update whole profile (server + local)
   const updateProfile = async (formData) => {
     try {
       const res = await fetch(
@@ -23,9 +39,9 @@ export function AuthProvider({ children }) {
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${token}`, // send token if API requires it
+            Authorization: `Bearer ${token}`,
           },
-          body: formData, // must be FormData so images can upload
+          body: formData,
         }
       );
 
@@ -38,8 +54,7 @@ export function AuthProvider({ children }) {
       const resData = await res.json();
       if (!resData.success) throw new Error("Profile update failed");
 
-      const updatedUser = resData.data; // backend sends updated user inside `data`
-
+      const updatedUser = resData.data;
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
@@ -59,24 +74,24 @@ export function AuthProvider({ children }) {
     });
   };
 
-  // ✅ Login: unwrap `data` if backend wraps response
+  // ✅ Login: works for both normal + OAuth
   const login = (responseUser, tokenValue) => {
     const userData =
       responseUser?.data && responseUser.success
         ? responseUser.data
         : responseUser;
 
-    // ✅ Always store role if present
     const userWithRole = {
       ...userData,
-      role: userData?.role || localStorage.getItem("role"),
+      role: userData?.role || localStorage.getItem("role") || "individual",
     };
 
     setUser(userWithRole);
     setToken(tokenValue);
 
-    //localStorage.setItem("user", JSON.stringify(userWithRole));
-    Cookies.set("token", tokenValue, { expires: 7 });
+    // 🔹 Persist user but make cookie session-only (expires on refresh)
+    localStorage.setItem("user", JSON.stringify(userWithRole));
+    Cookies.set("token", tokenValue); // ❌ no expires → session cookie
   };
 
   // ✅ Logout: clear everything
@@ -103,4 +118,5 @@ export function AuthProvider({ children }) {
   );
 }
 
+// Custom hook for consuming auth
 export const useAuth = () => useContext(AuthContext);
