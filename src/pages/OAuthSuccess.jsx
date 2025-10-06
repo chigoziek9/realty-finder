@@ -35,10 +35,10 @@ export default function OAuthSuccess() {
         }
       } catch (err) {
         console.error("Invalid token:", err);
-        navigate("/agents-dashboard");
+        navigate("/signin");
       }
     } else {
-      navigate("/signin");
+      navigate("/agents-dasboard");
     }
   }, [navigate, login]);
 
