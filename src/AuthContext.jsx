@@ -76,7 +76,7 @@ export function AuthProvider({ children }) {
     setToken(tokenValue);
 
     //localStorage.setItem("user", JSON.stringify(userWithRole));
-    Cookies.set("token", tokenValue, { expires: 7 });
+    Cookies.set("token", tokenValue);
   };
 
   // ✅ Logout: clear everything
