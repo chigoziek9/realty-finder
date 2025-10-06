@@ -38,7 +38,7 @@ export default function OAuthSuccess() {
         navigate("/signin");
       }
     } else {
-      navigate("/agents-dasboard");
+      navigate("/signin");
     }
   }, [navigate, login]);
 
