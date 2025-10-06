@@ -7,6 +7,9 @@ const ProtectedRoute = ({ children }) => {
   const cookieToken = Cookies.get("token");
 
   // ✅ Check both AuthContext state and cookie
+  if (user === undefined) {
+    return <p>Loading...</p>;
+  }
   if (!user || !(token || cookieToken)) {
     return <Navigate to="/signin" replace />;
   }
