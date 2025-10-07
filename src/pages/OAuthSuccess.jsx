@@ -26,14 +26,18 @@ export default function OAuthSuccess() {
         console.log("OAuth login success:", decodedUser);
 
         // Redirect to correct dashboard
-        if (decodedUser.role === "individual") {
-          console.log("individualllllllllll");
-          navigate("/");
-        } else if (decodedUser.role === "admin") {
-          navigate("/admin-dashboard");
-        } else {
-          navigate("/agents-dashboard");
-        }
+        setTimeout(() => {
+          if (decodedUser.role === "individual") {
+            console.log("Navigating to / (Individual)");
+            navigate("/", { replace: true });
+          } else if (decodedUser.role === "admin") {
+            console.log("Navigating to /admin-dashboard");
+            navigate("/admin-dashboard", { replace: true });
+          } else {
+            console.log("Navigating to /agents-dashboard");
+            navigate("/agents-dashboard", { replace: true });
+          }
+        }, 500);
       } catch (err) {
         console.error("Invalid token:", err);
         navigate("/signin");
