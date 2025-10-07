@@ -225,9 +225,9 @@ export default function App() {
         <Route
           path="/owners-dashboard"
           element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <OwnersDashboard />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
         <Route
