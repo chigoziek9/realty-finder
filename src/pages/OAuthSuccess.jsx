@@ -28,7 +28,7 @@ export default function OAuthSuccess() {
         // Redirect to correct dashboard
         setTimeout(() => {
           if (decodedUser.role === "individual") {
-            console.log("Navigating to / (Individual)");
+            console.log("Navigating to /owners-dashboard");
             navigate("/", { replace: true });
           } else if (decodedUser.role === "admin") {
             console.log("Navigating to /admin-dashboard");
