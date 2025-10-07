@@ -25,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!isUserDefined || !hasToken) {
-    console.warn("🚫 No valid user/token found — redirecting to /signin");
+    console.log("🚫 No valid user/token found — redirecting to /signin");
     console.groupEnd();
     return <Navigate to="/signin" replace />;
   }
