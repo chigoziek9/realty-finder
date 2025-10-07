@@ -29,7 +29,7 @@ export default function OAuthSuccess() {
         setTimeout(() => {
           if (decodedUser.role === "individual") {
             console.log("Navigating to /owners-dashboard");
-            navigate("/", { replace: true });
+            navigate("/owners-dashboard", { replace: true });
           } else if (decodedUser.role === "admin") {
             console.log("Navigating to /admin-dashboard");
             navigate("/admin-dashboard", { replace: true });
