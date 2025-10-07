@@ -28,7 +28,7 @@ export default function OAuthSuccess() {
         // Redirect to correct dashboard
         if (decodedUser.role === "individual") {
           console.log("individualllllllllll");
-          navigate("/owners-dashboard");
+          navigate("/");
         } else if (decodedUser.role === "admin") {
           navigate("/admin-dashboard");
         } else {
