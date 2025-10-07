@@ -3,7 +3,7 @@ import { FaGoogle } from "react-icons/fa";
 const GoogleSignInButton = () => {
   const handleGoogleSignIn = () => {
     // Redirect user to your backend endpoint for Google OAuth
-    window.location.href = "https://realtyfinder.onrender.com/api/auth/google";
+    window.location.href = "https://realtyfinder.onrender.com/api/auth/google?prompt=select_account";
   };
 
   return (
