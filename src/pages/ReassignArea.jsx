@@ -1,4 +1,4 @@
-import { Clock, Bell, Heart, LogOut } from "lucide-react";
+import { Clock, Bell, Heart, LogOut, ChevronRight } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../AuthContext";
@@ -21,7 +21,9 @@ export default function ReassignArea() {
           <nav className="mt-[85px] space-y-1">
             <button
               onClick={() => navigate("/admin-dashboard")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/admin-dashboard")}`}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
+                "/admin-dashboard"
+              )}`}
             >
               <Clock size={18} />
               <span>Dashboard</span>
@@ -29,7 +31,9 @@ export default function ReassignArea() {
 
             <button
               onClick={() => navigate("/admin-user-mgt")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/admin-user-mgt")}`}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
+                "/admin-user-mgt"
+              )}`}
             >
               <Bell size={18} />
               <span>User Management</span>
@@ -37,7 +41,9 @@ export default function ReassignArea() {
 
             <button
               onClick={() => navigate("/admin-property-mgt")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/admin-property-mgt")}`}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
+                "/admin-property-mgt"
+              )}`}
             >
               <Heart size={18} />
               <span>Property Management</span>
@@ -45,15 +51,19 @@ export default function ReassignArea() {
 
             <button
               onClick={() => navigate("/admin-agents-mgt")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/admin-agents-mgt")}`}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
+                "/admin-agents-mgt"
+              )}`}
             >
               <Heart size={18} />
-              <span>Estate Agents Management</span>
+              <span>Estate Agent Management</span>
             </button>
 
             <button
               onClick={() => navigate("/reassign-area")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/reassign-area")}`}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
+                "/reassign-area"
+              )}`}
             >
               <Heart size={18} />
               <span>Re-Assign Area</span>
@@ -61,7 +71,9 @@ export default function ReassignArea() {
 
             <button
               onClick={() => navigate("/admin-payments-transactions")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/admin-payments-transactions")}`}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
+                "/admin-payments-transactions"
+              )}`}
             >
               <Heart size={18} />
               <span>Payments & Transactions</span>
@@ -93,6 +105,26 @@ export default function ReassignArea() {
 
       {/* Main Content */}
       <main className="flex-1 p-10">
+        {/* Breadcrumb */}
+        <div className="flex items-center text-gray-500 text-sm mb-6">
+          <button
+            onClick={() => navigate("/admin-agents-mgt")}
+            className="hover:text-green-700 font-medium"
+          >
+            Estate agent management
+          </button>
+          <ChevronRight size={16} className="mx-2" />
+          <button
+            onClick={() => navigate("/admin-agent-detail")}
+            className="hover:text-green-700 font-medium"
+          >
+            Adanna Chukwu
+          </button>
+          <ChevronRight size={16} className="mx-2" />
+          <span className="text-green-700 font-medium">Re-assign area</span>
+        </div>
+
+        {/* Page Title */}
         <h2 className="text-2xl font-semibold mb-6">Re-assign area</h2>
 
         {/* Form Section */}
@@ -107,7 +139,9 @@ export default function ReassignArea() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Current Assigned Area</label>
+            <label className="block text-gray-700 mb-2">
+              Current Assigned Area
+            </label>
             <input
               type="text"
               defaultValue="Ikeja, Lagos State, Teju Osho Market, Yaba"
@@ -125,14 +159,23 @@ export default function ReassignArea() {
           </div>
 
           <div className="mb-6 flex items-center space-x-2">
-            <input type="checkbox" id="delete-area" className="w-4 h-4 text-green-600" />
+            <input
+              type="checkbox"
+              id="delete-area"
+              className="w-4 h-4 text-green-600"
+            />
             <label htmlFor="delete-area" className="text-gray-700">
               Delete the Current Assigned Area
             </label>
           </div>
 
           <div className="flex space-x-4">
-            <button className="px-6 py-2 border rounded-lg hover:bg-gray-200">Cancel</button>
+            <button
+              onClick={() => navigate("/admin-agents-mgt")}
+              className="px-6 py-2 border rounded-lg hover:bg-gray-200"
+            >
+              Cancel
+            </button>
             <button className="px-6 py-2 bg-green-800 text-white rounded-lg hover:bg-green-700">
               Confirm Reassignment
             </button>
