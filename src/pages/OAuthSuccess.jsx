@@ -47,5 +47,5 @@ export default function OAuthSuccess() {
     }
   }, [navigate, login]);
 
-  return <p>Logging you in to RealtyFinder...</p>;
+  return <p>Logging you in to RealtyFinder......</p>;
 }
