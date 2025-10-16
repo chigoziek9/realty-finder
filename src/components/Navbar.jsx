@@ -8,12 +8,10 @@ import UserDropdown from "./UserDropdown";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(null);
-  const [open, setOpen] = useState(false); // for notifications
+  const [open, setOpen] = useState(false); // notifications
   const timeoutRef = useRef(null);
-
   const { user, logout } = useContext(AuthContext);
 
-  // Dummy notifications (replace with real API later)
   const notifications = [
     { id: 1, text: "New message from agent" },
     { id: 2, text: "Your property listing was approved" },
@@ -23,25 +21,19 @@ export default function Navbar() {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setMenuOpen(menu);
   };
-
   const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setMenuOpen(null);
-    }, 200);
+    timeoutRef.current = setTimeout(() => setMenuOpen(null), 200);
   };
 
   return (
-    <header className="bg-white shadow-sm px-6 md:px-10 py-4 flex items-center relative">
+    <header className="bg-white shadow-sm px-6 md:px-10 py-4 flex items-center justify-between relative">
       {/* Logo */}
-      <div className="flex items-center gap-2">
-        <Link to="/">
-          <img src={logo} alt="Logo" />
-        </Link>
-      </div>
+      <Link to="/" className="flex items-center gap-2">
+        <img src={logo} alt="Logo" className="h-8 w-auto" />
+      </Link>
 
-      {/* Desktop Nav */}
-      <div className="hidden md:flex items-center gap-8 ml-auto">
-        {/* Public navigation (always visible) */}
+      {/* Desktop Navigation */}
+      <div className="hidden md:flex items-center gap-8">
         <nav>
           <ul className="flex items-center gap-8 text-sm font-medium text-black">
             {/* Buy Dropdown */}
@@ -54,23 +46,14 @@ export default function Navbar() {
                 Buy <ChevronDown size={14} className="ml-1" />
               </button>
               {menuOpen === "buy" && (
-                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-40 z-50 max-h-60 overflow-y-auto">
-                  <Link
-                    to="/buy/home"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-40 z-50">
+                  <Link to="/buy/home" className="block px-4 py-2 hover:bg-gray-100">
                     House For Sale
                   </Link>
-                  <Link
-                    to="/buy/land"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                  <Link to="/buy/land" className="block px-4 py-2 hover:bg-gray-100">
                     Land For Sale
                   </Link>
-                  <Link
-                    to="/buy/recent"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                  <Link to="/buy/recent" className="block px-4 py-2 hover:bg-gray-100">
                     Recently Sold
                   </Link>
                 </div>
@@ -87,40 +70,28 @@ export default function Navbar() {
                 Rent <ChevronDown size={14} className="ml-1" />
               </button>
               {menuOpen === "rent" && (
-                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-55 z-50 max-h-60 overflow-y-auto">
-                  <Link
-                    to="/rent/apartments"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                <div className="absolute top-full mt-2 left-0 bg-white shadow-lg rounded-md w-52 z-50">
+                  <Link to="/rent/apartments" className="block px-4 py-2 hover:bg-gray-100">
                     Apartments / Condos For Rent
                   </Link>
-                  <Link
-                    to="/rent/houses"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                  <Link to="/rent/houses" className="block px-4 py-2 hover:bg-gray-100">
                     Houses For Rent
                   </Link>
-                 
-                  <Link
-                    to="/rent/land"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
+                  <Link to="/rent/land" className="block px-4 py-2 hover:bg-gray-100">
                     Land For Rent
                   </Link>
                 </div>
               )}
             </li>
 
-            {/* Agent link (visible only to individuals & owners) */}
+            {/* Other links */}
             {user?.role !== "agent" && (
               <li>
                 <Link to="/agent" className="hover:text-green-800">
-                  Real estate agents
+                  Real Estate Agents
                 </Link>
               </li>
             )}
-
-            {/* Feed */}
             <li>
               <Link to="/feed" className="hover:text-green-800">
                 Feed
@@ -129,10 +100,10 @@ export default function Navbar() {
           </ul>
         </nav>
 
-        {/* Auth Section */}
+        {/* Right side (notifications & user/login) */}
         {user ? (
           <div className="flex items-center gap-6">
-            {/* Notification Bell */}
+            {/* Notifications */}
             <div className="relative">
               <button
                 className="relative text-gray-600 hover:text-green-700"
@@ -144,15 +115,10 @@ export default function Navbar() {
 
               {open && (
                 <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                  <div className="p-3 border-b font-semibold text-gray-700">
-                    Notifications
-                  </div>
+                  <div className="p-3 border-b font-semibold text-gray-700">Notifications</div>
                   <ul className="max-h-60 overflow-y-auto">
                     {notifications.map((n) => (
-                      <li
-                        key={n.id}
-                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      >
+                      <li key={n.id} className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                         {n.text}
                       </li>
                     ))}
@@ -160,7 +126,7 @@ export default function Navbar() {
                   <div className="text-center border-t">
                     <Link
                       to="/notifications"
-                      className="p-2 text-center text-sm text-green-700 font-medium hover:text-xl cursor-pointer"
+                      className="block p-2 text-sm text-green-700 font-medium hover:text-xl"
                     >
                       View All
                     </Link>
@@ -169,11 +135,13 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* User Dropdown */}
+            {/* User dropdown */}
             <UserDropdown
               user={{
-                name: `${user?.firstName || ""} ${user?.lastName || ""}`,
-                photo: user?.profilePhoto || "/default-avatar.png", // ✅ correct key
+                firstName: user?.firstName,
+                lastName: user?.lastName,
+                profilePhoto: user?.profilePhoto,
+                role: user?.role,
               }}
               logout={logout}
             />
@@ -195,6 +163,87 @@ export default function Navbar() {
       >
         {isOpen ? <X size={28} /> : <Menu size={28} />}
       </button>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-200 md:hidden z-50 animate-slideDown">
+          <nav className="flex flex-col p-5 space-y-3 text-gray-800 text-[15px] font-medium">
+            <Link
+              to="/buy/home"
+              className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
+              onClick={() => setIsOpen(false)}
+            >
+              🏠 Buy
+            </Link>
+
+            <Link
+              to="/rent/apartments"
+              className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
+              onClick={() => setIsOpen(false)}
+            >
+              🏢 Rent
+            </Link>
+
+            {user?.role !== "agent" && (
+              <Link
+                to="/agent"
+                className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
+                onClick={() => setIsOpen(false)}
+              >
+                👨‍💼 Real Estate Agents
+              </Link>
+            )}
+
+            <Link
+              to="/feed"
+              className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
+              onClick={() => setIsOpen(false)}
+            >
+              📰 Feed
+            </Link>
+
+            <hr className="border-gray-200 my-2" />
+
+            {user ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
+                  onClick={() => setIsOpen(false)}
+                >
+                  👤 Profile
+                </Link>
+
+                <Link
+                  to="/notifications"
+                  className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
+                  onClick={() => setIsOpen(false)}
+                >
+                  🔔 Notifications
+                </Link>
+
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsOpen(false);
+                  }}
+                  className="text-left block w-full px-4 py-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+                >
+                  🚪 Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/signin"
+                className="block text-center px-4 py-3 bg-green-900 text-white rounded-lg hover:bg-green-800 transition-all duration-200"
+                onClick={() => setIsOpen(false)}
+              >
+                🔑 Login / Sign-Up
+              </Link>
+            )}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
