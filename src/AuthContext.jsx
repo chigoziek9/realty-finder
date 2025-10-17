@@ -1,16 +1,14 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-
   const navigate = useNavigate();
 
-
   // 🔹 Load user from localStorage (if exists)
-
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
@@ -18,10 +16,7 @@ export function AuthProvider({ children }) {
 
   const [token, setToken] = useState(() => Cookies.get("token") || null);
 
-  // 🔹 Restore user from token
-
   // 🔹 Automatically restore user from token if missing
-
   useEffect(() => {
     const cookieToken = Cookies.get("token");
     if (!user && cookieToken) {
@@ -96,19 +91,15 @@ export function AuthProvider({ children }) {
     Cookies.set("token", tokenValue);
   };
 
+  // ✅ Single correct logout function
   const logout = () => {
     console.log("🚪 Logging out user...");
-  // ✅ Logout (without navigate)
-  const logout = () => {
-    console.log("🚪 Logging out user...");
-
     setUser(null);
     setToken(null);
     localStorage.clear();
     Cookies.remove("token");
     sessionStorage.clear();
     navigate("/signin", { replace: true });
-
     console.log("✅ Cleared user, token, and storage.");
   };
 
@@ -128,4 +119,5 @@ export function AuthProvider({ children }) {
   );
 }
 
+// ✅ Export must be at top level, not inside component
 export const useAuth = () => useContext(AuthContext);
