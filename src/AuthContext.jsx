@@ -1,4 +1,3 @@
-// src/AuthContext.jsx
 import { createContext, useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -9,16 +8,14 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
 
-  // 🔹 Load user from localStorage (if exists)
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  // 🔹 Load token from cookies (if exists)
   const [token, setToken] = useState(() => Cookies.get("token") || null);
 
-  // 🔹 Automatically restore user from token if missing (e.g., after OAuth redirect)
+  // 🔹 Restore user from token
   useEffect(() => {
     const cookieToken = Cookies.get("token");
     if (!user && cookieToken) {
@@ -34,7 +31,7 @@ export function AuthProvider({ children }) {
     }
   }, [user]);
 
-  // ✅ Update full profile (server + local)
+  // ✅ Update full profile
   const updateProfile = async (formData) => {
     try {
       const res = await fetch(
@@ -68,7 +65,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // ✅ Update only profile photo locally
   const updateProfilePhoto = (fileUrl) => {
     setUser((prevUser) => {
       const updatedUser = { ...prevUser, profilePhoto: fileUrl };
@@ -77,7 +73,6 @@ export function AuthProvider({ children }) {
     });
   };
 
-  // ✅ Login: works for both normal + OAuth
   const login = (responseUser, tokenValue) => {
     const userData =
       responseUser?.data && responseUser.success
@@ -91,33 +86,17 @@ export function AuthProvider({ children }) {
 
     setUser(userWithRole);
     setToken(tokenValue);
-
-    // 🔹 Store user persistently, but cookie expires on browser close
     localStorage.setItem("user", JSON.stringify(userWithRole));
-    Cookies.set("token", tokenValue); // no expires → session cookie
+    Cookies.set("token", tokenValue);
   };
 
-  // ✅ Logout: clear everything and redirect to /signin
   const logout = () => {
     console.log("🚪 Logging out user...");
-
-    // Clear React state
     setUser(null);
     setToken(null);
-
-    // Remove all auth-related data
-    localStorage.removeItem("user");
-    localStorage.removeItem("id");
-    localStorage.removeItem("email");
-    localStorage.removeItem("role");
+    localStorage.clear();
     Cookies.remove("token");
-
-    // Optional: clear sessionStorage if used anywhere
     sessionStorage.clear();
-
-    console.log("✅ Cleared user, token, and storage. Redirecting to /signin...");
-
-    // Redirect user to signin page
     navigate("/signin", { replace: true });
   };
 
@@ -137,5 +116,4 @@ export function AuthProvider({ children }) {
   );
 }
 
-// Custom hook for consuming auth
 export const useAuth = () => useContext(AuthContext);
