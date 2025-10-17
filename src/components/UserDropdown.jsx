@@ -41,6 +41,18 @@ export default function UserDropdown({ user, logout }) {
             Admin Dashboard
           </Link>
           <Link
+              to="/owners-dashboard"
+              className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
+            >
+              Owners Dashboard
+            </Link>
+             <Link
+              to="/agents-dashboard"
+              className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
+            >
+              Agent Dashboard
+            </Link>
+          <Link
             to="/account-settings"
             className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
           >
@@ -67,12 +79,13 @@ export default function UserDropdown({ user, logout }) {
           )}
 
           {user?.role === "individual" && (
-            <Link
-              to="/owners-dashboard"
-              className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
-            >
-              My owners testing Dashboard
-            </Link>
+              <Link
+            to="/profile"
+            className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
+          >
+            individual dashboard
+          </Link>
+            
           )}
 
           <button
