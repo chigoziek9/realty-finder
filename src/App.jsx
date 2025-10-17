@@ -69,7 +69,10 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserMgt from "./pages/AdminUserMgt";
 import AdminPropertyMgt from "./pages/AdminPropertyMgt";
 import AdminPayments from "./pages/AdminPayments";
+import AdminPaymentsOverview from "./pages/AdminPaymentsOverview";
 import AdminAgentMgt from "./pages/AdminAgentMgt";
+ import AdminPaymentsPending from "./pages/AdminPaymentsPending";
+import AdminPaymentDetail from "./pages/AdminPaymentDetail";
 import AgentDetail from "./pages/AgentDetail"
 import ReassignArea from "./pages/ReassignArea";
 
@@ -167,8 +170,14 @@ export default function App() {
             <ProtectedRoute>
               <AdminPayments />
             </ProtectedRoute>
+            
           }
         />
+        <Route path="/admin-payments-overview" element={<AdminPaymentsOverview />} />
+        <Route path="/admin-payments-pending" element={<AdminPaymentsPending />} />
+        <Route path="/admin-payment-detail" element={<AdminPaymentDetail />} />
+
+
 
         <Route path="/signup/phone" element={<PhoneSignup />} />
         <Route path="/choose-account-type" element={<ChooseAccountType />} />

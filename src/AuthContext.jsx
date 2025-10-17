@@ -1,12 +1,15 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+
   const navigate = useNavigate();
+
+
+  // 🔹 Load user from localStorage (if exists)
 
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
@@ -16,6 +19,9 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => Cookies.get("token") || null);
 
   // 🔹 Restore user from token
+
+  // 🔹 Automatically restore user from token if missing
+
   useEffect(() => {
     const cookieToken = Cookies.get("token");
     if (!user && cookieToken) {
@@ -38,9 +44,7 @@ export function AuthProvider({ children }) {
         "https://realtyfinder.onrender.com/api/profile/update-profile",
         {
           method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           body: formData,
         }
       );
@@ -73,6 +77,7 @@ export function AuthProvider({ children }) {
     });
   };
 
+  // ✅ Login (normal + OAuth)
   const login = (responseUser, tokenValue) => {
     const userData =
       responseUser?.data && responseUser.success
@@ -86,18 +91,25 @@ export function AuthProvider({ children }) {
 
     setUser(userWithRole);
     setToken(tokenValue);
+
     localStorage.setItem("user", JSON.stringify(userWithRole));
     Cookies.set("token", tokenValue);
   };
 
   const logout = () => {
     console.log("🚪 Logging out user...");
+  // ✅ Logout (without navigate)
+  const logout = () => {
+    console.log("🚪 Logging out user...");
+
     setUser(null);
     setToken(null);
     localStorage.clear();
     Cookies.remove("token");
     sessionStorage.clear();
     navigate("/signin", { replace: true });
+
+    console.log("✅ Cleared user, token, and storage.");
   };
 
   return (
