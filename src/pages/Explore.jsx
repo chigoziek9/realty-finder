@@ -4,7 +4,7 @@ import Filters from "../components/Filters";
 import Exploreproperty from "../components/Exploreproperty";
 import Footer from "../components/Footer";
 
-export default function Explore() {
+export default function Explored() {
   const [property, setProperty] = useState([]);
   const [filters, setFilters] = useState({
     search: "",
