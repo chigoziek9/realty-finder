@@ -132,6 +132,14 @@ export default function App() {
 
         {/* Auth routes */}
         <Route path="/signup" element={<SignUp />} />
+         <Route
+          path="/add-property-request-alert"
+          element={
+            <ProtectedRoute>
+              < AddPropertyRequestAlert />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/admin-dashboard"
           element={
@@ -140,6 +148,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        
         <Route
           path="/admin-user-mgt"
           element={
