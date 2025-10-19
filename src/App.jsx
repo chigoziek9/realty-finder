@@ -75,6 +75,7 @@ import AdminAgentMgt from "./pages/AdminAgentMgt";
 import AdminPaymentDetail from "./pages/AdminPaymentDetail";
 import AgentDetail from "./pages/AgentDetail"
 import ReassignArea from "./pages/ReassignArea";
+import Exploremain from "./pages/Explore";
 
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
@@ -114,6 +115,7 @@ export default function App() {
         <Route path="/sell" element={<Sell />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="/contact" element={<Contact />} />
+         <Route path="/explore" element={<Explore />} />
 
         {/* Property routes */}
 
@@ -128,7 +130,7 @@ export default function App() {
         <Route path="/newtomarket" element={<Newtomarket />} />
         <Route path="/mostviewed" element={<MostViewed />} />
         <Route path="/naturepage" element={<NaturePage />} />
-        <Route path="/explore" element={<Explore />} />
+        <Route path="/exploremain" element={<Explore />} />
 
         {/* Auth routes */}
         <Route path="/signup" element={<SignUp />} />
@@ -186,6 +188,8 @@ export default function App() {
         <Route path="/admin-payments-overview" element={<AdminPaymentsOverview />} />
         <Route path="/admin-payments-pending" element={<AdminPaymentsPending />} />
         <Route path="/admin-payment-detail" element={<AdminPaymentDetail />} />
+         <Route path="/explore" element={<Exploremain />} />
+
 
 
 
