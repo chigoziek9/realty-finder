@@ -9,6 +9,8 @@ export default function Filters() {
   const [location, setLocation] = useState("");
   const [type, setType] = useState("");
   const [pricing, setPricing] = useState("");
+   const [Sizes , setSizes] = useState("");
+    const [Years , setYears] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
   const FilterBox = ({ icon, value, setValue, options, placeholder }) => (
@@ -95,8 +97,8 @@ export default function Filters() {
         {/* Size */}
         <FilterBox
           icon={Size}
-          value={pricing}
-          setValue={setPricing}
+          value={Sizes}
+          setValue={setSizes}
           placeholder="Property Size"
           options={[
             { value: "small", label: "1-2 Bedroom" },
@@ -108,8 +110,8 @@ export default function Filters() {
         {/* Year */}
         <FilterBox
           icon={Calendar}
-          value={pricing}
-          setValue={setPricing}
+          value={Years}
+          setValue={setYears}
           placeholder="Build Year"
           options={[
             { value: "2020", label: "2020+" },
