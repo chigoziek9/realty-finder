@@ -2,20 +2,19 @@
   {
     "id": 1,
     "price": "₦550,000",
+    "priceValue": 550000,
     "beds": 4,
     "baths": 1,
     "sqft": 1931,
     "source": "RealtyFinder",
     "listed": "2 days ago",
+    "type": "bungalow",
+    "yearBuilt": 2018,
+    "location": "Lagos",
     "images": [
       "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
       "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg"
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg"
     ],
     "title": "Rustic Retreat Cottage",
     "description": "An elegant 3-bedroom, 2.5-bathroom townhouse in a gated community.",
@@ -24,20 +23,19 @@
   {
     "id": 2,
     "price": "₦750,000",
+    "priceValue": 750000,
     "beds": 3,
     "baths": 2,
     "sqft": 1500,
     "source": "HomeLink",
     "listed": "5 days ago",
+    "type": "apartment",
+    "yearBuilt": 2019,
+    "location": "Abuja",
     "images": [
       "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
       "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
-      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg"
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg"
     ],
     "title": "Modern Glass Haven",
     "description": "Contemporary 3-bed home with floor-to-ceiling windows and minimalist design.",
@@ -46,20 +44,19 @@
   {
     "id": 3,
     "price": "₦1,200,000",
+    "priceValue": 1200000,
     "beds": 5,
     "baths": 3.5,
     "sqft": 3200,
     "source": "EstateMaster",
     "listed": "1 day ago",
+    "type": "duplex",
+    "yearBuilt": 2021,
+    "location": "Enugu",
     "images": [
       "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
       "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg"
     ],
     "title": "Spacious Family Manor",
     "description": "A luxurious 5-bedroom estate with lush gardens and premium finishes.",
@@ -68,20 +65,19 @@
   {
     "id": 4,
     "price": "₦620,000",
+    "priceValue": 620000,
     "beds": 3,
     "baths": 1.5,
     "sqft": 1800,
     "source": "RealtyFinder",
     "listed": "3 days ago",
+    "type": "cottage",
+    "yearBuilt": 2015,
+    "location": "Port Harcourt",
     "images": [
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
       "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
       "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
-      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg"
     ],
     "title": "Cozy Brick Cottage",
     "description": "Quaint brick façade 3-bed cottage with a charming front porch.",
@@ -90,20 +86,19 @@
   {
     "id": 5,
     "price": "₦880,000",
+    "priceValue": 880000,
     "beds": 4,
     "baths": 2,
     "sqft": 2100,
     "source": "HomeLink",
     "listed": "4 days ago",
+    "type": "bungalow",
+    "yearBuilt": 2020,
+    "location": "Ibadan",
     "images": [
-      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
       "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
-      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg"
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg"
     ],
     "title": "Suburban Family Home",
     "description": "Comfortable 4-bed house in a quiet suburban neighborhood.",
@@ -112,20 +107,19 @@
   {
     "id": 6,
     "price": "₦1,500,000",
+    "priceValue": 1500000,
     "beds": 6,
     "baths": 4,
     "sqft": 4500,
     "source": "EstateMaster",
     "listed": "12 hours ago",
+    "type": "mansion",
+    "yearBuilt": 2022,
+    "location": "Lagos",
     "images": [
       "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
       "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg"
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg"
     ],
     "title": "Luxury Mansion Retreat",
     "description": "Expansive 6-bed mansion, perfect for entertaining and relaxation.",
@@ -134,20 +128,19 @@
   {
     "id": 7,
     "price": "₦490,000",
+    "priceValue": 490000,
     "beds": 2,
     "baths": 1,
     "sqft": 1200,
     "source": "BudgetHomes",
     "listed": "1 week ago",
+    "type": "townhouse",
+    "yearBuilt": 2010,
+    "location": "Onitsha",
     "images": [
       "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
       "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
-      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg"
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg"
     ],
     "title": "Compact Townhouse",
     "description": "Affordable 2-bed townhouse ideal for first-time buyers.",
@@ -156,20 +149,19 @@
   {
     "id": 8,
     "price": "₦1,100,000",
+    "priceValue": 1100000,
     "beds": 4,
     "baths": 3,
     "sqft": 2600,
     "source": "RealtyFinder",
     "listed": "6 days ago",
+    "type": "duplex",
+    "yearBuilt": 2021,
+    "location": "Abuja",
     "images": [
       "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
       "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
-      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg"
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg"
     ],
     "title": "Elegant Colonial",
     "description": "Classic colonial-style 4-bed home with modern updates.",
@@ -178,20 +170,19 @@
   {
     "id": 9,
     "price": "₦970,000",
+    "priceValue": 970000,
     "beds": 5,
     "baths": 3,
     "sqft": 3000,
     "source": "HomeLink",
     "listed": "2 days ago",
+    "type": "villa",
+    "yearBuilt": 2016,
+    "location": "Port Harcourt",
     "images": [
       "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
       "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
-      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg"
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg"
     ],
     "title": "Modern Ranch Villa",
     "description": "One-story ranch villa with open floor plan and spacious yard.",
@@ -200,23 +191,214 @@
   {
     "id": 10,
     "price": "₦580,000",
+    "priceValue": 580000,
     "beds": 3,
     "baths": 2,
     "sqft": 1700,
     "source": "BudgetHomes",
     "listed": "3 days ago",
+    "type": "bungalow",
+    "yearBuilt": 2014,
+    "location": "Benin City",
     "images": [
       "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
       "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg",
-      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg",
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg"
     ],
     "title": "Mid-Century Modern",
     "description": "Stylish mid-century inspired home with clean lines and retro charm.",
     "address": "Plot 4 GRA Phase 2, Benin City"
+  },
+  {
+    "id": 11,
+    "price": "₦800,000",
+    "priceValue": 800000,
+    "beds": 3,
+    "baths": 2,
+    "sqft": 1900,
+    "source": "RealtyFinder",
+    "listed": "4 days ago",
+    "type": "apartment",
+    "yearBuilt": 2020,
+    "location": "Lagos",
+    "images": [
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg",
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg"
+    ],
+    "title": "Urban Skyline Flat",
+    "description": "High-rise apartment with panoramic views of Victoria Island.",
+    "address": "Plot 22 Ozumba Mbadiwe, Lagos"
+  },
+  {
+    "id": 12,
+    "price": "₦1,800,000",
+    "priceValue": 1800000,
+    "beds": 6,
+    "baths": 5,
+    "sqft": 4700,
+    "source": "EstateMaster",
+    "listed": "8 hours ago",
+    "type": "mansion",
+    "yearBuilt": 2023,
+    "location": "Abuja",
+    "images": [
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg"
+    ],
+    "title": "Presidential Villa",
+    "description": "A stunning 6-bedroom mansion with swimming pool and marble finishes.",
+    "address": "Plot 1 Maitama Crescent, Abuja"
+  },
+  {
+    "id": 13,
+    "price": "₦650,000",
+    "priceValue": 650000,
+    "beds": 3,
+    "baths": 2,
+    "sqft": 1600,
+    "source": "BudgetHomes",
+    "listed": "6 days ago",
+    "type": "bungalow",
+    "yearBuilt": 2013,
+    "location": "Abeokuta",
+    "images": [
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg"
+    ],
+    "title": "Quiet Country Bungalow",
+    "description": "Peaceful 3-bed bungalow surrounded by lush greenery.",
+    "address": "Plot 11 Ibara Estate, Abeokuta"
+  },
+  {
+    "id": 14,
+    "price": "₦1,000,000",
+    "priceValue": 1000000,
+    "beds": 4,
+    "baths": 3,
+    "sqft": 2500,
+    "source": "HomeLink",
+    "listed": "1 day ago",
+    "type": "duplex",
+    "yearBuilt": 2018,
+    "location": "Lagos",
+    "images": [
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg"
+    ],
+    "title": "Palm View Duplex",
+    "description": "Modern duplex with rooftop terrace and garden.",
+    "address": "Plot 14 Chevron Drive, Lekki, Lagos"
+  },
+  {
+    "id": 15,
+    "price": "₦560,000",
+    "priceValue": 560000,
+    "beds": 2,
+    "baths": 1,
+    "sqft": 1100,
+    "source": "BudgetHomes",
+    "listed": "1 week ago",
+    "type": "apartment",
+    "yearBuilt": 2012,
+    "location": "Ilorin",
+    "images": [
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg"
+    ],
+    "title": "Affordable Downtown Flat",
+    "description": "Cozy 2-bed flat close to town center.",
+    "address": "Plot 6 Unity Road, Ilorin"
+  },
+  {
+    "id": 16,
+    "price": "₦1,300,000",
+    "priceValue": 1300000,
+    "beds": 5,
+    "baths": 4,
+    "sqft": 3500,
+    "source": "EstateMaster",
+    "listed": "2 days ago",
+    "type": "duplex",
+    "yearBuilt": 2019,
+    "location": "Owerri",
+    "images": [
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg"
+    ],
+    "title": "Luxury Duplex Villa",
+    "description": "Elegant duplex with private parking and outdoor lounge.",
+    "address": "Plot 8 Ikenegbu Layout, Owerri"
+  },
+  {
+    "id": 17,
+    "price": "₦720,000",
+    "priceValue": 720000,
+    "beds": 3,
+    "baths": 2,
+    "sqft": 1800,
+    "source": "HomeLink",
+    "listed": "5 days ago",
+    "type": "apartment",
+    "yearBuilt": 2016,
+    "location": "Kaduna",
+    "images": [
+      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg"
+    ],
+    "title": "Green Garden Apartment",
+    "description": "Serene apartment complex with gardens and play area.",
+    "address": "Plot 15 Barnawa GRA, Kaduna"
+  },
+  {
+    "id": 18,
+    "price": "₦2,200,000",
+    "priceValue": 2200000,
+    "beds": 6,
+    "baths": 5,
+    "sqft": 5000,
+    "source": "EstateMaster",
+    "listed": "3 hours ago",
+    "type": "mansion",
+    "yearBuilt": 2023,
+    "location": "Lagos",
+    "images": [
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+    ],
+    "title": "Banana Island Palace",
+    "description": "Ultimate luxury living with private pool and smart home system.",
+    "address": "Plot 7 Banana Island, Lagos"
+  },
+  {
+    "id": 19,
+    "price": "₦900,000",
+    "priceValue": 900000,
+    "beds": 4,
+    "baths": 3,
+    "sqft": 2200,
+    "source": "HomeLink",
+    "listed": "2 days ago",
+    "type": "duplex",
+    "yearBuilt": 2017,
+    "location": "Aba",
+    "images": [
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg"
+    ],
+    "title": "Urban Duplex Haven",
+    "description": "Spacious duplex in a secure estate, perfect for families.",
+    "address": "Plot 9 Umungasi Road, Aba"
+  },
+  {
+    "id": 20,
+    "price": "₦680,000",
+    "priceValue": 680000,
+    "beds": 3,
+    "baths": 2,
+    "sqft": 1600,
+    "source": "BudgetHomes",
+    "listed": "4 days ago",
+    "type": "bungalow",
+    "yearBuilt": 2015,
+    "location": "Jos",
+    "images": [
+      "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg"
+    ],
+    "title": "Hilltop Bungalow",
+    "description": "Quiet 3-bed bungalow overlooking Jos hills.",
+    "address": "Plot 2 Rayfield Estate, Jos"
   }
 ]
