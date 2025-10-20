@@ -11,6 +11,14 @@ import { FaArrowLeft } from "react-icons/fa"; // or whichever icon pack you're u
 
 export default function Feed() {
   const [property, setProperty] = useState([]);
+  const [filters, setFilters] = useState({
+    search: "",
+    location: "",
+    type: "",
+    pricing: "",
+    size: "",
+    year: "",
+  });
 
   useEffect(() => {
     const storedProperty = localStorage.getItem("exploreProperty");
@@ -60,7 +68,11 @@ export default function Feed() {
                 {/* Input */}
                 <input
                   type="text"
-                  placeholder="Address, neighbourhood, city, ZIP"
+                  placeholder="Search by address, neighbourhood, or city"
+                  value={filters.search}
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, search: e.target.value }))
+                  }
                   className="flex-1 px-4 py-3 text-sm sm:text-base text-[#313131] focus:outline-none"
                 />
 
@@ -86,8 +98,9 @@ export default function Feed() {
           </div>
 
           {/* filters */}
+          {/* filters */}
           <div className="bg-[#f3f3f3] p-4 mt-6 sm:mt-7 mx-4 sm:mx-11 rounded-2xl shadow-md md:relative md:z-20">
-            {/*  <Filters />  */} 
+            <Filters filters={filters} setFilters={setFilters} />
           </div>
         </div>
 
@@ -103,8 +116,9 @@ export default function Feed() {
         </div>
 
         {/* nav */}
-        {/* <FeedNav />  */}<FeedNav />
-      
+        {/* <FeedNav />  */}
+        <FeedNav />
+
         {/* footer message */}
         <div className="text-center py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#f3f3f3] mt-4">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black leading-tight">
@@ -114,8 +128,9 @@ export default function Feed() {
             Check back shortly for the latest listings.
           </p>
         </div>
-      {/*<DatePicker />*/}<DatePicker />
-       <Link
+        {/*<DatePicker />*/}
+        <DatePicker />
+        <Link
           to="/favorites"
           className="flex items-center text-gray-600 hover:text-gray-900"
         >
