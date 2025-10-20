@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import Viewproperty from "../components/Viewproperty";
 import Filters from "../components/Filters";
 import Settings from "../assets/feedsetting.png";
@@ -7,7 +6,7 @@ import FeedNav from "../components/FeedNav";
 import Footer from "../components/Footer";
 import DatePicker from "../components/Datepicker";
 import { Link } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa"; // or whichever icon pack you're using
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function Feed() {
   const [property, setProperty] = useState([]);
@@ -34,20 +33,60 @@ export default function Feed() {
     }
   }, []);
 
+  // ✅ Filtering Logic
+  const filteredProperties = property.filter((p) => {
+    const matchesSearch =
+      filters.search === "" ||
+      p.title?.toLowerCase().includes(filters.search.toLowerCase()) ||
+      p.location?.toLowerCase().includes(filters.search.toLowerCase());
+
+    const matchesLocation =
+      filters.location === "" ||
+      p.location?.toLowerCase() === filters.location.toLowerCase();
+
+    const matchesType =
+      filters.type === "" || p.type?.toLowerCase() === filters.type.toLowerCase();
+
+    const matchesPricing =
+      filters.pricing === "" ||
+      (filters.pricing === "low" && p.price <= 500000) ||
+      (filters.pricing === "mid" && p.price > 500000 && p.price <= 2000000) ||
+      (filters.pricing === "high" && p.price > 2000000);
+
+    const matchesYear =
+      filters.year === "" ||
+      (filters.year === "2020" && p.year >= 2020) ||
+      (filters.year === "2010" && p.year >= 2010 && p.year < 2020) ||
+      (filters.year === "2000" && p.year >= 2000 && p.year < 2010);
+
+    const matchesSize =
+      filters.size === "" ||
+      (filters.size === "small" && p.beds <= 2) ||
+      (filters.size === "medium" && p.beds > 2 && p.beds <= 4) ||
+      (filters.size === "large" && p.beds > 4);
+
+    return (
+      matchesSearch &&
+      matchesLocation &&
+      matchesType &&
+      matchesPricing &&
+      matchesYear &&
+      matchesSize
+    );
+  });
+
   if (property.length === 0) {
     return (
-      <>
-        <p className="flex justify-center items-center text-lg sm:text-xl md:text-3xl font-bold h-40 text-center px-4">
-          Loading...
-        </p>
-      </>
+      <p className="flex justify-center items-center text-lg sm:text-xl md:text-3xl font-bold h-40 text-center px-4">
+        Loading...
+      </p>
     );
   }
 
   return (
     <>
       <div className="bg-[#ffffff]">
-        {/* hero-section */}
+        {/* Hero Section */}
         <div>
           <div className="bg-gradient-to-r from-[#a3ca87] via-green-100 to-white w-full h-auto md:h-[380px] md:relative">
             <div className="px-6 py-12 md:p-20">
@@ -62,10 +101,9 @@ export default function Feed() {
               </p>
             </div>
 
-            {/* search-bar */}
+            {/* Search Bar */}
             <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 md:p-3 bg-[#f3f3f3] rounded-2xl shadow-md md:absolute md:-bottom-10 md:left-0 md:right-0 md:z-10">
               <div className="flex items-stretch bg-white rounded-2xl shadow-sm border border-[#b9b9b9] overflow-hidden">
-                {/* Input */}
                 <input
                   type="text"
                   placeholder="Search by address, neighbourhood, or city"
@@ -76,8 +114,9 @@ export default function Feed() {
                   className="flex-1 px-4 py-3 text-sm sm:text-base text-[#313131] focus:outline-none"
                 />
 
-                {/* Button */}
-                <button className="flex items-center justify-center bg-green-800 hover:bg-green-900 text-white px-5 sm:px-6 rounded-none">
+                <button
+                  className="flex items-center justify-center bg-green-800 hover:bg-green-900 text-white px-5 sm:px-6 rounded-none"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -97,14 +136,13 @@ export default function Feed() {
             </div>
           </div>
 
-          {/* filters */}
-          {/* filters */}
+          {/* Filters */}
           <div className="bg-[#f3f3f3] p-4 mt-6 sm:mt-7 mx-4 sm:mx-11 rounded-2xl shadow-md md:relative md:z-20">
             <Filters filters={filters} setFilters={setFilters} />
           </div>
         </div>
 
-        {/* heading */}
+        {/* Heading */}
         <div className="px-4 sm:px-10 py-6 sm:py-10 flex flex-row items-center justify-between gap-4">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
             Feed
@@ -115,12 +153,24 @@ export default function Feed() {
           </div>
         </div>
 
-        {/* nav */}
-        {/* <FeedNav />  */}
+        {/* Tabs */}
         <FeedNav />
 
-        {/* footer message */}
-        <div className="text-center py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#f3f3f3] mt-4">
+        {/* Filtered Properties */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 mt-10">
+          {filteredProperties.length > 0 ? (
+            filteredProperties.map((item) => (
+              <Viewproperty key={item.id} property={item} />
+            ))
+          ) : (
+            <p className="col-span-full text-center text-gray-500 text-lg">
+              No properties match your filters.
+            </p>
+          )}
+        </div>
+
+        {/* Footer Section */}
+        <div className="text-center py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#f3f3f3] mt-10">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black leading-tight">
             You're all caught up!
           </h1>
@@ -128,14 +178,14 @@ export default function Feed() {
             Check back shortly for the latest listings.
           </p>
         </div>
-        {/*<DatePicker />*/}
+
         <DatePicker />
         <Link
           to="/favorites"
-          className="flex items-center text-gray-600 hover:text-gray-900"
+          className="flex items-center text-gray-600 hover:text-gray-900 px-6 mb-10"
         >
           <FaArrowLeft className="w-5 h-5 mr-1" />
-          <span className="text-sm">FAvorites</span>
+          <span className="text-sm">Favorites</span>
         </Link>
       </div>
       <Footer />

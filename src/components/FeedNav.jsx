@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Properties from "./property.jsx";
 
-export default function PropertyTabs() {
+export default function FeedNav() {
   const [activeTab, setActiveTab] = useState("all");
 
   const tabs = [
@@ -44,11 +44,7 @@ export default function PropertyTabs() {
 
       {/* Content */}
       <div className="mt-6">
-        {activeTab === "new" && <Properties />}
-        {activeTab === "favourite" && <Properties />}
-        {activeTab === "sold" && <Properties />}
-        {activeTab === "status" && <Properties />}
-        {activeTab === "all" && <Properties />}
+        <Properties activeTab={activeTab} />
       </div>
     </div>
   );
