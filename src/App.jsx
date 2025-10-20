@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { BrowserRouter as Router } from "react-router-dom";
+
 
 import Home from "./pages/Home";
 import Help from "./pages/Help";
@@ -106,6 +106,7 @@ export default function App() {
         <Route path="*" element={<LowercaseRedirect />} />
 
         {/* Main pages */}
+          <Route path="/feed" element={<Feed />} />
         <Route path="/" element={<Home />} />
         <Route path="/help" element={<Help />} />
         <Route path="/buy/home" element={<Buy />} />
@@ -113,7 +114,7 @@ export default function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/agent" element={<Agent />} />
         <Route path="/sell" element={<Sell />} />
-        <Route path="/feed" element={<Feed />} />
+       
         <Route path="/contact" element={<Contact />} />
          <Route path="/explore" element={<Explore />} />
 

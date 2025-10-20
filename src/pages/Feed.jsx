@@ -87,7 +87,7 @@ export default function Feed() {
 
           {/* filters */}
           <div className="bg-[#f3f3f3] p-4 mt-6 sm:mt-7 mx-4 sm:mx-11 rounded-2xl shadow-md md:relative md:z-20">
-            <Filters />
+            {/*  <Filters />  */}
           </div>
         </div>
 
@@ -103,7 +103,7 @@ export default function Feed() {
         </div>
 
         {/* nav */}
-        <FeedNav />
+        {/* <FeedNav />  */}
       
         {/* footer message */}
         <div className="text-center py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#f3f3f3] mt-4">
@@ -114,7 +114,7 @@ export default function Feed() {
             Check back shortly for the latest listings.
           </p>
         </div>
-       <DatePicker />
+      {/*<DatePicker />*/}
        <Link
           to="/favorites"
           className="flex items-center text-gray-600 hover:text-gray-900"
