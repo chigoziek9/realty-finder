@@ -36,7 +36,7 @@ export default function AdminUserMgt() {
             {[
               { path: "/admin-dashboard", label: "Dashboard", icon: <Clock size={18} /> },
               { path: "/admin-user-mgt", label: "User Management", icon: <Bell size={18} /> },
-              { path: "/admin-property-mgt", label: "Property Management", icon: <Heart size={18} /> },
+              { path: "/admin-properties", label: "Property Management", icon: <Heart size={18} /> },
               { path: "/admin-agents-mgt", label: "Estate Agents Management", icon: <Heart size={18} /> },
               { path: "/admin-payments-transactions", label: "Payments & Transactions", icon: <Heart size={18} /> },
             ].map((item, idx) => (

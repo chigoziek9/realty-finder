@@ -76,13 +76,13 @@ export default function AdminPaymentsPending() {
                 className={`px-6 py-3 cursor-pointer ${isActive(
                   "/property-management"
                 )}`}
-                onClick={() => navigate("/property-management")}
+                onClick={() => navigate("/admin-properties")}
               >
                 Property management
               </li>
               <li
                 className={`px-6 py-3 cursor-pointer ${isActive(
-                  "/estate-agent-management"
+                  "/admin-properties"
                 )}`}
                 onClick={() => navigate("/estate-agent-management")}
               >

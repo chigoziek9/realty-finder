@@ -3,8 +3,16 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { useContext, useState } from "react";
 import Cookies from "js-cookie";
+import {
+ 
+ 
+  X,
+  Menu,
+  FileText,
+  Trash2,
+} from "lucide-react";
 
-export default function AgentPropertyForm() {
+export default function OwnersPropertyForm() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, token } = useContext(AuthContext); // Access user and token from context
@@ -30,6 +38,7 @@ export default function AgentPropertyForm() {
   const [features, setFeatures] = useState([]);
   const [files, setFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // --- File Upload Handlers ---
   const handleDrop = (e) => {
@@ -70,157 +79,183 @@ export default function AgentPropertyForm() {
   };
 
   // --- Submit Handler ---
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
-  try {
-    if (files.length === 0) {
-      alert("Please upload at least one image.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Upload all images to Cloudinary
-    const uploadedUrls = await Promise.all(
-      files.map((file) => handleImageUpload(file))
-    );
-
-    const newProperty = {
-      title,
-      description,
-      price: Number(price),
-      location: locationField,
-      state,
-      postalCode,
-      images: uploadedUrls,
-      features,
-      type,
-    };
-
-    const response = await fetch(
-      "https://realtyfinder.onrender.com/api/properties",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify(newProperty),
+    try {
+      if (files.length === 0) {
+        alert("Please upload at least one image.");
+        setIsSubmitting(false);
+        return;
       }
-    );
 
-    if (response.ok) {
-      alert("✅ Your listing has been submitted and is pending admin approval.");
-      // Reset form
-      setTitle("");
-      setDescription("");
-      setPrice("");
-      setLocationField("");
-      setState("");
-       setType("");
-      setPostalCode("");
-      setFiles([]);
-      setFeatures([]);
-    } else {
-      const error = await response.json();
-      alert("❌ Failed to submit listing: " + (error.message || "Unknown error"));
+      // Upload all images to Cloudinary
+      const uploadedUrls = await Promise.all(
+        files.map((file) => handleImageUpload(file))
+      );
+
+      const newProperty = {
+        title,
+        description,
+        price: Number(price),
+        location: locationField,
+        state,
+        postalCode,
+        images: uploadedUrls,
+        features,
+        type,
+      };
+
+      const response = await fetch(
+        "https://realtyfinder.onrender.com/api/properties",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify(newProperty),
+        }
+      );
+
+      if (response.ok) {
+        alert(
+          "✅ Your listing has been submitted and is pending admin approval."
+        );
+        // Reset form
+        setTitle("");
+        setDescription("");
+        setPrice("");
+        setLocationField("");
+        setState("");
+        setType("");
+        setPostalCode("");
+        setFiles([]);
+        setFeatures([]);
+      } else {
+        const error = await response.json();
+        alert(
+          "❌ Failed to submit listing: " + (error.message || "Unknown error")
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (err) {
-    console.error(err);
-    alert("⚠️ Something went wrong. Please try again later.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
-        <div>
-          <nav className="mt-[85px] space-y-1">
-            <button
-              onClick={() => navigate("/agents-dashboard")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                "/agents-dashboard"
-              )}`}
-            >
-              <Clock size={18} />
-              <span>Dashboard Overview</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/agents-transaction")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                "/agents-transaction"
-              )}`}
-            >
-              <Bell size={18} />
-              <span>Transaction & Commission</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/agents-client")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                "/agents-client"
-              )}`}
-            >
-              <Heart size={18} />
-              <span>Clients</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/agents-property")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                "/agents-property"
-              )}`}
-            >
-              <Heart size={18} />
-              <span>Document Compliance</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/agents-document")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                "/agents-document"
-              )}`}
-            >
-              <Heart size={18} />
-              <span>Property Management</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/account-settings")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                "/account-settings"
-              )}`}
-            >
-              <Settings size={18} />
-              <span>Account Settings</span>
-            </button>
-          </nav>
+      {/* Sidebar */}
+       {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-20 bg-black/30 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      <aside
+        className={`z-30 fixed inset-y-0 left-0 transform transition-transform duration-200 ease-in-out
+                ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
+                lg:translate-x-0 lg:static lg:w-72 w-64 bg-green-900 text-white flex flex-col`}
+      >
+        <div className="px-6 py-6 border-b border-green-800 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center font-bold">
+              RF
+            </div>
+            <div className="text-lg font-bold">RealtyFinder</div>
+          </div>
+          <button className="lg:hidden" onClick={() => setSidebarOpen(false)}>
+            <X size={18} />
+          </button>
         </div>
 
-        {/* User Info */}
+        <nav className="mt-6 px-4 space-y-1 flex-1">
+          <button
+            onClick={() => navigate("/owners-dashboard")}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(
+              "/owners-dashboard"
+            )}`}
+          >
+            <Clock size={18} />
+            <span>Dashboard</span>
+          </button>
+
+          <button
+            onClick={() => navigate("/owners-listings")}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(
+              "/owners-listings"
+            )}`}
+          >
+            <Bell size={18} />
+            <span>My listings</span>
+          </button>
+
+          <button
+            onClick={() => navigate("/owners-saved-property")}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(
+              "/owners-saved-property"
+            )}`}
+          >
+            <Heart size={18} />
+            <span>My saved property</span>
+          </button>
+
+          <button
+            onClick={() => navigate("/owners-documents")}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(
+              "/owners-documents"
+            )}`}
+          >
+            <FileText size={18} />
+            <span>My documents</span>
+          </button>
+
+          <button
+            onClick={() => navigate("/owners-agreement")}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(
+              "/owners-agreement"
+            )}`}
+          >
+            <FileText size={18} />
+            <span>New tenancy agreement</span>
+          </button>
+
+          <button
+            onClick={() => navigate("/owners-settings")}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left border-t border-green-800 mt-4 ${isActive(
+              "/owners-settings"
+            )}`}
+          >
+            <Settings size={18} />
+            <span>Account settings</span>
+          </button>
+        </nav>
+
         <div className="p-6 border-t border-green-800">
-          <div className="flex items-center space-x-3">
-            <img
-              src={user?.profilePic || "https://via.placeholder.com/40"}
-              alt="profile"
-              className="w-10 h-10 rounded-full object-cover border"
-            />
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold">
+              {user?.firstName?.[0]?.toUpperCase() || "U"}
+            </div>
             <div>
-              <p className="font-medium">
-                {user?.firstName} {user?.lastName}
+              <p className="font-medium">{user?.firstName || "User"}</p>
+              <p className="text-xs text-green-200">
+                {user?.email || "user@example.com"}
               </p>
-              <p className="text-sm text-gray-300">{user?.email}</p>
             </div>
           </div>
-          <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
-            <LogOut size={18} />
-            <span>Logout</span>
+
+          <button
+            onClick={() => navigate("/login")}
+            className="mt-4 flex items-center gap-2 text-sm text-red-300 hover:text-red-200"
+          >
+            <LogOut size={16} />
+            Logout
           </button>
         </div>
       </aside>
@@ -234,7 +269,7 @@ export default function AgentPropertyForm() {
             today and get noticed fast.
           </p>
           <button
-            onClick={() => navigate("/agent-property-list")}
+            onClick={() => navigate("/owners-property-list")}
             className="mt-4 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
           >
             View Listed Property
@@ -288,8 +323,6 @@ export default function AgentPropertyForm() {
                 required
               />
             </div>
-
-            
           </div>
 
           {/* Location Details */}

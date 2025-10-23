@@ -17,7 +17,7 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 
-export default function AgentPropertyForm() {
+export default function OwnersPropertyListings() {
   const navigate = useNavigate();
   const { user, token } = useContext(AuthContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -57,9 +57,6 @@ export default function AgentPropertyForm() {
           );
 
           setProperties(filtered);
-
-          // ✅ Log property IDs to console
-          console.log("Fetched property IDs:", filtered.map((p) => p._id));
         } else {
           setError("Unexpected API response");
         }
@@ -301,11 +298,6 @@ export default function AgentPropertyForm() {
 
                   <p className="text-green-700 font-bold text-lg mt-2">
                     ₦{property.price?.toLocaleString() || "N/A"}
-                  </p>
-
-                  {/* 👇 Optional: Display property ID */}
-                  <p className="text-xs text-gray-500 mt-1">
-                    ID: {property._id}
                   </p>
 
                   <p className="text-xs text-gray-500 mt-1">

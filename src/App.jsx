@@ -76,7 +76,10 @@ import AdminPaymentDetail from "./pages/AdminPaymentDetail";
 import AgentDetail from "./pages/AgentDetail"
 import ReassignArea from "./pages/ReassignArea";
 import Exploremain from "./pages/Explore";
-
+import AgentPropertyList from "./components/AgentListedProperty";
+import OwnersPropertyList from "./components/OwnersListedProperty";
+import OwnersPropertyForm from "./components/OwnersPropeertyForm";
+import AdminProperties from "./pages/AdminProperties"
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -158,6 +161,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <AdminUserMgt />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/admin-properties"
+          element={
+            <ProtectedRoute>
+              <AdminProperties />
             </ProtectedRoute>
           }
         />
@@ -246,6 +257,14 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+         <Route
+          path="/agent-property-list"
+          element={
+            <ProtectedRoute>
+              <AgentPropertyList />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/owners-dashboard"
           element={
@@ -275,6 +294,22 @@ export default function App() {
           element={
             <ProtectedRoute>
               <OwnersAccountSettings />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/owners-form"
+          element={
+            <ProtectedRoute>
+              <OwnersPropertyForm />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/owners-property-list"
+          element={
+            <ProtectedRoute>
+              <OwnersPropertyList />
             </ProtectedRoute>
           }
         />

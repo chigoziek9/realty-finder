@@ -1,8 +1,7 @@
 import { Clock, Bell, Heart, Settings, LogOut, X, Trash2 } from "lucide-react";
-
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import Graph from "../components/Graph.jsx";
 import RecentActivity from "../components/RecentActivity";
 import InboxInquiry from "../components/InboxInquiry.jsx";
@@ -10,33 +9,78 @@ import InboxInquiry from "../components/InboxInquiry.jsx";
 export default function AgentsDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
 
-  // Utility to check if a link is active
+  // ✅ Add states for properties
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // ✅ Fetch total properties same as in AgentPropertyForm
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await fetch(
+          "https://realtyfinder.onrender.com/api/properties/admin/pending",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+        const result = await res.json();
+
+        if (result.success && Array.isArray(result.data)) {
+          const userEmail = user?.email?.toLowerCase();
+          const userId = user?._id;
+
+          // Filter to only properties created by this agent
+          const filtered = result.data.filter(
+            (p) =>
+              p.createdBy?.email?.toLowerCase() === userEmail ||
+              p.user?._id === userId
+          );
+
+          setProperties(filtered);
+        } else {
+          setError("Unexpected API response");
+        }
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+        setError("Failed to fetch properties. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token && user) fetchProperties();
+  }, [token, user]);
+
+  // Sidebar active link utility
   const isActive = (path) =>
     location.pathname === path
       ? "bg-white text-green-900 font-medium"
       : "hover:bg-green-800";
+
   const appointments = [
     {
       message:
-        "John smith has booked a property viewing on Tuesday, Aug 20 at 2:00pm. Please review thw details in your dashboard",
+        "John Smith has booked a property viewing on Tuesday, Aug 20 at 2:00pm. Please review the details in your dashboard.",
       title: "New appointment booking",
     },
     {
       message:
-        "Your scheduled appointment with John smith for Victoria island duplex on Friday, August 23 at am has been confirmed.",
+        "Your scheduled appointment with John Smith for Victoria Island duplex on Friday, August 23 at 10am has been confirmed.",
       title: "Appointment Confirmation",
     },
     {
       message:
-        "John smith has rescheduled  the tour for banana island villa to Saturday, August 24 at 4:00pm. Updated details are available in your calendar.",
-      title: "New appointment booking",
-    },
-    {
-      message:
-        "John smith has rescheduled  the tour for banana island villa to Saturday, August 24 at 4:00pm. Updated details are available in your calendar.",
-      title: "Appointment cancellation",
+        "John Smith has rescheduled the tour for Banana Island villa to Saturday, August 24 at 4:00pm.",
+      title: "Appointment Rescheduled",
     },
   ];
 
@@ -49,7 +93,7 @@ export default function AgentsDashboard() {
           <nav className="mt-[85px] space-y-1">
             <button
               onClick={() => navigate("/agents-dashboard")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
                 "/agents-dashboard"
               )}`}
             >
@@ -59,7 +103,7 @@ export default function AgentsDashboard() {
 
             <button
               onClick={() => navigate("/agents-transaction")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
                 "/agents-transaction"
               )}`}
             >
@@ -69,13 +113,14 @@ export default function AgentsDashboard() {
 
             <button
               onClick={() => navigate("/agents-client")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
                 "/agents-client"
               )}`}
             >
               <Heart size={18} />
               <span>Clients</span>
             </button>
+
             <button
               onClick={() => navigate("/agents-document")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
@@ -85,6 +130,7 @@ export default function AgentsDashboard() {
               <Heart size={18} />
               <span>Document Compliance</span>
             </button>
+
             <button
               onClick={() => navigate("/agents-property")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
@@ -97,7 +143,7 @@ export default function AgentsDashboard() {
 
             <button
               onClick={() => navigate("/agent-settings")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
+              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg ${isActive(
                 "/agent-settings"
               )}`}
             >
@@ -115,8 +161,8 @@ export default function AgentsDashboard() {
               alt="profile"
               className="w-10 h-10 rounded-full object-cover border"
             />
-            <div className="flex-colunm">
-              <p className="font-medium ">
+            <div>
+              <p className="font-medium">
                 {user?.firstName} {user?.lastName}
               </p>
               <p className="text-sm text-gray-300">{user?.email}</p>
@@ -140,43 +186,48 @@ export default function AgentsDashboard() {
             + List Property
           </button>
         </div>
-        <div className="flex gap-[27px]">
-          <div className="mt-[31px] inline-block border max-w-[240px ] w-[240px] h-[154px]  p-[19px] ">
-            <p className="">Total Listing </p>
-            <p className="text-5xl  font-bold mt-[13px]">48</p>
 
+        {/* ✅ Stats Boxes */}
+        <div className="flex gap-[27px] flex-wrap">
+          {/* ✅ Dynamic Total Listings */}
+          <div className="mt-[31px] inline-block border w-[240px] h-[154px] p-[19px] bg-white rounded-lg shadow">
+            <p>Total Listing</p>
+            <p className="text-5xl font-bold mt-[13px]">
+              {loading ? "..." : properties.length}
+            </p>
             <p className="mt-[13.31px] mb-3">This Week</p>
           </div>
-          <div className="mt-[31px] inline-block border max-w-[216px ] w-[240px] h-[154px]  p-[19px] ">
-            <p className="">Total Clients </p>
-            <p className="text-5xl  font-bold mt-[13px]">25</p>
 
+          <div className="mt-[31px] inline-block border w-[240px] h-[154px] p-[19px] bg-white rounded-lg shadow">
+            <p>Total Clients</p>
+            <p className="text-5xl font-bold mt-[13px]">25</p>
             <p className="mt-[13.31px] mb-3">This Week</p>
           </div>
-          <div className="mt-[31px] inline-block border max-w-[216px ] w-[240px] h-[154px]  p-[19px] ">
-            <p className="">Total Inquiries </p>
-            <p className="text-5xl  font-bold mt-[13px]">45</p>
 
+          <div className="mt-[31px] inline-block border w-[240px] h-[154px] p-[19px] bg-white rounded-lg shadow">
+            <p>Total Inquiries</p>
+            <p className="text-5xl font-bold mt-[13px]">45</p>
             <p className="mt-[13.31px] mb-3">This Week</p>
           </div>
-          <div className="mt-[31px] inline-block border max-w-[216px ] w-[240px] h-[154px]  p-[19px] ">
-            <p className="">Commision Earned </p>
-            <p className="text-5xl  font-bold mt-[13px]">0</p>
 
+          <div className="mt-[31px] inline-block border w-[240px] h-[154px] p-[19px] bg-white rounded-lg shadow">
+            <p>Commission Earned</p>
+            <p className="text-5xl font-bold mt-[13px]">₦0</p>
             <p className="mt-[13.31px] mb-3">This Week</p>
           </div>
         </div>
 
-        {/* Graph left and right side */}
-        <div className="max-w-7xl mt-[24px] flex gap-[27px]">
+        {/* Graph & Activity */}
+        <div className="max-w-7xl mt-[24px] flex gap-[27px] flex-wrap">
           <Graph />
           <div>
             <RecentActivity />
           </div>
         </div>
-        <div className="flex gap-[27px] max-w-7xl">
-          <div className="max-w-2xl  w-full border rounded-xl mt-[27px]  bg-white">
-            {/* Section header (only once, not inside map) */}
+
+        {/* Appointments */}
+        <div className="flex gap-[27px] max-w-7xl flex-wrap">
+          <div className="max-w-2xl w-full border rounded-xl mt-[27px] bg-white">
             <div className="flex justify-between mt-[27px] px-[20px] py-[12px]">
               <h1 className="font-jakarta text-[30px] leading-[30px] font-bold">
                 Appointments
@@ -185,26 +236,23 @@ export default function AgentsDashboard() {
                 View all
               </button>
             </div>
-            <hr className="border-t border-gray-400 mt-2" />{" "}
-            {/* List of appointments */}
+            <hr className="border-t border-gray-400 mt-2" />
+
             {appointments.map((appointment, index) => (
-              <div className="flex">
-                <div key={index} className="px-[20px] py-[12px]">
-                  <p className="font-jakarta text-[#08110C]-700 text-[20px] font-semibold">
-                    {appointment.title}
+              <div key={index} className="flex justify-between px-[20px] py-[12px]">
+                <div>
+                  <p className="font-semibold text-[18px]">{appointment.title}</p>
+                  <p className="text-[14px] text-[#313131] leading-[21px] w-[500px]">
+                    {appointment.message}
                   </p>
-                  <li>
-                    <p className="font-jakarta font-normal text-[14px] w-[500px] text-wrap leading-[21px] text-[#313131]">
-                      {appointment.message}
-                    </p>
-                  </li>
                 </div>
-                <button className="font-jakarta text-[#28563a] text-[16px] font-medium hover:text-black transition">
+                <button className="text-[#28563a] text-[16px] font-medium hover:text-black transition">
                   See detail
                 </button>
               </div>
             ))}
           </div>
+
           <div>
             <InboxInquiry />
           </div>
