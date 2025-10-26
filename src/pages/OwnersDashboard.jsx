@@ -269,7 +269,7 @@ export default function OwnersDashboard() {
 
             <div className="flex items-center gap-4">
               <button
-                onClick={() => navigate("/agents-form")}
+                onClick={() => navigate("/owners-form")}
                 className="px-4 py-2 bg-green-700 hover:bg-green-800 text-white rounded-md font-semibold shadow"
               >
                 + List Property

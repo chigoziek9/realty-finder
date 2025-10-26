@@ -19,14 +19,81 @@ export default function AddPropertyRequestAlert() {
     email: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
+  // ✅ Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  // ✅ UPDATED handleSubmit FUNCTION (using fetch)
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setLoading(true);
+
+    // Prepare data in the format expected by your API
+    const requestData = {
+      email: formData.email,
+      propertyType:
+        formData.subtype !== "Any"
+          ? formData.subtype
+          : formData.category !== "Any"
+          ? formData.category
+          : "apartment",
+      location:
+        formData.area !== "Any"
+          ? formData.area
+          : formData.state !== "Any"
+          ? formData.state
+          : "Lagos",
+      minPrice: parseInt(formData.minPrice.replace(/\D/g, "")) || 500,
+      maxPrice: parseInt(formData.maxPrice.replace(/\D/g, "")) || 2000,
+      bedrooms: formData.bedrooms !== "Any" ? Number(formData.bedrooms) : 1,
+      bathrooms: 1, // You can extend this later if your form includes bathrooms
+    };
+
+    try {
+      const response = await fetch(
+        "https://realtyfinder.onrender.com/api/property-requests/create",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("✅ Property request created successfully!");
+        console.log("Response:", data);
+
+        // Reset form
+        setFormData({
+          category: "Any",
+          type: "Any",
+          subtype: "Any",
+          bedrooms: "Any",
+          state: "Any",
+          area: "Any",
+          minPrice: "Select Min",
+          maxPrice: "Select Max",
+          comments: "",
+          name: "",
+          accountType: "Individual",
+          phone: "",
+          email: "",
+        });
+      } else {
+        alert("⚠️ Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("❌ Error creating property request:", error);
+      alert("❌ Failed to create property request. Check console for details.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -198,9 +265,14 @@ export default function AddPropertyRequestAlert() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-green-900 text-white py-3 rounded-lg hover:bg-green-800"
+            disabled={loading}
+            className={`w-full text-white py-3 rounded-lg ${
+              loading
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-green-900 hover:bg-green-800"
+            }`}
           >
-            Create Request
+            {loading ? "Creating Request..." : "Create Request"}
           </button>
         </form>
       </div>

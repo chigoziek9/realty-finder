@@ -40,9 +40,9 @@ export default function AdminPayments() {
             </button>
 
             <button
-              onClick={() => navigate("/admin-property-mgt")}
+              onClick={() => navigate("/admin-properties")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
-                "/admin-property-mgt"
+                "/admin-properties"
               )}`}
             >
               <Heart size={18} />

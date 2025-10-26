@@ -61,8 +61,8 @@ export default function AdminPaymentDetail() {
                 User Management
               </li>
               <li
-                className={`px-6 py-3 cursor-pointer ${isActive("/property-management")}`}
-                onClick={() => navigate("/property-management")}
+                className={`px-6 py-3 cursor-pointer ${isActive("/admin-properties")}`}
+                onClick={() => navigate("/admin-properties")}
               >
                 Property Management
               </li>

@@ -1,383 +1,377 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import {
-  FaUser,
-  FaEnvelope,
-  FaLock,
-  FaEye,
-  FaEyeSlash,
-  FaCheckCircle,
-  FaTimesCircle,
-  FaGoogle,
-  FaPhone,
-} from "react-icons/fa";
-import signupImage from "../assets/Frame 1.png";
-import logo from "../assets/logo.png";
+  Clock,
+  Bell,
+  Heart,
+  Settings,
+  LogOut,
+} from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
+import { useContext, useState } from "react";
+import Cookies from "js-cookie";
 
-export default function SignUp({ accountType: propAccountType }) {
+export default function AgentPropertyForm() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    agree: false,
-    accountType: propAccountType || "",
-  });
+  const location = useLocation();
+  const { user, token } = useContext(AuthContext); // Access user and token from context
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  // ✅ Use token from context or fallback to cookie
+  const authToken = token || Cookies.get("token");
 
-  // ✅ Load accountType from localStorage if not passed as prop
-  useEffect(() => {
-    if (!formData.accountType) {
-      const savedType = localStorage.getItem("accountType");
-      if (savedType) {
-        setFormData((prev) => ({ ...prev, accountType: savedType }));
-      } else {
-        navigate("/choose-account-type");
-      }
-    }
-  }, [formData.accountType, navigate]);
+  // --- Navigation Active State ---
+  const isActive = (path) =>
+    location.pathname === path
+      ? "bg-white text-green-900 font-medium"
+      : "hover:bg-green-800";
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
+  // --- Form State ---
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [locationField, setLocationField] = useState("");
+  const [state, setState] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [features, setFeatures] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // --- File Upload Handlers ---
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setFiles((prev) => [...prev, ...Array.from(e.dataTransfer.files)]);
   };
 
-  // ✅ Allow user to re-select account type
-  const handleChangeType = () => {
-    localStorage.removeItem("accountType");
-    navigate("/choose-account-type");
+  const handleFileChange = (e) => {
+    setFiles((prev) => [...prev, ...Array.from(e.target.files)]);
   };
 
-  // ✅ Password validation rules
-  const passwordRules = [
-    {
-      text: "Password must be at least 8 characters long.",
-      valid: formData.password.length >= 8,
-    },
-    {
-      text: "Password must not be longer than 18 characters.",
-      valid: formData.password.length <= 18 && formData.password.length > 0,
-    },
-    {
-      text: "Password must contain at least one upper and one lower case letter.",
-      valid: /[A-Z]/.test(formData.password) && /[a-z]/.test(formData.password),
-    },
-    {
-      text: "Password must contain at least one number or punctuation character.",
-      valid: /[0-9\W]/.test(formData.password),
-    },
-    {
-      text: "Password must not contain space or unicode characters.",
-      valid:
-        !/\s/.test(formData.password) &&
-        // eslint-disable-next-line no-control-regex
-        /^[\x00-\x7F]*$/.test(formData.password),
-    },
-  ];
+  const handleDragOver = (e) => e.preventDefault();
 
-  const allValid = passwordRules.every((rule) => rule.valid);
+  // --- Feature Toggle ---
+  const toggleFeature = (feature) => {
+    setFeatures((prev) =>
+      prev.includes(feature)
+        ? prev.filter((f) => f !== feature)
+        : [...prev, feature]
+    );
+  };
+
+  // --- Submit Handler ---
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!formData.agree) {
-      alert("You must agree to the terms & conditions.");
-      return;
-    }
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    if (!allValid) {
-      alert("Password does not meet the requirements.");
-      return;
-    }
+    setIsSubmitting(true);
 
     try {
-      // ✅ Choose base URL depending on environment
-      const API_BASE = "https://realtyfinder.onrender.com/api"; // your Render backend
+      // Convert file objects to temporary preview URLs
+      const imageUrls = files.map((file) => URL.createObjectURL(file));
 
-      const response = await fetch(`${API_BASE}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-         credentials: "include",
-        body: JSON.stringify(formData),
-      });
+      const newProperty = {
+        title,
+        description,
+        price,
+        location: locationField,
+        state,
+        postalCode,
+        images: imageUrls,
+        features,
+      };
 
-      const data = await response.json().catch(() => ({}));
+      const response = await fetch(
+        "https://realtyfinder.onrender.com/api/properties",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify(newProperty),
+        }
+      );
 
       if (response.ok) {
-        localStorage.setItem("email", formData.email);
-        alert("Registration successful! Please check your email for OTP.");
-        navigate("/otp-verification");
+        alert("✅ Your listing has been submitted and is pending admin approval.");
+        // Reset form
+        setTitle("");
+        setDescription("");
+        setPrice("");
+        setLocationField("");
+        setState("");
+        setPostalCode("");
+        setFiles([]);
+        setFeatures([]);
       } else {
-        alert(data.message || "Registration failed.");
+        const error = await response.json();
+        alert("❌ Failed to submit listing: " + (error.message || "Unknown error"));
       }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Something went wrong. Please try again.");
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-      {/* Left Image */}
-      <div className="hidden md:block">
-        <img
-          src={signupImage}
-          alt="Sign Up Banner"
-          className="w-full h-full object-cover rounded-r-3xl"
-        />
-      </div>
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
+        <div>
+          <nav className="mt-[85px] space-y-1">
+            <button
+              onClick={() => navigate("/agents-dashboard")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/agents-dashboard")}`}
+            >
+              <Clock size={18} />
+              <span>Dashboard Overview</span>
+            </button>
 
-      {/* Right Form */}
-      <div className="flex items-center justify-center px-6 py-10 bg-white">
-        <div className="w-full max-w-md space-y-6">
-          {/* Logo + Title */}
-          <div className="text-left">
-            <img src={logo} alt="Logo" className="w-32 mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900">
-              Get started now
-            </h2>
-            <p className="mt-2 text-gray-600">
-              {formData.accountType ? (
-                <span>
-                  Create your{" "}
-                  <span className="font-semibold capitalize">
-                    {formData.accountType}
-                  </span>{" "}
-                  account
-                  <button
-                    onClick={handleChangeType}
-                    className="ml-3 text-sm text-green-600 hover:underline"
-                  >
-                    Change
-                  </button>
-                </span>
-              ) : (
-                "Let’s create your account"
-              )}
-            </p>
+            <button
+              onClick={() => navigate("/agents-transaction")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/agents-transaction")}`}
+            >
+              <Bell size={18} />
+              <span>Transaction & Commission</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/agents-client")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/agents-client")}`}
+            >
+              <Heart size={18} />
+              <span>Clients</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/agents-property")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/agents-property")}`}
+            >
+              <Heart size={18} />
+              <span>Document Compliance</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/agents-document")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/agents-document")}`}
+            >
+              <Heart size={18} />
+              <span>Property Management</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/account-settings")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/account-settings")}`}
+            >
+              <Settings size={18} />
+              <span>Account Settings</span>
+            </button>
+          </nav>
+        </div>
+
+        {/* User Info */}
+        <div className="p-6 border-t border-green-800">
+          <div className="flex items-center space-x-3">
+            <img
+              src={user?.profilePic || "https://via.placeholder.com/40"}
+              alt="profile"
+              className="w-10 h-10 rounded-full object-cover border"
+            />
+            <div>
+              <p className="font-medium">
+                {user?.firstName} {user?.lastName}
+              </p>
+              <p className="text-sm text-gray-300">{user?.email}</p>
+            </div>
           </div>
+          <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
+            <LogOut size={18} />
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* First Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                First name <span className="text-red-500">*</span>
+      {/* Main Content */}
+      <main className="flex-1 p-[60px]">
+        <div>
+          <h1 className="text-3xl font-bold">List Property</h1>
+          <p className="mt-4">
+            Showcase your property to thousands of buyers and renters.
+            List today and get noticed fast.
+          </p>
+          <button
+            onClick={() => navigate("/agents-listed-property")}
+            className="mt-4 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
+          >
+            View Listed Property
+          </button>
+        </div>
+
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-4xl mt-[32px] bg-white p-6 rounded-lg shadow"
+        >
+          {/* Basic Information */}
+          <h2 className="bg-gray-100 px-4 py-2 font-semibold">Basic Information</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Property Title*
               </label>
-              <div className="flex items-center border rounded-lg px-3 py-2">
-                <FaUser className="text-gray-400 mr-2" />
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder="Enter first name"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="w-full focus:outline-none"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Middle Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Middle name
-              </label>
-              <div className="flex items-center border rounded-lg px-3 py-2">
-                <FaUser className="text-gray-400 mr-2" />
-                <input
-                  type="text"
-                  name="middleName"
-                  placeholder="Enter middle name"
-                  value={formData.middleName}
-                  onChange={handleChange}
-                  className="w-full focus:outline-none"
-                />
-              </div>
-            </div>
-
-            {/* Last Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Last name <span className="text-red-500">*</span>
-              </label>
-              <div className="flex items-center border rounded-lg px-3 py-2">
-                <FaUser className="text-gray-400 mr-2" />
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder="Enter last name"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="w-full focus:outline-none"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Email <span className="text-red-500">*</span>
-              </label>
-              <div className="flex items-center border rounded-lg px-3 py-2">
-                <FaEnvelope className="text-gray-400 mr-2" />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Enter email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full focus:outline-none"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Password <span className="text-red-500">*</span>
-              </label>
-              <div className="flex items-center border rounded-lg px-3 py-2 relative">
-                <FaLock className="text-gray-400 mr-2" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Set your password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full focus:outline-none pr-8"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 text-gray-500"
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-
-              {/* ✅ Password Rules */}
-              <div className="mt-3 bg-gray-50 border border-gray-200 rounded-lg p-4 text-xs leading-5">
-                <ul className="space-y-1">
-                  {passwordRules.map((rule, idx) => (
-                    <li
-                      key={idx}
-                      className={`flex items-center gap-2 ${
-                        rule.valid ? "text-green-600" : "text-gray-500"
-                      }`}
-                    >
-                      {rule.valid ? (
-                        <FaCheckCircle className="text-green-600" />
-                      ) : (
-                        <FaTimesCircle className="text-gray-400" />
-                      )}
-                      {rule.text}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Confirm Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Confirm password <span className="text-red-500">*</span>
-              </label>
-              <div className="flex items-center border rounded-lg px-3 py-2 relative">
-                <FaLock className="text-gray-400 mr-2" />
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  placeholder="Confirm password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="w-full focus:outline-none pr-8"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 text-gray-500"
-                >
-                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-            </div>
-
-            {/* Terms */}
-            <div className="flex items-center">
               <input
-                type="checkbox"
-                name="agree"
-                checked={formData.agree}
-                onChange={handleChange}
-                className="h-4 w-4 text-green-600"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="border rounded px-3 py-2"
                 required
               />
-              <span className="ml-2 text-sm text-gray-600">
-                I agree to RealtyFinder’s{" "}
-                <a href="#" className="text-green-600 font-medium">
-                  terms & condition
-                </a>
-              </span>
             </div>
 
-            {/* Submit */}
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Price
+              </label>
+              <input
+                type="text"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Location
+              </label>
+              <input
+                type="text"
+                value={locationField}
+                onChange={(e) => setLocationField(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Location Details */}
+          <h2 className="bg-gray-100 px-4 py-2 font-semibold mt-6">Location Details</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">State</label>
+              <input
+                type="text"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                className="border rounded px-3 py-2"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">Postal Code</label>
+              <input
+                type="text"
+                value={postalCode}
+                onChange={(e) => setPostalCode(e.target.value)}
+                className="border rounded px-3 py-2"
+              />
+            </div>
+          </div>
+
+          {/* Property Gallery */}
+          <h2 className="bg-gray-100 px-4 py-2 font-semibold mt-6">Property Gallery</h2>
+          <div
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onClick={() => document.getElementById("fileInput").click()}
+            className="border-2 border-dashed border-gray-400 rounded-lg p-12 text-center text-gray-500 cursor-pointer hover:bg-gray-50"
+          >
+            <p>Drop files here to upload or click to browse</p>
+            <input
+              id="fileInput"
+              type="file"
+              multiple
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </div>
+
+          {/* Preview selected files */}
+          {files.length > 0 && (
+            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+              {files.map((file, index) => (
+                <div
+                  key={index}
+                  className="border rounded p-2 text-sm text-gray-700 flex flex-col items-center"
+                >
+                  {file.type.startsWith("image/") ? (
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={file.name}
+                      className="w-full h-32 object-cover rounded mb-2"
+                    />
+                  ) : (
+                    <div className="w-full h-32 flex items-center justify-center bg-gray-100 rounded mb-2">
+                      <span className="text-xs text-gray-500">File</span>
+                    </div>
+                  )}
+                  <p className="truncate w-full text-center">{file.name}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Description */}
+          <h2 className="bg-gray-100 px-4 py-2 font-semibold mt-6">
+            Detailed Information
+          </h2>
+          <div className="flex flex-col mt-4">
+            <label className="mb-1 text-sm font-medium text-gray-700">Description</label>
+            <textarea
+              rows={5}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full border rounded px-3 py-2"
+            ></textarea>
+          </div>
+
+          {/* Features */}
+          <h2 className="bg-gray-100 px-4 py-2 font-semibold mt-6">
+            Features (optional)
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-4">
+            {[
+              "Free parking",
+              "Air condition",
+              "Laundry room",
+              "Swimming pool",
+              "Lobby/sit out",
+              "Window covering",
+              "Alarm",
+              "Bar",
+            ].map((feature, index) => (
+              <label key={index} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={features.includes(feature)}
+                  onChange={() => toggleFeature(feature)}
+                  className="h-4 w-4"
+                />
+                <span>{feature}</span>
+              </label>
+            ))}
+          </div>
+
+          {/* Submit */}
+          <div className="text-center mt-6">
             <button
               type="submit"
-              disabled={!allValid}
-              className={`w-full py-3 rounded-lg font-semibold transition ${
-                allValid
-                  ? "bg-green-700 text-white hover:bg-green-800"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
+              disabled={isSubmitting}
+              className="bg-green-900 text-white px-8 py-2 rounded hover:bg-green-800 transition disabled:opacity-50"
             >
-              Sign up
+              {isSubmitting ? "Submitting..." : "Submit"}
             </button>
-          </form>
-
-          {/* Divider */}
-          <div className="flex items-center my-4">
-            <hr className="flex-grow border-gray-300" />
-            <span className="px-3 text-gray-500 text-sm">or</span>
-            <hr className="flex-grow border-gray-300" />
           </div>
-
-          {/* Social Sign Up */}
-          <div className="space-y-3">
-            <button className="w-full flex items-center justify-center gap-2 border rounded-lg py-3 hover:bg-gray-50 transition">
-              <FaGoogle className="text-red-500" /> Sign up with Google
-            </button>
-
-            <Link to="/signup/phone">
-              <button className="w-full flex items-center justify-center gap-2 border rounded-lg py-3 hover:bg-gray-50 transition">
-                <FaPhone className="text-green-600" /> Sign up with Phone
-              </button>
-            </Link>
-          </div>
-
-          {/* Footer */}
-          <p className="text-center text-sm text-gray-600 mt-4">
-            Already have an account?{" "}
-            <Link to="/signin" className="text-green-600 font-medium">
-              Sign in
-            </Link>
-          </p>
-        </div>
-      </div>
+        </form>
+      </main>
     </div>
   );
 }
