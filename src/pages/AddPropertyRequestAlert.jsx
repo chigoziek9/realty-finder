@@ -1,6 +1,8 @@
 // src/pages/AddPropertyRequestAlert.jsx
-import { useState } from "react";
+import { useState, useContext } from "react";
 import DashboardLayout from "../components/DashboardLayout";
+import { AuthContext } from "../AuthContext";
+import Cookies from "js-cookie";
 
 export default function AddPropertyRequestAlert() {
   const [formData, setFormData] = useState({
@@ -18,6 +20,7 @@ export default function AddPropertyRequestAlert() {
     phone: "",
     email: "",
   });
+  const { user, token: contextToken } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
 
@@ -54,11 +57,24 @@ export default function AddPropertyRequestAlert() {
     };
 
     try {
+      const authToken = Cookies.get("token") || contextToken;
+
+      if (!authToken) {
+        alert("You are not authorized. Please log in again.");
+        return;
+      }
+      console.log("Auth Token (from cookie):", Cookies.get("token"));
+      console.log("Auth Token (from context):", contextToken);
+      console.log("Final Token Used:", authToken);
+
       const response = await fetch(
         "https://realtyfinder.onrender.com/api/property-requests/create",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`, // ✅ must be included
+          },
           body: JSON.stringify(requestData),
         }
       );
