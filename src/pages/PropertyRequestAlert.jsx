@@ -11,29 +11,24 @@ export default function PropertyRequestAlert() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { token: contextToken } = useContext(AuthContext); // ✅ get token from AuthContext
+  const { token: contextToken } = useContext(AuthContext);
 
-  // Utility to check if a link is active
   const isActive = (path) =>
     location.pathname === path
       ? "bg-green-800 font-medium"
       : "hover:bg-green-800";
 
-  // Fetch property requests from API
+  // ✅ Fetch property requests
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-         const authToken = Cookies.get("token") || contextToken;
+        const authToken = Cookies.get("token") || contextToken;
 
         if (!authToken) {
           setError("You are not authorized. Please log in again.");
           setLoading(false);
           return;
         }
-
-        console.log("Auth Token (from cookie):", Cookies.get("token"));
-        console.log("Auth Token (from context):", contextToken);
-        console.log("Final Token Used:", authToken);
 
         const res = await fetch(
           "https://realtyfinder.onrender.com/api/property-requests",
@@ -45,17 +40,13 @@ export default function PropertyRequestAlert() {
           }
         );
 
-        if (!res.ok) {
-          throw new Error(`Failed to fetch: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
 
         const data = await res.json();
-        setRequests(data.data || data || []); // handle possible data structure
+        setRequests(data.data || data || []);
       } catch (err) {
         console.error("Error fetching property requests:", err);
-        setError(
-          "Failed to fetch properties. Please check API connection or login token."
-        );
+        setError("Failed to fetch properties. Please check your login or connection.");
       } finally {
         setLoading(false);
       }
@@ -64,12 +55,45 @@ export default function PropertyRequestAlert() {
     fetchRequests();
   }, [contextToken]);
 
+  // ✅ Delete request handler
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this request?");
+    if (!confirmDelete) return;
+
+    try {
+      const authToken = Cookies.get("token") || contextToken;
+      if (!authToken) {
+        alert("Unauthorized! Please log in again.");
+        return;
+      }
+
+      const res = await fetch(
+        `https://realtyfinder.onrender.com/api/property-requests/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error(`Failed to delete: ${res.status}`);
+
+      // ✅ Update local state
+      setRequests((prev) => prev.filter((req) => req._id !== id));
+      alert("Property request deleted successfully!");
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("Failed to delete property request.");
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-green-900 text-white flex flex-col justify-between">
         <div>
-          {/* Menu */}
           <nav className="mt-6 space-y-1">
             <button
               onClick={() => navigate("/property-request-alert")}
@@ -151,12 +175,11 @@ export default function PropertyRequestAlert() {
           </button>
         </div>
 
-        {/* Middle Section */}
+        {/* Info Section */}
         <div className="mt-6">
           <div className="flex items-center justify-between bg-green-100 text-green-700 px-4 py-3 rounded-md">
             <p>
-              Your request has been queued for review and will be posted after
-              it has been reviewed
+              Your request has been queued for review and will be posted after it has been reviewed
             </p>
             <X size={18} className="cursor-pointer" />
           </div>
@@ -179,11 +202,12 @@ export default function PropertyRequestAlert() {
           {!loading && !error && requests.length === 0 && (
             <p className="text-gray-600">No property requests found.</p>
           )}
+
           {!loading &&
             !error &&
-            requests.map((req, index) => (
+            requests.map((req) => (
               <div
-                key={req._id || index}
+                key={req._id}
                 className="bg-white shadow-md rounded-lg p-6"
               >
                 <div className="space-y-3 text-sm">
@@ -211,7 +235,11 @@ export default function PropertyRequestAlert() {
                   </p>
                 </div>
 
-                <button className="mt-6 flex items-center gap-2 text-red-600 font-medium hover:text-red-800">
+                {/* ✅ Delete Button */}
+                <button
+                  onClick={() => handleDelete(req._id)}
+                  className="mt-6 flex items-center gap-2 text-red-600 font-medium hover:text-red-800"
+                >
                   <Trash2 size={18} /> Delete
                 </button>
               </div>
