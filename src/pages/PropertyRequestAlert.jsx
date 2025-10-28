@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Clock, Bell, Heart, Settings, LogOut, X, Trash2 } from "lucide-react";
 import profileImg from "../assets/profile.png";
 import { useNavigate, useLocation } from "react-router-dom";
+import Cookies from "js-cookie";
+import { AuthContext } from "../AuthContext";
 
 export default function PropertyRequestAlert() {
   const navigate = useNavigate();
@@ -9,22 +11,39 @@ export default function PropertyRequestAlert() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { token: contextToken } = useContext(AuthContext); // ✅ get token from AuthContext
 
   // Utility to check if a link is active
   const isActive = (path) =>
-    location.pathname === path ? "bg-green-800 font-medium" : "hover:bg-green-800";
+    location.pathname === path
+      ? "bg-green-800 font-medium"
+      : "hover:bg-green-800";
 
   // Fetch property requests from API
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const token = localStorage.getItem("token"); // 🔐 get token from local storage
-        const res = await fetch("https://realtyfinder.onrender.com/api/property-requests", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+         const authToken = Cookies.get("token") || contextToken;
+
+        if (!authToken) {
+          setError("You are not authorized. Please log in again.");
+          setLoading(false);
+          return;
+        }
+
+        console.log("Auth Token (from cookie):", Cookies.get("token"));
+        console.log("Auth Token (from context):", contextToken);
+        console.log("Final Token Used:", authToken);
+
+        const res = await fetch(
+          "https://realtyfinder.onrender.com/api/property-requests",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
 
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
@@ -34,14 +53,16 @@ export default function PropertyRequestAlert() {
         setRequests(data.data || data || []); // handle possible data structure
       } catch (err) {
         console.error("Error fetching property requests:", err);
-        setError("Failed to fetch properties. Please check API connection or login token.");
+        setError(
+          "Failed to fetch properties. Please check API connection or login token."
+        );
       } finally {
         setLoading(false);
       }
     };
 
     fetchRequests();
-  }, []);
+  }, [contextToken]);
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -134,8 +155,8 @@ export default function PropertyRequestAlert() {
         <div className="mt-6">
           <div className="flex items-center justify-between bg-green-100 text-green-700 px-4 py-3 rounded-md">
             <p>
-              Your request has been queued for review and will be posted after it
-              has been reviewed
+              Your request has been queued for review and will be posted after
+              it has been reviewed
             </p>
             <X size={18} className="cursor-pointer" />
           </div>
@@ -167,7 +188,8 @@ export default function PropertyRequestAlert() {
               >
                 <div className="space-y-3 text-sm">
                   <p>
-                    <span className="font-semibold">Type:</span> {req.type || "N/A"}
+                    <span className="font-semibold">Type:</span>{" "}
+                    {req.type || "N/A"}
                   </p>
                   <p>
                     <span className="font-semibold">Bedrooms:</span>{" "}
