@@ -1,21 +1,8 @@
-import {
-  Clock,
-  Bell,
-  Heart,
-  Settings,
-  LogOut,
-  X,
-  Menu,
-} from "lucide-react";
+import { Clock, Bell, Heart, Settings, LogOut, X, Menu } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { useContext, useState, useEffect } from "react";
-import {
-  FaBed,
-  FaBath,
-  FaRulerCombined,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
+import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt } from "react-icons/fa";
 
 export default function AdminProperties() {
   const navigate = useNavigate();
@@ -33,7 +20,11 @@ export default function AdminProperties() {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
 
-  const tabs = ["Pending Properties", "Approved Properties", "Rejected Properties"];
+  const tabs = [
+    "Pending Properties",
+    "Approved Properties",
+    "Rejected Properties",
+  ];
 
   const isActive = (path) =>
     location.pathname === path
@@ -45,16 +36,23 @@ export default function AdminProperties() {
     setLoading(true);
     try {
       const [pendingRes, approvedRes, rejectedRes] = await Promise.all([
-        fetch("https://realtyfinder.onrender.com/api/properties/admin/pending", {
+        fetch("https://realtyfinder.onrender.com/api/properties/user/pending", {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        
-        fetch("https://realtyfinder.onrender.com/api/properties/admin/approved", {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        fetch("https://realtyfinder.onrender.com/api/properties/admin/rejected", {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
+
+        fetch(
+          "https://realtyfinder.onrender.com/api/properties/user?approvalstatus=approved",
+
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        ),
+        fetch(
+          "https://realtyfinder.onrender.com/api/properties/admin/rejected",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        ),
       ]);
 
       const pendingData = await pendingRes.json();
@@ -80,14 +78,15 @@ export default function AdminProperties() {
   // Approve or reject property
   const updatePropertyStatus = async (id, action) => {
     // action === "approve" or "reject"
-    if (!window.confirm(`Are you sure you want to ${action} this property?`)) return;
+    if (!window.confirm(`Are you sure you want to ${action} this property?`))
+      return;
 
     try {
       setActionLoading(id);
       const endpoint =
         action === "approve"
-          ? `https://realtyfinder.onrender.com/api/admin/approve-property/${id}`
-          : `https://realtyfinder.onrender.com/api/admin/reject-property/${id}`;
+          ? `https://realtyfinder.onrender.com/api/properties/approve/${id}`
+          : `https://realtyfinder.onrender.com/api/properties/reject/${id}`;
 
       const res = await fetch(endpoint, {
         method: "PUT",
@@ -185,19 +184,27 @@ export default function AdminProperties() {
                 {activeTab === "Pending Properties" && (
                   <>
                     <button
-                      onClick={() => updatePropertyStatus(property._id, "approve")}
+                      onClick={() =>
+                        updatePropertyStatus(property._id, "approve")
+                      }
                       disabled={actionLoading === property._id}
                       className="px-3 py-1 border rounded-lg text-sm text-green-600 hover:bg-green-50"
                     >
-                      {actionLoading === property._id ? "Processing..." : "Approve"}
+                      {actionLoading === property._id
+                        ? "Processing..."
+                        : "Approve"}
                     </button>
 
                     <button
-                      onClick={() => updatePropertyStatus(property._id, "reject")}
+                      onClick={() =>
+                        updatePropertyStatus(property._id, "reject")
+                      }
                       disabled={actionLoading === property._id}
                       className="px-3 py-1 border rounded-lg text-sm text-red-600 hover:bg-red-50"
                     >
-                      {actionLoading === property._id ? "Processing..." : "Reject"}
+                      {actionLoading === property._id
+                        ? "Processing..."
+                        : "Reject"}
                     </button>
                   </>
                 )}
@@ -219,11 +226,31 @@ export default function AdminProperties() {
         <div>
           <nav className="mt-[85px] space-y-1">
             {[
-              { path: "/admin-dashboard", label: "Dashboard", icon: <Clock size={18} /> },
-              { path: "/admin-user-mgt", label: "User Management", icon: <Bell size={18} /> },
-              { path: "/admin-properties", label: "Property Management", icon: <Heart size={18} /> },
-              { path: "/admin-agents-mgt", label: "Estate Agent Management", icon: <Heart size={18} /> },
-              { path: "/admin-payments-transactions", label: "Payments & Transactions", icon: <Heart size={18} /> },
+              {
+                path: "/admin-dashboard",
+                label: "Dashboard",
+                icon: <Clock size={18} />,
+              },
+              {
+                path: "/admin-user-mgt",
+                label: "User Management",
+                icon: <Bell size={18} />,
+              },
+              {
+                path: "/admin-properties",
+                label: "Property Management",
+                icon: <Heart size={18} />,
+              },
+              {
+                path: "/admin-agents-mgt",
+                label: "Estate Agent Management",
+                icon: <Heart size={18} />,
+              },
+              {
+                path: "/admin-payments-transactions",
+                label: "Payments & Transactions",
+                icon: <Heart size={18} />,
+              },
             ].map((item, idx) => (
               <button
                 key={idx}
@@ -272,7 +299,9 @@ export default function AdminProperties() {
 
       <main className="flex-1 p-4 md:p-8">
         <div className="flex items-center justify-between md:hidden bg-white p-4 shadow mb-4 rounded-md">
-          <h1 className="text-lg font-semibold text-gray-800">Properties Management</h1>
+          <h1 className="text-lg font-semibold text-gray-800">
+            Properties Management
+          </h1>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-2 rounded-md bg-green-800 text-white"
@@ -349,7 +378,8 @@ export default function AdminProperties() {
                   ₦{selectedProperty.price?.toLocaleString() || "N/A"}
                 </p>
                 <p className="text-sm text-gray-700 mb-4">
-                  {selectedProperty.description || "No detailed description available."}
+                  {selectedProperty.description ||
+                    "No detailed description available."}
                 </p>
               </div>
             </div>

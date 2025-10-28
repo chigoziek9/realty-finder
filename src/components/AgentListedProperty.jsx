@@ -42,7 +42,7 @@ export default function AgentPropertyForm() {
     const fetchProperties = async () => {
       try {
         const res = await fetch(
-          "https://realtyfinder.onrender.com/api/properties/admin/pending",
+          "https://realtyfinder.onrender.com/api/properties/user/pending",
           {
             method: "GET",
             headers: {
