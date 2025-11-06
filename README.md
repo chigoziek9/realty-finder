@@ -1,4 +1,4 @@
-# 🏠 Real Estate Frontend (Simple Plan)
+# 🏠 RealtyFinder Frontend 
 
 A modern, responsive **real estate web application** built with a user-first approach — designed for property owners, buyers, and agents.  
 This project focuses on delivering a smooth user experience with clear navigation, interactive forms, and dynamic UI components.
