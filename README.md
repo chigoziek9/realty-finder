@@ -1,4 +1,4 @@
-# 🏠 Real Estate Frontend (Simple Plan)
+# 🏠 RealtyFinder Frontend 
 
 A modern, responsive **real estate web application** built with a user-first approach — designed for property owners, buyers, and agents.  
 This project focuses on delivering a smooth user experience with clear navigation, interactive forms, and dynamic UI components.
@@ -50,9 +50,7 @@ src/
 ├── pages/               # Route-based pages (Home, Login, Profile, etc.)
 ├── layouts/             # Reusable layout components (Navbar, Footer)
 ├── context/             # Auth & global state management
-├── hooks/               # Custom hooks
-├── utils/               # Helper functions (formatters, validators)
-├── services/            # API calls (fetch, axios)
+├── services/            # API calls (fetch)
 └── App.jsx              # Main app entry
 ```
 
