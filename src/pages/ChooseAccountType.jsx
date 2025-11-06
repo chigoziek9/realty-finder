@@ -7,8 +7,8 @@ import agentImg from "../assets/Realestateagent.png";
 
 const accountTypes = [
   { id: "individual", title: "Individual", image: individualImg },
-  { id: "owner", title: "Property Owner", image: ownerImg },
-  { id: "agent", title: "Real Estate Agent", image: agentImg },
+  { id: "property_owner", title: "Property Owner", image: ownerImg },
+  { id: "real_estate_agent", title: "Real Estate Agent", image: agentImg },
   { id: "admin", title: "Admin", image: agentImg },
 ];
 

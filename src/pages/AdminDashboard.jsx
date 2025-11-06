@@ -25,73 +25,62 @@ export default function AdminDashboard() {
       : "hover:bg-green-800";
 
   return (
-    <div className="flex min-h-screen bg-gray-100 relative">
-      {/* ===== Sidebar (Desktop + Mobile Drawer) ===== */}
-      <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-green-900 text-white flex flex-col justify-between transform transition-transform duration-300 z-50 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        }`}
-      >
-        {/* Close button (mobile only) */}
-        <div className="flex items-center justify-between px-6 py-4 md:hidden border-b border-green-800">
-          <span className="text-lg font-semibold">Menu</span>
-          <button onClick={() => setSidebarOpen(false)}>
-            <X size={24} />
-          </button>
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
+        <div>
+          <nav className="mt-[85px] space-y-1">
+            <button
+              onClick={() => navigate("/admin-dashboard")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-dashboard"
+              )}`}
+            >
+              <Clock size={18} />
+              <span>Dashboard</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-user-mgt")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-user-mgt"
+              )}`}
+            >
+              <Bell size={18} />
+              <span>User Management</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-properties")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-properties"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>Property Management</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-agents-mgt")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-agents-mgt"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>Estate Agent Management</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-property-request")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-property-request"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>Property Requests</span>
+            </button>
+          </nav>
         </div>
-
-        {/* Menu Items */}
-        <nav className="mt-[70px] space-y-1 md:mt-[85px]">
-          <button
-            onClick={() => navigate("/admin-dashboard")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive(
-              "/admin-dashboard"
-            )}`}
-          >
-            <Clock size={18} />
-            <span>Dashboard</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/admin-user-mgt")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive(
-              "/admin-user-mgt"
-            )}`}
-          >
-            <Bell size={18} />
-            <span>User Management</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/admin-properties")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive(
-              "/admin-properties"
-            )}`}
-          >
-            <Heart size={18} />
-            <span>Property Management</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/admin-agents-mgt")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive(
-              "/admin-agents-mgt"
-            )}`}
-          >
-            <Heart size={18} />
-            <span>Estate Agents Management</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/admin-payments-transactions")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive(
-              "/admin-payments-transactions"
-            )}`}
-          >
-            <Heart size={18} />
-            <span>Payments & Transactions</span>
-          </button>
-        </nav>
 
         {/* User Info */}
         <div className="p-6 border-t border-green-800">
@@ -102,9 +91,7 @@ export default function AdminDashboard() {
               className="w-10 h-10 rounded-full object-cover border"
             />
             <div>
-              <p className="font-medium">
-                {user?.firstName} {user?.lastName}
-              </p>
+              <p className="font-medium">{user?.firstName} {user?.lastName}</p>
               <p className="text-sm text-gray-300">{user?.email}</p>
             </div>
           </div>

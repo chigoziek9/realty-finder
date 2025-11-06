@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
 
-  // 🔹 Load user from localStorage (if exists)
+  // Load user and token from storage
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
@@ -16,23 +16,47 @@ export function AuthProvider({ children }) {
 
   const [token, setToken] = useState(() => Cookies.get("token") || null);
 
-  // 🔹 Automatically restore user from token if missing
-  useEffect(() => {
-    const cookieToken = Cookies.get("token");
-    if (!user && cookieToken) {
-      try {
-        const decodedUser = jwtDecode(cookieToken);
-        setUser(decodedUser);
-        setToken(cookieToken);
-        localStorage.setItem("user", JSON.stringify(decodedUser));
-      } catch (err) {
-        console.error("❌ Failed to decode token:", err);
-        Cookies.remove("token");
-      }
-    }
-  }, [user]);
+  // Restore user from token if available
+ useEffect(() => {
+  const cookieToken = Cookies.get("token");
+  if (!user && cookieToken) {
+    try {
+      const decodedUser = jwtDecode(cookieToken);
+      setToken(cookieToken);
 
-  // ✅ Update full profile
+      // ✅ Fetch full user details from backend
+      fetch("https://realtyfinder.onrender.com/api/profile/me", {
+        headers: { Authorization: `Bearer ${cookieToken}` },
+      })
+        .then(async (res) => {
+          if (!res.ok) {
+            console.error("Failed to fetch full profile:", await res.text());
+            return decodedUser; // fallback
+          }
+          const data = await res.json();
+          if (data?.success && data?.data) {
+            setUser(data.data);
+            localStorage.setItem("user", JSON.stringify(data.data));
+          } else {
+            // fallback if backend didn’t return full data
+            setUser(decodedUser);
+            localStorage.setItem("user", JSON.stringify(decodedUser));
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching profile:", err);
+          setUser(decodedUser);
+          localStorage.setItem("user", JSON.stringify(decodedUser));
+        });
+    } catch (err) {
+      console.error("❌ Failed to decode token:", err);
+      Cookies.remove("token");
+    }
+  }
+}, [user]);
+
+
+  // ✅ Update full user profile
   const updateProfile = async (formData) => {
     try {
       const res = await fetch(
@@ -64,6 +88,7 @@ export function AuthProvider({ children }) {
     }
   };
 
+  // ✅ Update only profile photo
   const updateProfilePhoto = (fileUrl) => {
     setUser((prevUser) => {
       const updatedUser = { ...prevUser, profilePhoto: fileUrl };
@@ -72,7 +97,7 @@ export function AuthProvider({ children }) {
     });
   };
 
-  // ✅ Login (normal + OAuth)
+  // ✅ Login (normal or OAuth)
   const login = (responseUser, tokenValue) => {
     const userData =
       responseUser?.data && responseUser.success
@@ -91,7 +116,7 @@ export function AuthProvider({ children }) {
     Cookies.set("token", tokenValue);
   };
 
-  // ✅ Single correct logout function
+  // ✅ Logout (clears everything safely)
   const logout = () => {
     console.log("🚪 Logging out user...");
     setUser(null);
@@ -119,5 +144,5 @@ export function AuthProvider({ children }) {
   );
 }
 
-// ✅ Export must be at top level, not inside component
+// ✅ Hook for consuming context
 export const useAuth = () => useContext(AuthContext);

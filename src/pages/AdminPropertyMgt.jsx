@@ -15,23 +15,11 @@ export default function AdminPropertyMgt() {
       : "hover:bg-green-800";
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
-      {/* Mobile Header */}
-      <header className="flex items-center justify-between bg-green-900 text-white p-4 md:hidden">
-        <h1 className="text-lg font-semibold">Admin Panel</h1>
-        <button onClick={() => setSidebarOpen(!sidebarOpen)}>
-          {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </header>
-
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-green-900 text-white flex flex-col justify-between transform transition-transform duration-300 z-40
-          ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
-      >
-        <div className="flex-1 overflow-y-auto">
-          {/* Menu */}
-          <nav className="mt-[85px] md:mt-10 space-y-1">
+      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
+        <div>
+          <nav className="mt-[85px] space-y-1">
             <button
               onClick={() => navigate("/admin-dashboard")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
@@ -69,17 +57,16 @@ export default function AdminPropertyMgt() {
               )}`}
             >
               <Heart size={18} />
-              <span>Estate Agents Management</span>
+              <span>Estate Agent Management</span>
             </button>
-
             <button
-              onClick={() => navigate("/admin-payments-transactions")}
+              onClick={() => navigate("/admin-property-requests")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
-                "/admin-payments-transactions"
+                "/admin-property-requests"
               )}`}
             >
               <Heart size={18} />
-              <span>Payments & Transactions</span>
+              <span>Property Requests</span>
             </button>
           </nav>
         </div>
@@ -93,10 +80,10 @@ export default function AdminPropertyMgt() {
               className="w-10 h-10 rounded-full object-cover border"
             />
             <div>
-              <p className="font-medium text-sm md:text-base">
+              <p className="font-medium">
                 {user?.firstName} {user?.lastName}
               </p>
-              <p className="text-xs md:text-sm text-gray-300">{user?.email}</p>
+              <p className="text-sm text-gray-300">{user?.email}</p>
             </div>
           </div>
           <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
@@ -105,7 +92,6 @@ export default function AdminPropertyMgt() {
           </button>
         </div>
       </aside>
-
       {/* Overlay for mobile sidebar */}
       {sidebarOpen && (
         <div
@@ -129,10 +115,18 @@ export default function AdminPropertyMgt() {
         <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4">Seller details</h2>
           <div className="space-y-2 text-sm sm:text-base text-gray-700">
-            <p><span className="font-medium">Name:</span> Samuel Carter</p>
-            <p><span className="font-medium">Email:</span> email@email.com</p>
-            <p><span className="font-medium">Phone:</span> +234-123-456-7890</p>
-            <p><span className="font-medium">Location:</span> Kubwa, Nigeria</p>
+            <p>
+              <span className="font-medium">Name:</span> Samuel Carter
+            </p>
+            <p>
+              <span className="font-medium">Email:</span> email@email.com
+            </p>
+            <p>
+              <span className="font-medium">Phone:</span> +234-123-456-7890
+            </p>
+            <p>
+              <span className="font-medium">Location:</span> Kubwa, Nigeria
+            </p>
           </div>
         </div>
 
@@ -140,12 +134,26 @@ export default function AdminPropertyMgt() {
         <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4">Property Information</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm sm:text-base text-gray-700">
-            <p><span className="font-medium">Property name:</span> Ocean view apartment</p>
-            <p><span className="font-medium">Property type:</span> Apartment</p>
-            <p><span className="font-medium">Property size:</span> 5 bedroom</p>
-            <p><span className="font-medium">Amount:</span> ₦50,000,000</p>
-            <p><span className="font-medium">Date/time:</span> 12/14/2024, 10 AM</p>
-            <p><span className="font-medium">Status:</span> <span className="text-red-500 font-semibold">Pending</span></p>
+            <p>
+              <span className="font-medium">Property name:</span> Ocean view
+              apartment
+            </p>
+            <p>
+              <span className="font-medium">Property type:</span> Apartment
+            </p>
+            <p>
+              <span className="font-medium">Property size:</span> 5 bedroom
+            </p>
+            <p>
+              <span className="font-medium">Amount:</span> ₦50,000,000
+            </p>
+            <p>
+              <span className="font-medium">Date/time:</span> 12/14/2024, 10 AM
+            </p>
+            <p>
+              <span className="font-medium">Status:</span>{" "}
+              <span className="text-red-500 font-semibold">Pending</span>
+            </p>
           </div>
         </div>
 

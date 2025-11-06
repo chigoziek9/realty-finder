@@ -73,10 +73,10 @@ export default function AdminPaymentDetail() {
                 Estate Agent Management
               </li>
               <li
-                className={`px-6 py-3 cursor-pointer ${isActive("/admin-payments-pending")}`}
-                onClick={() => navigate("/admin-payments-pending")}
+                className={`px-6 py-3 cursor-pointer ${isActive("/admin-property-request")}`}
+                onClick={() => navigate("/admin-property-request")}
               >
-                Payments & Transactions
+                Property Requests
               </li>
             </ul>
           </nav>

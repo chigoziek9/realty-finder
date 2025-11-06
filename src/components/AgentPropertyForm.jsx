@@ -18,18 +18,24 @@ export default function AgentPropertyForm() {
       ? "bg-white text-green-900 font-medium"
       : "hover:bg-green-800";
 
-  // --- Form State ---
+  // --- Form States ---
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [locationField, setLocationField] = useState("");
   const [state, setState] = useState("");
   const [type, setType] = useState("");
-
   const [postalCode, setPostalCode] = useState("");
   const [features, setFeatures] = useState([]);
   const [files, setFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // ✅ New Required Fields
+  const [address, setAddress] = useState("");
+  const [country, setCountry] = useState("");
+  const [area, setArea] = useState("");
+  const [bedrooms, setBedrooms] = useState("");
+  const [bathrooms, setBathrooms] = useState("");
 
   // --- File Upload Handlers ---
   const handleDrop = (e) => {
@@ -46,7 +52,7 @@ export default function AgentPropertyForm() {
   const handleImageUpload = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "realtyfinder_unsigned"); // set this in Cloudinary settings
+    formData.append("upload_preset", "realtyfinder_unsigned");
 
     const response = await fetch(
       "https://api.cloudinary.com/v1_1/dbnpqbc6e/image/upload",
@@ -57,7 +63,7 @@ export default function AgentPropertyForm() {
     );
 
     const data = await response.json();
-    return data.secure_url; // <-- This is the valid image URL
+    return data.secure_url;
   };
 
   // --- Feature Toggle ---
@@ -70,70 +76,81 @@ export default function AgentPropertyForm() {
   };
 
   // --- Submit Handler ---
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
-  try {
-    if (files.length === 0) {
-      alert("Please upload at least one image.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Upload all images to Cloudinary
-    const uploadedUrls = await Promise.all(
-      files.map((file) => handleImageUpload(file))
-    );
-
-    const newProperty = {
-      title,
-      description,
-      price: Number(price),
-      location: locationField,
-      state,
-      postalCode,
-      images: uploadedUrls,
-      features,
-      type,
-    };
-
-    const response = await fetch(
-      "https://realtyfinder.onrender.com/api/properties",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify(newProperty),
+    try {
+      if (files.length === 0) {
+        alert("Please upload at least one image.");
+        setIsSubmitting(false);
+        return;
       }
-    );
 
-    if (response.ok) {
-      alert("✅ Your listing has been submitted and is pending admin approval.");
-      // Reset form
-      setTitle("");
-      setDescription("");
-      setPrice("");
-      setLocationField("");
-      setState("");
-       setType("");
-      setPostalCode("");
-      setFiles([]);
-      setFeatures([]);
-    } else {
-      const error = await response.json();
-      alert("❌ Failed to submit listing: " + (error.message || "Unknown error"));
+      // Upload images
+      const uploadedUrls = await Promise.all(
+        files.map((file) => handleImageUpload(file))
+      );
+
+      // ✅ Full property object
+      const newProperty = {
+        title,
+        description,
+        price: Number(price),
+        location: locationField,
+        type,
+        address,
+        state,
+        country,
+        postalCode,
+        area: Number(area),
+        bedrooms: Number(bedrooms),
+        bathrooms: Number(bathrooms),
+        images: uploadedUrls,
+        features,
+      };
+
+      const response = await fetch(
+        "https://realtyfinder.onrender.com/api/properties",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify(newProperty),
+        }
+      );
+
+      if (response.ok) {
+        alert("✅ Your listing has been submitted and is pending admin approval.");
+        // Reset form
+        setTitle("");
+        setDescription("");
+        setPrice("");
+        setLocationField("");
+        setState("");
+        setType("");
+        setPostalCode("");
+        setAddress("");
+        setCountry("");
+        setArea("");
+        setBedrooms("");
+        setBathrooms("");
+        setFiles([]);
+        setFeatures([]);
+      } else {
+        const error = await response.json();
+        console.error("Server error:", error);
+        alert("❌ Failed to submit listing: " + (error.message || "Unknown error"));
+      }
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (err) {
-    console.error(err);
-    alert("⚠️ Something went wrong. Please try again later.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -268,7 +285,7 @@ export default function AgentPropertyForm() {
                 Price
               </label>
               <input
-                type="text"
+                type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 className="border rounded px-3 py-2"
@@ -288,8 +305,6 @@ export default function AgentPropertyForm() {
                 required
               />
             </div>
-
-            
           </div>
 
           {/* Location Details */}
@@ -311,6 +326,32 @@ export default function AgentPropertyForm() {
 
             <div className="flex flex-col">
               <label className="mb-1 text-sm font-medium text-gray-700">
+                Country
+              </label>
+              <input
+                type="text"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Address
+              </label>
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
                 Postal Code
               </label>
               <input
@@ -320,6 +361,7 @@ export default function AgentPropertyForm() {
                 className="border rounded px-3 py-2"
               />
             </div>
+
             <div className="flex flex-col">
               <label className="mb-1 text-sm font-medium text-gray-700">
                 Location
@@ -328,6 +370,49 @@ export default function AgentPropertyForm() {
                 type="text"
                 value={locationField}
                 onChange={(e) => setLocationField(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Additional Details */}
+          <h2 className="bg-gray-100 px-4 py-2 font-semibold mt-6">
+            Property Details
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Area (sq ft)
+              </label>
+              <input
+                type="number"
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Bedrooms
+              </label>
+              <input
+                type="number"
+                value={bedrooms}
+                onChange={(e) => setBedrooms(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Bathrooms
+              </label>
+              <input
+                type="number"
+                value={bathrooms}
+                onChange={(e) => setBathrooms(e.target.value)}
                 className="border rounded px-3 py-2"
                 required
               />

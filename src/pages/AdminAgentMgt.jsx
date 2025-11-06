@@ -16,62 +16,81 @@ export default function AdminAgentMgt() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar (desktop & mobile) */}
-      <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-green-900 text-white flex flex-col justify-between transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 transition-transform duration-300 z-50`}
-      >
-        <div>
-          {/* Menu */}
-          <nav className="mt-[85px] space-y-1">
-            {[
-              { path: "/admin-dashboard", label: "Dashboard", icon: <Clock size={18} /> },
-              { path: "/admin-user-mgt", label: "User Management", icon: <Bell size={18} /> },
-              { path: "/admin-properties", label: "Property Management", icon: <Heart size={18} /> },
-              { path: "/admin-agents-mgt", label: "Estate Agent Management", icon: <Heart size={18} /> },
-              { path: "/admin-payments-transactions", label: "Payments & Transactions", icon: <Heart size={18} /> },
-            ].map((item, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  navigate(item.path);
-                  setIsSidebarOpen(false);
-                }}
-                className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                  item.path
-                )}`}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        {/* User Info */}
-        <div className="p-6 border-t border-green-800">
-          <div className="flex items-center space-x-3">
-            <img
-              src={user?.profilePic || "https://via.placeholder.com/40"}
-              alt="profile"
-              className="w-10 h-10 rounded-full object-cover border"
-            />
-            <div className="flex-col">
-              <p className="font-medium">
-                {user?.firstName || "Charles"} {user?.lastName || "Doe"}
-              </p>
-              <p className="text-sm text-gray-300">
-                {user?.email || "email@gmail.com"}
-              </p>
-            </div>
-          </div>
-          <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
-            <LogOut size={18} />
-            <span>Logout</span>
-          </button>
-        </div>
-      </aside>
+         {/* Sidebar */}
+         <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
+           <div>
+             <nav className="mt-[85px] space-y-1">
+               <button
+                 onClick={() => navigate("/admin-dashboard")}
+                 className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                   "/admin-dashboard"
+                 )}`}
+               >
+                 <Clock size={18} />
+                 <span>Dashboard</span>
+               </button>
+   
+               <button
+                 onClick={() => navigate("/admin-user-mgt")}
+                 className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                   "/admin-user-mgt"
+                 )}`}
+               >
+                 <Bell size={18} />
+                 <span>User Management</span>
+               </button>
+   
+               <button
+                 onClick={() => navigate("/admin-properties")}
+                 className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                   "/admin-properties"
+                 )}`}
+               >
+                 <Heart size={18} />
+                 <span>Property Management</span>
+               </button>
+   
+               <button
+                 onClick={() => navigate("/admin-agents-mgt")}
+                 className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                   "/admin-agents-mgt"
+                 )}`}
+               >
+                 <Heart size={18} />
+                 <span>Estate Agent Management</span>
+               </button>
+   
+               <button
+                 onClick={() => navigate("/admin-property-request")}
+                 className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                   "/admin-property-request"
+                 )}`}
+               >
+                 <Heart size={18} />
+                 <span>Property Requests</span>
+               </button>
+             </nav>
+           </div>
+   
+           {/* User Info */}
+           <div className="p-6 border-t border-green-800">
+             <div className="flex items-center space-x-3">
+               <img
+                 src={user?.profilePic || "https://via.placeholder.com/40"}
+                 alt="profile"
+                 className="w-10 h-10 rounded-full object-cover border"
+               />
+               <div>
+                 <p className="font-medium">{user?.firstName} {user?.lastName}</p>
+                 <p className="text-sm text-gray-300">{user?.email}</p>
+               </div>
+             </div>
+             <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
+               <LogOut size={18} />
+               <span>Logout</span>
+             </button>
+           </div>
+         </aside>
 
       {/* Overlay for mobile */}
       {isSidebarOpen && (

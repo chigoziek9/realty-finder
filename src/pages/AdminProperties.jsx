@@ -1,4 +1,4 @@
-import { Clock, Bell, Heart, Settings, LogOut, X, Menu } from "lucide-react";
+import { Clock, Bell, Heart, Settings, LogOut, X, Menu, Trash2 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { useContext, useState, useEffect } from "react";
@@ -31,7 +31,7 @@ export default function AdminProperties() {
       ? "bg-white text-green-900 font-medium"
       : "hover:bg-green-800";
 
-  // Fetch all statuses
+  // Fetch all properties by status
   const fetchProperties = async () => {
     setLoading(true);
     try {
@@ -39,20 +39,12 @@ export default function AdminProperties() {
         fetch("https://realtyfinder.onrender.com/api/properties/user/pending", {
           headers: { Authorization: `Bearer ${token}` },
         }),
-
-        fetch(
-          "https://realtyfinder.onrender.com/api/properties/user?approvalstatus=approved",
-
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        ),
-        fetch(
-          "https://realtyfinder.onrender.com/api/properties/admin/rejected",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        ),
+        fetch("https://realtyfinder.onrender.com/api/properties/user/approved", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch("https://realtyfinder.onrender.com/api/properties/user/rejected", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
       ]);
 
       const pendingData = await pendingRes.json();
@@ -70,16 +62,12 @@ export default function AdminProperties() {
   };
 
   useEffect(() => {
-    if (token) {
-      fetchProperties();
-    }
+    if (token) fetchProperties();
   }, [token]);
 
   // Approve or reject property
   const updatePropertyStatus = async (id, action) => {
-    // action === "approve" or "reject"
-    if (!window.confirm(`Are you sure you want to ${action} this property?`))
-      return;
+    if (!window.confirm(`Are you sure you want to ${action} this property?`)) return;
 
     try {
       setActionLoading(id);
@@ -105,6 +93,37 @@ export default function AdminProperties() {
       }
     } catch (err) {
       console.error(`Error updating property to ${action}:`, err);
+      alert(`Error: ${err.message}`);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  // DELETE property (for Approved ones)
+  const deleteProperty = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this property?")) return;
+
+    try {
+      setActionLoading(id);
+      const res = await fetch(
+        `https://realtyfinder.onrender.com/api/properties/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await res.json();
+      if (res.ok || result.success) {
+        alert("Property deleted successfully!");
+        await fetchProperties();
+      } else {
+        alert(result.message || "Failed to delete property");
+      }
+    } catch (err) {
+      console.error("Error deleting property:", err);
       alert(`Error: ${err.message}`);
     } finally {
       setActionLoading(null);
@@ -208,6 +227,18 @@ export default function AdminProperties() {
                     </button>
                   </>
                 )}
+
+                {/* Delete button for Approved Properties */}
+                {activeTab === "Approved Properties" && (
+                  <button
+                    onClick={() => deleteProperty(property._id)}
+                    disabled={actionLoading === property._id}
+                    className="px-3 py-1 border rounded-lg text-sm text-red-600 hover:bg-red-50 flex items-center gap-1"
+                  >
+                    <Trash2 size={14} />
+                    {actionLoading === property._id ? "Deleting..." : "Delete"}
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -218,68 +249,72 @@ export default function AdminProperties() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-green-900 text-white flex flex-col justify-between transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 transition-transform duration-300 z-50`}
-      >
+      {/* Sidebar */}
+      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
         <div>
           <nav className="mt-[85px] space-y-1">
-            {[
-              {
-                path: "/admin-dashboard",
-                label: "Dashboard",
-                icon: <Clock size={18} />,
-              },
-              {
-                path: "/admin-user-mgt",
-                label: "User Management",
-                icon: <Bell size={18} />,
-              },
-              {
-                path: "/admin-properties",
-                label: "Property Management",
-                icon: <Heart size={18} />,
-              },
-              {
-                path: "/admin-agents-mgt",
-                label: "Estate Agent Management",
-                icon: <Heart size={18} />,
-              },
-              {
-                path: "/admin-payments-transactions",
-                label: "Payments & Transactions",
-                icon: <Heart size={18} />,
-              },
-            ].map((item, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  navigate(item.path);
-                  setIsSidebarOpen(false);
-                }}
-                className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                  item.path
-                )}`}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </button>
-            ))}
+            <button
+              onClick={() => navigate("/admin-dashboard")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-dashboard"
+              )}`}
+            >
+              <Clock size={18} />
+              <span>Dashboard</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-user-mgt")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-user-mgt"
+              )}`}
+            >
+              <Bell size={18} />
+              <span>User Management</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-properties")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-properties"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>Property Management</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-agents-mgt")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-agents-mgt"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>Estate Agent Management</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-property-requests")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-property-requests"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>Property Requests</span>
+            </button>
           </nav>
         </div>
 
+        {/* User Info */}
         <div className="p-6 border-t border-green-800">
           <div className="flex items-center space-x-3">
             <img
-              src={user?.profilePic || "https://placehold.co/40x40"}
+              src={user?.profilePic || "https://via.placeholder.com/40"}
               alt="profile"
               className="w-10 h-10 rounded-full object-cover border"
             />
             <div>
-              <p className="font-medium">
-                {user?.firstName} {user?.lastName}
-              </p>
+              <p className="font-medium">{user?.firstName} {user?.lastName}</p>
               <p className="text-sm text-gray-300">{user?.email}</p>
             </div>
           </div>
@@ -290,6 +325,7 @@ export default function AdminProperties() {
         </div>
       </aside>
 
+      {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div
           onClick={() => setIsSidebarOpen(false)}
@@ -297,6 +333,7 @@ export default function AdminProperties() {
         ></div>
       )}
 
+      {/* Main Content */}
       <main className="flex-1 p-4 md:p-8">
         <div className="flex items-center justify-between md:hidden bg-white p-4 shadow mb-4 rounded-md">
           <h1 className="text-lg font-semibold text-gray-800">
@@ -334,6 +371,7 @@ export default function AdminProperties() {
         {activeTab === "Approved Properties" && renderProperties(approved)}
         {activeTab === "Rejected Properties" && renderProperties(rejected)}
 
+        {/* Modal for viewing property */}
         {selectedProperty && (
           <>
             <div

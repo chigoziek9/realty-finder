@@ -103,13 +103,13 @@ export default function AdminPaymentsOverview() {
             </button>
 
             <button
-              onClick={() => navigate("/admin-payments-transactions")}
+              onClick={() => navigate("/admin-property-request")}
               className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
-                "/admin-payments-transactions"
+                "/admin-property-request"
               )}`}
             >
               <Heart size={18} />
-              <span>Payments & transactions</span>
+              <span>Property Requests</span>
             </button>
           </nav>
         </div>

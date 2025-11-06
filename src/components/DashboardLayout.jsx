@@ -2,10 +2,13 @@
 import { Clock, Bell, Heart, Settings, LogOut } from "lucide-react";
 import profileImg from "../assets/profile.png";
 import { useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
+import { useContext } from "react";
 
 export default function DashboardLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useContext(AuthContext);
 
   const isActive = (path) =>
     location.pathname === path ? "bg-green-800 font-medium" : "hover:bg-green-800";
@@ -59,23 +62,24 @@ export default function DashboardLayout({ children }) {
         </div>
 
         {/* User Info */}
-        <div className="p-6 border-t border-green-800">
-          <div className="flex items-center space-x-3">
-            <img
-              src={profileImg}
-              alt="User Avatar"
-              className="w-10 h-10 rounded-full border"
-            />
-            <div>
-              <p className="font-medium">Charles Doe</p>
-              <p className="text-sm text-gray-300">email@gmail.com</p>
-            </div>
-          </div>
-          <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
-            <LogOut size={18} />
-            <span>Logout</span>
-          </button>
-        </div>
+        
+               <div className="p-6 border-t border-green-800">
+                 <div className="flex items-center space-x-3">
+                   <img
+                     src={user?.profilePic || "https://via.placeholder.com/40"}
+                     alt="profile"
+                     className="w-10 h-10 rounded-full object-cover border"
+                   />
+                   <div>
+                     <p className="font-medium">{user?.firstName} {user?.lastName}</p>
+                     <p className="text-sm text-gray-300">{user?.email}</p>
+                   </div>
+                 </div>
+                 <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
+                   <LogOut size={18} />
+                   <span>Logout</span>
+                 </button>
+               </div>
       </aside>
 
       {/* Main Content */}
