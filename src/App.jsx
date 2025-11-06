@@ -80,6 +80,7 @@ import AgentPropertyList from "./components/AgentListedProperty";
 import OwnersPropertyList from "./components/OwnersListedProperty";
 import OwnersPropertyForm from "./components/OwnersPropeertyForm";
 import AdminProperties from "./pages/AdminProperties"
+import AdminPropertyRequest from "./pages/AdminPropertyRequest";
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -169,6 +170,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <AdminProperties />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/admin-property-request"
+          element={
+            <ProtectedRoute>
+              <AdminPropertyRequest />
             </ProtectedRoute>
           }
         />

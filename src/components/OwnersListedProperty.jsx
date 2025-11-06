@@ -1,3 +1,4 @@
+// src/pages/AgentPropertyForm.jsx
 import {
   Clock,
   Bell,
@@ -17,7 +18,7 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 
-export default function OwnersPropertyListings() {
+export default function AgentPropertyForm() {
   const navigate = useNavigate();
   const { user, token } = useContext(AuthContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -25,14 +26,23 @@ export default function OwnersPropertyListings() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleting, setDeleting] = useState(null);
-  const [selectedProperty, setSelectedProperty] = useState(null); // 👈 for modal
+
+  // 👇 For modals
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [soldModalOpen, setSoldModalOpen] = useState(false);
+  const [buyerDetails, setBuyerDetails] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  });
 
   // ✅ Fetch properties
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         const res = await fetch(
-          "https://realtyfinder.onrender.com/api/properties/admin/pending",
+          "https://realtyfinder.onrender.com/api/properties/user/pending",
           {
             method: "GET",
             headers: {
@@ -57,6 +67,7 @@ export default function OwnersPropertyListings() {
           );
 
           setProperties(filtered);
+          console.log("Fetched property IDs:", filtered.map((p) => p._id));
         } else {
           setError("Unexpected API response");
         }
@@ -105,6 +116,15 @@ export default function OwnersPropertyListings() {
     }
   };
 
+  // ✅ Handle Sold submission
+  const handleSoldSubmit = (e) => {
+    e.preventDefault();
+    console.log("Buyer details:", buyerDetails);
+    alert("Buyer details submitted successfully!");
+    setBuyerDetails({ firstName: "", lastName: "", email: "", phone: "" });
+    setSoldModalOpen(false);
+  };
+
   const isActive = (path) =>
     window.location.pathname === path
       ? "bg-white text-green-900"
@@ -120,7 +140,7 @@ export default function OwnersPropertyListings() {
     <div className="flex min-h-screen bg-gray-100 relative">
       {/* ===== Sidebar ===== */}
       <aside
-        className={`fixed md:static top-0 left-0 min-h-screen md:h-screen w-74 bg-green-900 text-white flex flex-col justify-between transform transition-transform duration-300 z-50 ${
+        className={`fixed md:static top-0 left-0 min-h-screen w-72 bg-green-900 text-white flex flex-col justify-between transform transition-transform duration-300 z-50 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
@@ -228,7 +248,7 @@ export default function OwnersPropertyListings() {
       )}
 
       {/* ===== Main Content ===== */}
-      <main className="flex-1 flex flex-col w-full p-6 md:p-8 overflow-y-auto">
+      <main className="flex-1 flex flex-col w-full p-4 md:p-8 overflow-y-auto">
         {/* ===== Top Nav (Mobile) ===== */}
         <div className="flex items-center justify-between mb-6 md:hidden">
           <button
@@ -243,7 +263,7 @@ export default function OwnersPropertyListings() {
         </div>
 
         {/* ===== Property Listings ===== */}
-        <div className="p-6">
+        <div>
           <h2 className="text-2xl font-bold mb-1">Pending Listings</h2>
           <p className="text-gray-600 mb-4">
             View and manage properties awaiting approval.
@@ -299,7 +319,9 @@ export default function OwnersPropertyListings() {
                   <p className="text-green-700 font-bold text-lg mt-2">
                     ₦{property.price?.toLocaleString() || "N/A"}
                   </p>
-
+                  <p className="text-xs text-gray-500 mt-1">
+                    ID: {property._id}
+                  </p>
                   <p className="text-xs text-gray-500 mt-1">
                     Created: {new Date(property.createdAt).toLocaleDateString()}
                   </p>
@@ -315,14 +337,19 @@ export default function OwnersPropertyListings() {
                     {property.approvalStatus || "Unknown"}
                   </span>
 
-                  <div className="flex gap-2 mt-4">
+                  <div className="flex gap-2 mt-4 flex-wrap">
                     <button
-                      onClick={() => setSelectedProperty(property)} // 👈 open modal
+                      onClick={() => setSelectedProperty(property)}
                       className="px-3 py-1 border rounded-lg text-sm hover:bg-gray-100"
                     >
                       View
                     </button>
-
+                    <button
+                      onClick={() => setSoldModalOpen(true)}
+                      className="px-3 py-1 border rounded-lg text-green-800 text-sm hover:bg-yellow-200"
+                    >
+                      Sold
+                    </button>
                     <button
                       onClick={() => handleDelete(property._id)}
                       disabled={deleting === property._id}
@@ -345,13 +372,10 @@ export default function OwnersPropertyListings() {
       {/* ===== Property Details Modal ===== */}
       {selectedProperty && (
         <>
-          {/* Overlay */}
           <div
             onClick={() => setSelectedProperty(null)}
             className="fixed inset-0 bg-black bg-opacity-40 z-40"
           ></div>
-
-          {/* Modal */}
           <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl relative p-6 overflow-y-auto max-h-[90vh]">
               <button
@@ -360,11 +384,9 @@ export default function OwnersPropertyListings() {
               >
                 <X size={20} />
               </button>
-
               <h2 className="text-2xl font-semibold mb-3 text-green-800">
                 {selectedProperty.title}
               </h2>
-
               <img
                 src={
                   selectedProperty.images?.[0] ||
@@ -373,12 +395,10 @@ export default function OwnersPropertyListings() {
                 alt={selectedProperty.title}
                 className="w-full h-60 object-cover rounded-lg mb-4"
               />
-
               <p className="flex items-center text-gray-600 text-sm mb-3">
                 <FaMapMarkerAlt className="mr-2" />
                 {selectedProperty.location || "Unknown location"}
               </p>
-
               <div className="flex flex-wrap gap-4 text-gray-700 mb-3 text-sm">
                 <span className="flex items-center gap-1">
                   <FaBed /> {selectedProperty.bedrooms || "N/A"} Beds
@@ -390,21 +410,93 @@ export default function OwnersPropertyListings() {
                   <FaRulerCombined /> {selectedProperty.sqft || "N/A"} sq ft
                 </span>
               </div>
-
               <p className="text-green-700 font-bold text-lg mb-3">
                 ₦{selectedProperty.price?.toLocaleString() || "N/A"}
               </p>
-
               <p className="text-sm text-gray-700 mb-4">
                 {selectedProperty.description ||
                   "No detailed description available."}
               </p>
-
-              <p className="text-xs text-gray-500">
-                Created:{" "}
-                {new Date(selectedProperty.createdAt).toLocaleDateString()}
-              </p>
             </div>
+          </div>
+        </>
+      )}
+
+      {/* ===== SOLD FORM MODAL ===== */}
+      {soldModalOpen && (
+        <>
+          <div
+            onClick={() => setSoldModalOpen(false)}
+            className="fixed inset-0 bg-black bg-opacity-40 z-40"
+          ></div>
+
+          <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+            <form
+              onSubmit={handleSoldSubmit}
+              className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative"
+            >
+              <button
+                onClick={() => setSoldModalOpen(false)}
+                type="button"
+                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+              >
+                <X size={20} />
+              </button>
+
+              <h2 className="text-xl font-semibold text-green-800 mb-4">
+                Buyer Details
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  value={buyerDetails.firstName}
+                  onChange={(e) =>
+                    setBuyerDetails({ ...buyerDetails, firstName: e.target.value })
+                  }
+                  className="border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-600"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  value={buyerDetails.lastName}
+                  onChange={(e) =>
+                    setBuyerDetails({ ...buyerDetails, lastName: e.target.value })
+                  }
+                  className="border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-600"
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={buyerDetails.email}
+                  onChange={(e) =>
+                    setBuyerDetails({ ...buyerDetails, email: e.target.value })
+                  }
+                  className="border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-600"
+                  required
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={buyerDetails.phone}
+                  onChange={(e) =>
+                    setBuyerDetails({ ...buyerDetails, phone: e.target.value })
+                  }
+                  className="border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-600"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-green-800 text-white py-2 mt-6 rounded-lg hover:bg-green-700 transition"
+              >
+                Submit
+              </button>
+            </form>
           </div>
         </>
       )}

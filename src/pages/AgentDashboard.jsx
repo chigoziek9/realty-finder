@@ -1,4 +1,4 @@
-import { Clock, Bell, Heart, Settings, LogOut, X, Trash2 } from "lucide-react";
+import { Clock, Bell, Heart, Settings, LogOut } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { useContext, useState, useEffect } from "react";
@@ -11,44 +11,48 @@ export default function AgentsDashboard() {
   const location = useLocation();
   const { user, token } = useContext(AuthContext);
 
-  // ✅ Add states for properties
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // ✅ Fetch total properties same as in AgentPropertyForm
+  // ✅ Fetch all agent properties (approved + pending + rejected)
   useEffect(() => {
-    const fetchProperties = async () => {
+    const fetchAllProperties = async () => {
       try {
-        const res = await fetch(
-          "https://realtyfinder.onrender.com/api/properties/admin/pending",
-          {
+        const endpoints = [
+          "https://realtyfinder.onrender.com/api/properties/user/approved",
+          "https://realtyfinder.onrender.com/api/properties/user/pending",
+          "https://realtyfinder.onrender.com/api/properties/user/rejected",
+        ];
+
+        const requests = endpoints.map((url) =>
+          fetch(url, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          })
         );
 
-        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-        const result = await res.json();
+        const responses = await Promise.all(requests);
+        const allData = await Promise.all(responses.map((res) => res.json()));
 
-        if (result.success && Array.isArray(result.data)) {
-          const userEmail = user?.email?.toLowerCase();
-          const userId = user?._id;
+        const allProperties = allData.flatMap((result) =>
+          result.success && Array.isArray(result.data) ? result.data : []
+        );
 
-          // Filter to only properties created by this agent
-          const filtered = result.data.filter(
-            (p) =>
-              p.createdBy?.email?.toLowerCase() === userEmail ||
-              p.user?._id === userId
-          );
+        const userEmail = user?.email?.toLowerCase();
+        const userId = user?._id;
 
-          setProperties(filtered);
-        } else {
-          setError("Unexpected API response");
-        }
+        // ✅ Filter only properties created by this agent
+        const filtered = allProperties.filter(
+          (p) =>
+            p.createdBy?.email?.toLowerCase() === userEmail ||
+            p.user?._id === userId
+        );
+
+        setProperties(filtered);
       } catch (err) {
         console.error("Error fetching properties:", err);
         setError("Failed to fetch properties. Please try again.");
@@ -57,39 +61,19 @@ export default function AgentsDashboard() {
       }
     };
 
-    if (token && user) fetchProperties();
+    if (token && user) fetchAllProperties();
   }, [token, user]);
 
-  // Sidebar active link utility
   const isActive = (path) =>
     location.pathname === path
       ? "bg-white text-green-900 font-medium"
       : "hover:bg-green-800";
-
-  const appointments = [
-    {
-      message:
-        "John Smith has booked a property viewing on Tuesday, Aug 20 at 2:00pm. Please review the details in your dashboard.",
-      title: "New appointment booking",
-    },
-    {
-      message:
-        "Your scheduled appointment with John Smith for Victoria Island duplex on Friday, August 23 at 10am has been confirmed.",
-      title: "Appointment Confirmation",
-    },
-    {
-      message:
-        "John Smith has rescheduled the tour for Banana Island villa to Saturday, August 24 at 4:00pm.",
-      title: "Appointment Rescheduled",
-    },
-  ];
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
         <div>
-          {/* Menu */}
           <nav className="mt-[85px] space-y-1">
             <button
               onClick={() => navigate("/agents-dashboard")}
@@ -189,13 +173,12 @@ export default function AgentsDashboard() {
 
         {/* ✅ Stats Boxes */}
         <div className="flex gap-[27px] flex-wrap">
-          {/* ✅ Dynamic Total Listings */}
           <div className="mt-[31px] inline-block border w-[240px] h-[154px] p-[19px] bg-white rounded-lg shadow">
-            <p>Total Listing</p>
+            <p>Total Listings (All Status)</p>
             <p className="text-5xl font-bold mt-[13px]">
               {loading ? "..." : properties.length}
             </p>
-            <p className="mt-[13.31px] mb-3">This Week</p>
+           
           </div>
 
           <div className="mt-[31px] inline-block border w-[240px] h-[154px] p-[19px] bg-white rounded-lg shadow">
@@ -237,20 +220,6 @@ export default function AgentsDashboard() {
               </button>
             </div>
             <hr className="border-t border-gray-400 mt-2" />
-
-            {appointments.map((appointment, index) => (
-              <div key={index} className="flex justify-between px-[20px] py-[12px]">
-                <div>
-                  <p className="font-semibold text-[18px]">{appointment.title}</p>
-                  <p className="text-[14px] text-[#313131] leading-[21px] w-[500px]">
-                    {appointment.message}
-                  </p>
-                </div>
-                <button className="text-[#28563a] text-[16px] font-medium hover:text-black transition">
-                  See detail
-                </button>
-              </div>
-            ))}
           </div>
 
           <div>

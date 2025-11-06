@@ -21,13 +21,14 @@ import {
 export default function AgentPropertyForm() {
   const navigate = useNavigate();
   const { user, token } = useContext(AuthContext);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleting, setDeleting] = useState(null);
 
-  // 👇 For modals
+  // Modal states
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [soldModalOpen, setSoldModalOpen] = useState(false);
   const [buyerDetails, setBuyerDetails] = useState({
@@ -37,20 +38,29 @@ export default function AgentPropertyForm() {
     phone: "",
   });
 
-  // ✅ Fetch properties
+  // 🟢 Active tab: "pending" | "approved" | "rejected"
+  const [activeTab, setActiveTab] = useState("pending");
+
+  // API endpoints
+  const endpoints = {
+    pending: "https://realtyfinder.onrender.com/api/properties/user/pending",
+    approved: "https://realtyfinder.onrender.com/api/properties/user/approved",
+    rejected: "https://realtyfinder.onrender.com/api/properties/user/rejected",
+  };
+
+  // ✅ Fetch properties depending on activeTab
   useEffect(() => {
     const fetchProperties = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const res = await fetch(
-          "https://realtyfinder.onrender.com/api/properties/user/pending",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await fetch(endpoints[activeTab], {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
@@ -67,9 +77,8 @@ export default function AgentPropertyForm() {
           );
 
           setProperties(filtered);
-          console.log("Fetched property IDs:", filtered.map((p) => p._id));
         } else {
-          setError("Unexpected API response");
+          setError("Unexpected API response.");
         }
       } catch (err) {
         console.error("Error fetching properties:", err);
@@ -79,16 +88,15 @@ export default function AgentPropertyForm() {
       }
     };
 
-    fetchProperties();
-  }, [token, user]);
+    if (token && user) fetchProperties();
+  }, [token, user, activeTab]);
 
-  // ✅ Handle delete property
+  // ✅ Handle delete
   const handleDelete = async (propertyId) => {
     if (!window.confirm("Are you sure you want to delete this property?")) return;
 
     try {
       setDeleting(propertyId);
-
       const res = await fetch(
         `https://realtyfinder.onrender.com/api/properties/${propertyId}`,
         {
@@ -99,9 +107,9 @@ export default function AgentPropertyForm() {
         }
       );
 
-      if (!res.ok) throw new Error(`Failed to delete property (${res.status})`);
-
+      if (!res.ok) throw new Error(`Failed to delete (${res.status})`);
       const result = await res.json();
+
       if (result.success) {
         setProperties((prev) => prev.filter((p) => p._id !== propertyId));
         alert("Property deleted successfully!");
@@ -110,26 +118,27 @@ export default function AgentPropertyForm() {
       }
     } catch (err) {
       console.error("Error deleting property:", err);
-      alert(err.message || "An error occurred while deleting property.");
+      alert(err.message || "Error deleting property.");
     } finally {
       setDeleting(null);
     }
   };
 
-  // ✅ Handle Sold submission
+  // ✅ Handle Sold Submission
   const handleSoldSubmit = (e) => {
     e.preventDefault();
-    console.log("Buyer details:", buyerDetails);
     alert("Buyer details submitted successfully!");
     setBuyerDetails({ firstName: "", lastName: "", email: "", phone: "" });
     setSoldModalOpen(false);
   };
 
+  // ✅ Sidebar route styling
   const isActive = (path) =>
     window.location.pathname === path
       ? "bg-white text-green-900"
       : "hover:bg-white hover:text-green-900";
 
+  // ✅ Status color mapping
   const statusColors = {
     pending: "bg-yellow-500",
     approved: "bg-green-600",
@@ -144,7 +153,6 @@ export default function AgentPropertyForm() {
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
-        {/* ===== Mobile Close Button ===== */}
         <div className="flex items-center justify-between px-6 py-4 md:hidden border-b border-green-800">
           <span className="text-lg font-semibold">Menu</span>
           <button onClick={() => setSidebarOpen(false)}>
@@ -152,70 +160,51 @@ export default function AgentPropertyForm() {
           </button>
         </div>
 
-        {/* ===== Sidebar Menu ===== */}
         <nav className="mt-[85px] space-y-1 flex-1 overflow-y-auto">
           <button
             onClick={() => navigate("/agents-dashboard")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive(
-              "/agents-dashboard"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive("/agents-dashboard")}`}
           >
             <Clock size={18} />
             <span>Dashboard Overview</span>
           </button>
-
           <button
             onClick={() => navigate("/agents-transaction")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive(
-              "/agents-transaction"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive("/agents-transaction")}`}
           >
             <Bell size={18} />
             <span>Transaction & Commission</span>
           </button>
-
           <button
             onClick={() => navigate("/agents-client")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive(
-              "/agents-client"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive("/agents-client")}`}
           >
             <Heart size={18} />
             <span>Clients</span>
           </button>
-
           <button
             onClick={() => navigate("/agents-property")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive(
-              "/agents-property"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive("/agents-property")}`}
           >
             <Heart size={18} />
             <span>Document Compliance</span>
           </button>
-
           <button
             onClick={() => navigate("/agents-document")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive(
-              "/agents-document"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive("/agents-document")}`}
           >
             <Heart size={18} />
             <span>Property Management</span>
           </button>
-
           <button
             onClick={() => navigate("/account-settings")}
-            className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg transition ${isActive(
-              "/account-settings"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg transition ${isActive("/account-settings")}`}
           >
             <Settings size={18} />
             <span>Account Settings</span>
           </button>
         </nav>
 
-        {/* ===== User Info ===== */}
         <div className="p-6 border-t border-green-800">
           <div className="flex items-center space-x-3">
             <img
@@ -239,7 +228,7 @@ export default function AgentPropertyForm() {
         </div>
       </aside>
 
-      {/* ===== Overlay (mobile only) ===== */}
+      {/* ===== Overlay (mobile) ===== */}
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
@@ -249,7 +238,6 @@ export default function AgentPropertyForm() {
 
       {/* ===== Main Content ===== */}
       <main className="flex-1 flex flex-col w-full p-4 md:p-8 overflow-y-auto">
-        {/* ===== Top Nav (Mobile) ===== */}
         <div className="flex items-center justify-between mb-6 md:hidden">
           <button
             onClick={() => setSidebarOpen(true)}
@@ -258,35 +246,50 @@ export default function AgentPropertyForm() {
             <Menu size={24} />
           </button>
           <h1 className="text-xl font-semibold text-green-900">
-            Pending Properties
+            Agent Properties
           </h1>
         </div>
 
+        {/* ===== Tabs ===== */}
+        <div className="flex gap-4 mb-6 border-b border-gray-300">
+          {["pending", "approved", "rejected"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-2 capitalize text-lg font-medium ${
+                activeTab === tab
+                  ? "text-green-800 border-b-4 border-green-800"
+                  : "text-gray-500 hover:text-green-700"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
         {/* ===== Property Listings ===== */}
-        <div>
-          <h2 className="text-2xl font-bold mb-1">Pending Listings</h2>
-          <p className="text-gray-600 mb-4">
-            View and manage properties awaiting approval.
+        {loading && (
+          <p className="text-gray-500 text-center mt-10">
+            Loading {activeTab} properties...
           </p>
+        )}
 
-          {loading && (
-            <p className="text-gray-500 text-center">Loading properties...</p>
-          )}
-          {error && <p className="text-red-500 text-center">{error}</p>}
+        {error && <p className="text-red-500 text-center">{error}</p>}
 
-          {!loading && !error && properties.length === 0 && (
-            <p className="text-gray-500 text-center mt-10">
-              No pending properties found.
-            </p>
-          )}
+        {/* 🟡 Show properties ONLY when loading is false */}
+        {!loading && !error && properties.length === 0 && (
+          <p className="text-gray-500 text-center mt-10">
+            No {activeTab} properties found.
+          </p>
+        )}
 
+        {!loading && !error && properties.length > 0 && (
           <div className="space-y-6">
             {properties.map((property) => (
               <div
                 key={property._id}
                 className="flex flex-col md:flex-row gap-4 border rounded-xl shadow-sm p-4 bg-white"
               >
-                {/* Property Image */}
                 <img
                   src={
                     property.images?.[0] ||
@@ -296,14 +299,12 @@ export default function AgentPropertyForm() {
                   className="w-full md:w-48 h-48 object-cover rounded-lg"
                 />
 
-                {/* Property Info */}
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold">{property.title}</h3>
                   <p className="flex items-center text-gray-600 text-sm">
                     <FaMapMarkerAlt className="mr-1" />{" "}
                     {property.location || "Unknown location"}
                   </p>
-
                   <div className="flex flex-wrap gap-4 text-gray-700 mt-2 text-sm">
                     <span className="flex items-center gap-1">
                       <FaBed /> {property.bedrooms || "N/A"}
@@ -315,15 +316,13 @@ export default function AgentPropertyForm() {
                       <FaRulerCombined /> {property.sqft || "N/A"} sq ft
                     </span>
                   </div>
-
                   <p className="text-green-700 font-bold text-lg mt-2">
                     ₦{property.price?.toLocaleString() || "N/A"}
                   </p>
+                  <p className="text-xs text-gray-500 mt-1">ID: {property._id}</p>
                   <p className="text-xs text-gray-500 mt-1">
-                    ID: {property._id}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Created: {new Date(property.createdAt).toLocaleDateString()}
+                    Created:{" "}
+                    {new Date(property.createdAt).toLocaleDateString()}
                   </p>
                 </div>
 
@@ -331,10 +330,10 @@ export default function AgentPropertyForm() {
                 <div className="flex flex-row md:flex-col items-center md:items-end justify-between">
                   <span
                     className={`text-white text-xs px-3 py-1 rounded-full ${
-                      statusColors[property.approvalStatus] || "bg-gray-400"
+                      statusColors[activeTab] || "bg-gray-400"
                     }`}
                   >
-                    {property.approvalStatus || "Unknown"}
+                    {activeTab}
                   </span>
 
                   <div className="flex gap-2 mt-4 flex-wrap">
@@ -344,12 +343,17 @@ export default function AgentPropertyForm() {
                     >
                       View
                     </button>
-                    <button
-                      onClick={() => setSoldModalOpen(true)}
-                      className="px-3 py-1 border rounded-lg text-green-800 text-sm hover:bg-yellow-200"
-                    >
-                      Sold
-                    </button>
+
+                    {/* Only show Sold for pending */}
+                    {activeTab === "pending" && (
+                      <button
+                        onClick={() => setSoldModalOpen(true)}
+                        className="px-3 py-1 border rounded-lg text-green-800 text-sm hover:bg-yellow-200"
+                      >
+                        Sold
+                      </button>
+                    )}
+
                     <button
                       onClick={() => handleDelete(property._id)}
                       disabled={deleting === property._id}
@@ -366,140 +370,8 @@ export default function AgentPropertyForm() {
               </div>
             ))}
           </div>
-        </div>
+        )}
       </main>
-
-      {/* ===== Property Details Modal ===== */}
-      {selectedProperty && (
-        <>
-          <div
-            onClick={() => setSelectedProperty(null)}
-            className="fixed inset-0 bg-black bg-opacity-40 z-40"
-          ></div>
-          <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl relative p-6 overflow-y-auto max-h-[90vh]">
-              <button
-                onClick={() => setSelectedProperty(null)}
-                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-              >
-                <X size={20} />
-              </button>
-              <h2 className="text-2xl font-semibold mb-3 text-green-800">
-                {selectedProperty.title}
-              </h2>
-              <img
-                src={
-                  selectedProperty.images?.[0] ||
-                  "https://placehold.co/600x400?text=No+Image"
-                }
-                alt={selectedProperty.title}
-                className="w-full h-60 object-cover rounded-lg mb-4"
-              />
-              <p className="flex items-center text-gray-600 text-sm mb-3">
-                <FaMapMarkerAlt className="mr-2" />
-                {selectedProperty.location || "Unknown location"}
-              </p>
-              <div className="flex flex-wrap gap-4 text-gray-700 mb-3 text-sm">
-                <span className="flex items-center gap-1">
-                  <FaBed /> {selectedProperty.bedrooms || "N/A"} Beds
-                </span>
-                <span className="flex items-center gap-1">
-                  <FaBath /> {selectedProperty.bathrooms || "N/A"} Baths
-                </span>
-                <span className="flex items-center gap-1">
-                  <FaRulerCombined /> {selectedProperty.sqft || "N/A"} sq ft
-                </span>
-              </div>
-              <p className="text-green-700 font-bold text-lg mb-3">
-                ₦{selectedProperty.price?.toLocaleString() || "N/A"}
-              </p>
-              <p className="text-sm text-gray-700 mb-4">
-                {selectedProperty.description ||
-                  "No detailed description available."}
-              </p>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* ===== SOLD FORM MODAL ===== */}
-      {soldModalOpen && (
-        <>
-          <div
-            onClick={() => setSoldModalOpen(false)}
-            className="fixed inset-0 bg-black bg-opacity-40 z-40"
-          ></div>
-
-          <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-            <form
-              onSubmit={handleSoldSubmit}
-              className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative"
-            >
-              <button
-                onClick={() => setSoldModalOpen(false)}
-                type="button"
-                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-              >
-                <X size={20} />
-              </button>
-
-              <h2 className="text-xl font-semibold text-green-800 mb-4">
-                Buyer Details
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  placeholder="First Name"
-                  value={buyerDetails.firstName}
-                  onChange={(e) =>
-                    setBuyerDetails({ ...buyerDetails, firstName: e.target.value })
-                  }
-                  className="border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-600"
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Last Name"
-                  value={buyerDetails.lastName}
-                  onChange={(e) =>
-                    setBuyerDetails({ ...buyerDetails, lastName: e.target.value })
-                  }
-                  className="border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-600"
-                  required
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={buyerDetails.email}
-                  onChange={(e) =>
-                    setBuyerDetails({ ...buyerDetails, email: e.target.value })
-                  }
-                  className="border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-600"
-                  required
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number"
-                  value={buyerDetails.phone}
-                  onChange={(e) =>
-                    setBuyerDetails({ ...buyerDetails, phone: e.target.value })
-                  }
-                  className="border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-600"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-green-800 text-white py-2 mt-6 rounded-lg hover:bg-green-700 transition"
-              >
-                Submit
-              </button>
-            </form>
-          </div>
-        </>
-      )}
     </div>
   );
 }

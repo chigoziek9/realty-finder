@@ -83,6 +83,7 @@ export default function Navbar() {
                 </div>
               )}
             </li>
+             
 
             {/* Other links */}
             {user?.role !== "agent" && (

@@ -90,11 +90,11 @@ export default function AdminPaymentsPending() {
               </li>
               <li
                 className={`px-6 py-3 cursor-pointer ${isActive(
-                  "/admin-payments-pending"
+                  "/admin-property-request"
                 )}`}
-                onClick={() => navigate("/admin-payments-pending")}
+                onClick={() => navigate("/admin-property-request")}
               >
-                Payments & transactions
+                Property Requests
               </li>
             </ul>
           </nav>

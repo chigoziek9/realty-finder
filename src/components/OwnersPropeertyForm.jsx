@@ -1,24 +1,19 @@
-import { Clock, Bell, Heart, Settings, LogOut } from "lucide-react";
+import { Clock, Bell, Heart, Settings, LogOut, X, Menu, FileText } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { useContext, useState } from "react";
 import Cookies from "js-cookie";
-import {
- 
- 
-  X,
-  Menu,
-  FileText,
-  Trash2,
-} from "lucide-react";
 
 export default function OwnersPropertyForm() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, token } = useContext(AuthContext); // Access user and token from context
+  const { user, token } = useContext(AuthContext);
 
   // ✅ Use token from context or fallback to cookie
   const authToken = token || Cookies.get("token");
+
+  // --- Sidebar State ---
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // --- Navigation Active State ---
   const isActive = (path) =>
@@ -26,19 +21,24 @@ export default function OwnersPropertyForm() {
       ? "bg-white text-green-900 font-medium"
       : "hover:bg-green-800";
 
-  // --- Form State ---
+  // --- Form States ---
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [locationField, setLocationField] = useState("");
   const [state, setState] = useState("");
   const [type, setType] = useState("");
-
   const [postalCode, setPostalCode] = useState("");
   const [features, setFeatures] = useState([]);
   const [files, setFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // ✅ New Required Fields
+  const [address, setAddress] = useState("");
+  const [country, setCountry] = useState("");
+  const [area, setArea] = useState("");
+  const [bedrooms, setBedrooms] = useState("");
+  const [bathrooms, setBathrooms] = useState("");
 
   // --- File Upload Handlers ---
   const handleDrop = (e) => {
@@ -55,7 +55,7 @@ export default function OwnersPropertyForm() {
   const handleImageUpload = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "realtyfinder_unsigned"); // set this in Cloudinary settings
+    formData.append("upload_preset", "realtyfinder_unsigned");
 
     const response = await fetch(
       "https://api.cloudinary.com/v1_1/dbnpqbc6e/image/upload",
@@ -66,7 +66,7 @@ export default function OwnersPropertyForm() {
     );
 
     const data = await response.json();
-    return data.secure_url; // <-- This is the valid image URL
+    return data.secure_url;
   };
 
   // --- Feature Toggle ---
@@ -90,7 +90,7 @@ export default function OwnersPropertyForm() {
         return;
       }
 
-      // Upload all images to Cloudinary
+      // Upload images
       const uploadedUrls = await Promise.all(
         files.map((file) => handleImageUpload(file))
       );
@@ -100,11 +100,16 @@ export default function OwnersPropertyForm() {
         description,
         price: Number(price),
         location: locationField,
+        type,
+        address,
         state,
+        country,
         postalCode,
+        area: Number(area),
+        bedrooms: Number(bedrooms),
+        bathrooms: Number(bathrooms),
         images: uploadedUrls,
         features,
-        type,
       };
 
       const response = await fetch(
@@ -120,9 +125,7 @@ export default function OwnersPropertyForm() {
       );
 
       if (response.ok) {
-        alert(
-          "✅ Your listing has been submitted and is pending admin approval."
-        );
+        alert("✅ Your listing has been submitted and is pending admin approval.");
         // Reset form
         setTitle("");
         setDescription("");
@@ -131,13 +134,17 @@ export default function OwnersPropertyForm() {
         setState("");
         setType("");
         setPostalCode("");
+        setAddress("");
+        setCountry("");
+        setArea("");
+        setBedrooms("");
+        setBathrooms("");
         setFiles([]);
         setFeatures([]);
       } else {
         const error = await response.json();
-        alert(
-          "❌ Failed to submit listing: " + (error.message || "Unknown error")
-        );
+        console.error("Server error:", error);
+        alert("❌ Failed to submit listing: " + (error.message || "Unknown error"));
       }
     } catch (err) {
       console.error(err);
@@ -150,18 +157,10 @@ export default function OwnersPropertyForm() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      {/* Sidebar */}
-       {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-20 bg-black/30 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
       <aside
         className={`z-30 fixed inset-y-0 left-0 transform transition-transform duration-200 ease-in-out
-                ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
-                lg:translate-x-0 lg:static lg:w-72 w-64 bg-green-900 text-white flex flex-col`}
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
+          lg:translate-x-0 lg:static lg:w-72 w-64 bg-green-900 text-white flex flex-col`}
       >
         <div className="px-6 py-6 border-b border-green-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -178,9 +177,7 @@ export default function OwnersPropertyForm() {
         <nav className="mt-6 px-4 space-y-1 flex-1">
           <button
             onClick={() => navigate("/owners-dashboard")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(
-              "/owners-dashboard"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive("/owners-dashboard")}`}
           >
             <Clock size={18} />
             <span>Dashboard</span>
@@ -188,9 +185,7 @@ export default function OwnersPropertyForm() {
 
           <button
             onClick={() => navigate("/owners-listings")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(
-              "/owners-listings"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive("/owners-listings")}`}
           >
             <Bell size={18} />
             <span>My listings</span>
@@ -198,9 +193,7 @@ export default function OwnersPropertyForm() {
 
           <button
             onClick={() => navigate("/owners-saved-property")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(
-              "/owners-saved-property"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive("/owners-saved-property")}`}
           >
             <Heart size={18} />
             <span>My saved property</span>
@@ -208,9 +201,7 @@ export default function OwnersPropertyForm() {
 
           <button
             onClick={() => navigate("/owners-documents")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(
-              "/owners-documents"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive("/owners-documents")}`}
           >
             <FileText size={18} />
             <span>My documents</span>
@@ -218,9 +209,7 @@ export default function OwnersPropertyForm() {
 
           <button
             onClick={() => navigate("/owners-agreement")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(
-              "/owners-agreement"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive("/owners-agreement")}`}
           >
             <FileText size={18} />
             <span>New tenancy agreement</span>
@@ -228,9 +217,7 @@ export default function OwnersPropertyForm() {
 
           <button
             onClick={() => navigate("/owners-settings")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left border-t border-green-800 mt-4 ${isActive(
-              "/owners-settings"
-            )}`}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left border-t border-green-800 mt-4 ${isActive("/owners-settings")}`}
           >
             <Settings size={18} />
             <span>Account settings</span>
@@ -244,9 +231,7 @@ export default function OwnersPropertyForm() {
             </div>
             <div>
               <p className="font-medium">{user?.firstName || "User"}</p>
-              <p className="text-xs text-green-200">
-                {user?.email || "user@example.com"}
-              </p>
+              <p className="text-xs text-green-200">{user?.email || "user@example.com"}</p>
             </div>
           </div>
 
@@ -261,7 +246,7 @@ export default function OwnersPropertyForm() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-[60px]">
+    <main className="flex-1 p-[60px]">
         <div>
           <h1 className="text-3xl font-bold">List Property</h1>
           <p className="mt-4">
@@ -269,7 +254,7 @@ export default function OwnersPropertyForm() {
             today and get noticed fast.
           </p>
           <button
-            onClick={() => navigate("/owners-property-list")}
+            onClick={() => navigate("/agent-property-list")}
             className="mt-4 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
           >
             View Listed Property
@@ -303,7 +288,7 @@ export default function OwnersPropertyForm() {
                 Price
               </label>
               <input
-                type="text"
+                type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 className="border rounded px-3 py-2"
@@ -344,6 +329,32 @@ export default function OwnersPropertyForm() {
 
             <div className="flex flex-col">
               <label className="mb-1 text-sm font-medium text-gray-700">
+                Country
+              </label>
+              <input
+                type="text"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Address
+              </label>
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
                 Postal Code
               </label>
               <input
@@ -353,6 +364,7 @@ export default function OwnersPropertyForm() {
                 className="border rounded px-3 py-2"
               />
             </div>
+
             <div className="flex flex-col">
               <label className="mb-1 text-sm font-medium text-gray-700">
                 Location
@@ -361,6 +373,49 @@ export default function OwnersPropertyForm() {
                 type="text"
                 value={locationField}
                 onChange={(e) => setLocationField(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Additional Details */}
+          <h2 className="bg-gray-100 px-4 py-2 font-semibold mt-6">
+            Property Details
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Area (sq ft)
+              </label>
+              <input
+                type="number"
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Bedrooms
+              </label>
+              <input
+                type="number"
+                value={bedrooms}
+                onChange={(e) => setBedrooms(e.target.value)}
+                className="border rounded px-3 py-2"
+                required
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1 text-sm font-medium text-gray-700">
+                Bathrooms
+              </label>
+              <input
+                type="number"
+                value={bathrooms}
+                onChange={(e) => setBathrooms(e.target.value)}
                 className="border rounded px-3 py-2"
                 required
               />

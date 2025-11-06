@@ -25,35 +25,58 @@ export default function AdminUserMgt() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-green-900 text-white flex flex-col justify-between transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 transition-transform duration-300 z-50`}
-      >
+      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
         <div>
-          {/* Menu */}
           <nav className="mt-[85px] space-y-1">
-            {[
-              { path: "/admin-dashboard", label: "Dashboard", icon: <Clock size={18} /> },
-              { path: "/admin-user-mgt", label: "User Management", icon: <Bell size={18} /> },
-              { path: "/admin-properties", label: "Property Management", icon: <Heart size={18} /> },
-              { path: "/admin-agents-mgt", label: "Estate Agents Management", icon: <Heart size={18} /> },
-              { path: "/admin-payments-transactions", label: "Payments & Transactions", icon: <Heart size={18} /> },
-            ].map((item, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  navigate(item.path);
-                  setIsSidebarOpen(false);
-                }}
-                className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                  item.path
-                )}`}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </button>
-            ))}
+            <button
+              onClick={() => navigate("/admin-dashboard")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-dashboard"
+              )}`}
+            >
+              <Clock size={18} />
+              <span>Dashboard</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-user-mgt")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-user-mgt"
+              )}`}
+            >
+              <Bell size={18} />
+              <span>User Management</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-properties")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-properties"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>Property Management</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-agents-mgt")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-agents-mgt"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>Estate Agent Management</span>
+            </button>
+
+            <button
+              onClick={() => navigate("/admin-property-requests")}
+              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
+                "/admin-property-requests"
+              )}`}
+            >
+              <Heart size={18} />
+              <span>Property Requests</span>
+            </button>
           </nav>
         </div>
 
@@ -65,13 +88,9 @@ export default function AdminUserMgt() {
               alt="profile"
               className="w-10 h-10 rounded-full object-cover border"
             />
-            <div className="flex flex-col">
-              <p className="font-medium">
-                {user?.firstName || "Charles"} {user?.lastName || "Doe"}
-              </p>
-              <p className="text-sm text-gray-300">
-                {user?.email || "email@gmail.com"}
-              </p>
+            <div>
+              <p className="font-medium">{user?.firstName} {user?.lastName}</p>
+              <p className="text-sm text-gray-300">{user?.email}</p>
             </div>
           </div>
           <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
@@ -80,7 +99,6 @@ export default function AdminUserMgt() {
           </button>
         </div>
       </aside>
-
       {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div

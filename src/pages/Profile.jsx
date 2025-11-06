@@ -5,7 +5,7 @@ import { AuthContext } from "../AuthContext";
 
 export default function AccountSettings() {
   const navigate = useNavigate();
-  const { user, updateProfile } = useContext(AuthContext);
+  const { user, updateProfile, setUser } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     firstName: "",
@@ -78,33 +78,33 @@ export default function AccountSettings() {
         }
       }
 
-      // Append socials in correct format
+      // Append socials
       if (form.facebook) formData.append("socials[facebook]", form.facebook);
       if (form.twitter) formData.append("socials[twitter]", form.twitter);
       if (form.linkedin) formData.append("socials[linkedin]", form.linkedin);
 
-      // Append profile photo if any
+      // Append profile photo
       if (file) formData.append("profilePhoto", file);
 
-      // Debug payload
-      for (let [k, v] of formData.entries()) console.log(k, v);
+      const res = await updateProfile(formData);
 
-      await updateProfile(formData);
-
-      setStatus("✅ Profile updated successfully!");
-      setTimeout(() => setStatus(""), 4000);
-      navigate("/profile");
+      if (res.success) {
+        setUser(res.data); // ✅ Update AuthContext user immediately
+        setStatus("✅ Profile updated successfully!");
+        setTimeout(() => setStatus(""), 3000);
+        navigate("/profile");
+      } else {
+        setStatus("❌ Failed to update profile.");
+      }
     } catch (err) {
       console.error(err);
       setStatus("❌ Failed to update profile. Please try again.");
     }
   };
 
-  // 🟢 JSX
   return (
     <DashboardLayout>
       <div className="p-6">
-        {/* Breadcrumb */}
         <div className="text-sm text-gray-500 mb-4">
           <button
             onClick={() => navigate(-1)}
@@ -115,13 +115,11 @@ export default function AccountSettings() {
           &gt; Profile
         </div>
 
-        {/* Title */}
         <h1 className="text-2xl font-semibold mb-6">Account settings</h1>
         <p className="text-gray-600 mb-8">
           Manage your profile, preferences, and security options.
         </p>
 
-        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="bg-white rounded-xl shadow-sm p-8"
@@ -129,7 +127,6 @@ export default function AccountSettings() {
           <h2 className="text-lg font-medium mb-6">Edit your profile</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Profile photo */}
             <div className="flex flex-col items-center">
               <img
                 src={preview || "https://via.placeholder.com/400"}
@@ -151,7 +148,6 @@ export default function AccountSettings() {
               </p>
             </div>
 
-            {/* Input fields */}
             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
               <input
                 type="text"
@@ -223,7 +219,6 @@ export default function AccountSettings() {
             </div>
           </div>
 
-          {/* Socials */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
             <div>
               <h3 className="font-medium mb-4">Socials</h3>
@@ -254,7 +249,6 @@ export default function AccountSettings() {
             </div>
           </div>
 
-          {/* Reset Password */}
           <div className="mt-10">
             <Link
               to="/forgot-password"
@@ -264,7 +258,6 @@ export default function AccountSettings() {
             </Link>
           </div>
 
-          {/* Actions */}
           <div className="flex justify-end gap-4 mt-10">
             <button
               type="button"
@@ -281,7 +274,6 @@ export default function AccountSettings() {
             </button>
           </div>
 
-          {/* Status Message */}
           {status && (
             <p className="text-sm mt-4 text-gray-600 text-center">{status}</p>
           )}
