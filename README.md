@@ -50,9 +50,7 @@ src/
 ├── pages/               # Route-based pages (Home, Login, Profile, etc.)
 ├── layouts/             # Reusable layout components (Navbar, Footer)
 ├── context/             # Auth & global state management
-├── hooks/               # Custom hooks
-├── utils/               # Helper functions (formatters, validators)
-├── services/            # API calls (fetch, axios)
+├── services/            # API calls (fetch)
 └── App.jsx              # Main app entry
 ```
 
