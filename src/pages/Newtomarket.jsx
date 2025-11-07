@@ -2,6 +2,8 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt } from "react-icons/fa";
+import FavoriteButton from "../components/FavoriteButton";
+
 
 export default function Newtomarket() {
   const [approvedProperties, setApprovedProperties] = useState([]);
@@ -108,6 +110,7 @@ export default function Newtomarket() {
               <p className="text-gray-500 text-xs mt-2 line-clamp-2">
                 {property.description || "No description available."}
               </p>
+              <FavoriteButton property={property} />
             </div>
           </div>
         ))}

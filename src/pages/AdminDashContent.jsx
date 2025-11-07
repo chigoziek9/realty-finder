@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { Bell } from "lucide-react";
-import { useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../AuthContext.jsx";
 
 export default function Dashboard() {
-      const { user } = useContext(AuthContext) || {};
+  const { user, token } = useContext(AuthContext) || {};
   const [activities] = useState([
     {
       id: 1,
@@ -34,43 +32,77 @@ export default function Dashboard() {
       date: "Aug 15, 2024",
       avatar: "https://randomuser.me/api/portraits/men/4.jpg",
     },
-    {
-      id: 5,
-      name: "Peace Patrick",
-      action: "Peace Patrick added a new agent",
-      date: "Aug 15, 2024",
-      avatar: "https://randomuser.me/api/portraits/men/5.jpg",
-    },
-    {
-      id: 6,
-      name: "Helen Paul",
-      action: "Helen Paul approved a payment",
-      date: "Aug 15, 2024",
-      avatar: "https://randomuser.me/api/portraits/women/6.jpg",
-    },
-    {
-      id: 7,
-      name: "Samson Green",
-      action: "Samson Green added a new property",
-      date: "Aug 15, 2024",
-      avatar: "https://randomuser.me/api/portraits/men/7.jpg",
-    },
   ]);
 
-  return (
-    <div className="min-h-screen ">
-      
+  const [activeListings, setActiveListings] = useState(0);
+  const [totalListings, setTotalListings] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-      {/* Page Content */}
+  // ✅ Fetch total + active listings
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const endpoints = [
+          "https://realtyfinder.onrender.com/api/properties/user/approved",
+          "https://realtyfinder.onrender.com/api/properties/user/pending",
+          "https://realtyfinder.onrender.com/api/properties/user/rejected",
+        ];
+
+        const requests = endpoints.map((url) =>
+          fetch(url, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          })
+        );
+
+        const responses = await Promise.all(requests);
+        const data = await Promise.all(responses.map((res) => res.json()));
+
+        const approvedData = data[0]?.data || [];
+        const pendingData = data[1]?.data || [];
+        const rejectedData = data[2]?.data || [];
+
+        const totalCount =
+          (approvedData?.length || 0) +
+          (pendingData?.length || 0) +
+          (rejectedData?.length || 0);
+
+        setActiveListings(approvedData.length);
+        setTotalListings(totalCount);
+      } catch (err) {
+        console.error("Error fetching property totals:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) fetchListings();
+  }, [token]);
+
+  return (
+    <div className="min-h-screen">
       <main className="px-6 py-8">
-        <h1 className="text-2xl font-bold">Hello {user?.firstName || "CHIGGYY"}</h1>
+        <h1 className="text-2xl font-bold">
+          Hello {user?.firstName || "CHIGGYY"}
+        </h1>
 
         {/* Stats Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 mt-10">
-          <StatCard title="Total listings" value="10,353" />
-          <StatCard title="Active listings" value="2050" />
-          <StatCard title="Agents" value="150" />
-          <StatCard title="Buyers" value="1,500" />
+          <StatCard
+            title="Total listings"
+            value={
+              loading ? "Loading..." : totalListings.toLocaleString()
+            }
+          />
+          <StatCard
+            title="Active listings"
+            value={
+              loading ? "Loading..." : activeListings.toLocaleString()
+            }
+          />
         </div>
 
         {/* Recent Activity */}
@@ -84,7 +116,6 @@ export default function Dashboard() {
             </button>
           </div>
 
-          {/* Search */}
           <div className="mb-4">
             <input
               type="text"
@@ -93,7 +124,6 @@ export default function Dashboard() {
             />
           </div>
 
-          {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left border-collapse">
               <thead className="bg-gray-50 text-gray-600 font-medium">
@@ -133,7 +163,6 @@ export default function Dashboard() {
             </table>
           </div>
 
-          {/* Pagination */}
           <div className="flex items-center justify-between mt-4 text-sm text-gray-600">
             <p>Showing 1–10 from 100</p>
             <div className="flex items-center gap-2">

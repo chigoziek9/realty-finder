@@ -254,7 +254,7 @@ export default function OwnersPropertyForm() {
             today and get noticed fast.
           </p>
           <button
-            onClick={() => navigate("/agent-property-list")}
+            onClick={() => navigate("/owners-listings")}
             className="mt-4 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
           >
             View Listed Property

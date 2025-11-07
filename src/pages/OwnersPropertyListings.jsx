@@ -1,165 +1,224 @@
+// src/pages/AgentPropertyForm.jsx
 import {
   Clock,
   Bell,
   Heart,
   Settings,
   LogOut,
-  Edit,
-  EyeOff,
-  Trash2,
-  MapPin,
-  BedDouble,
-  Bath,
-  Ruler,
+  X,
+  Menu,
 } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { AuthContext } from "../AuthContext.jsx";
-import { useContext } from "react";
-
-// Import your listing images
-import List1 from "../assets/list1.png";
-import List2 from "../assets/list2.png";
-import List3 from "../assets/list3.png";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
+import { useContext, useState, useEffect } from "react";
+import {
+  FaBed,
+  FaBath,
+  FaRulerCombined,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 
 export default function OwnersPropertyListings() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
 
-  // Utility to check if a link is active
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [deleting, setDeleting] = useState(null);
+
+  // Modal states
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [soldModalOpen, setSoldModalOpen] = useState(false);
+  const [buyerDetails, setBuyerDetails] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  });
+
+  // 🟢 Active tab: "pending" | "approved" | "rejected"
+  const [activeTab, setActiveTab] = useState("pending");
+
+  // API endpoints
+  const endpoints = {
+    pending: "https://realtyfinder.onrender.com/api/properties/user/pending",
+    approved: "https://realtyfinder.onrender.com/api/properties/user/approved",
+    rejected: "https://realtyfinder.onrender.com/api/properties/user/rejected",
+  };
+
+  // ✅ Fetch properties depending on activeTab
+  useEffect(() => {
+    const fetchProperties = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(endpoints[activeTab], {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+
+        const result = await res.json();
+
+        if (result.success && Array.isArray(result.data)) {
+          const userEmail = user?.email?.toLowerCase();
+          const userId = user?._id;
+
+          const filtered = result.data.filter(
+            (p) =>
+              p.createdBy?.email?.toLowerCase() === userEmail ||
+              p.user?._id === userId
+          );
+
+          setProperties(filtered);
+        } else {
+          setError("Unexpected API response.");
+        }
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+        setError("Failed to fetch properties. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token && user) fetchProperties();
+  }, [token, user, activeTab]);
+
+  // ✅ Handle delete
+  const handleDelete = async (propertyId) => {
+    if (!window.confirm("Are you sure you want to delete this property?")) return;
+
+    try {
+      setDeleting(propertyId);
+      const res = await fetch(
+        `https://realtyfinder.onrender.com/api/properties/${propertyId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error(`Failed to delete (${res.status})`);
+      const result = await res.json();
+
+      if (result.success) {
+        setProperties((prev) => prev.filter((p) => p._id !== propertyId));
+        alert("Property deleted successfully!");
+      } else {
+        throw new Error(result.message || "Delete failed");
+      }
+    } catch (err) {
+      console.error("Error deleting property:", err);
+      alert(err.message || "Error deleting property.");
+    } finally {
+      setDeleting(null);
+    }
+  };
+
+  // ✅ Handle Sold Submission
+  const handleSoldSubmit = (e) => {
+    e.preventDefault();
+    alert("Buyer details submitted successfully!");
+    setBuyerDetails({ firstName: "", lastName: "", email: "", phone: "" });
+    setSoldModalOpen(false);
+  };
+
+  // ✅ Sidebar route styling
   const isActive = (path) =>
-    location.pathname === path
-      ? "bg-white text-green-900 font-medium"
-      : "hover:bg-green-800";
+    window.location.pathname === path
+      ? "bg-white text-green-900"
+      : "hover:bg-white hover:text-green-900";
 
-  // Example listings with different images
-  const listings = [
-    {
-      id: 1,
-      title: "Home in Coral Gables",
-      address: "Jeronimo Drive, Coral Gables, FL 33146, Enugu",
-      beds: 4,
-      baths: 4,
-      sqft: 3800,
-      price: "₦850,000",
-      status: "Live",
-      date: "March 8, 2025",
-      image: List3, // first listing uses List 3
-    },
-    {
-      id: 2,
-      title: "Home in Coral Gables",
-      address: "Jeronimo Drive, Coral Gables, FL 33146, Enugu",
-      beds: 4,
-      baths: 4,
-      sqft: 3800,
-      price: "₦850,000",
-      status: "Pending",
-      date: "March 8, 2025",
-      image: List1, // second listing uses List 1
-    },
-    {
-      id: 3,
-      title: "Home in Coral Gables",
-      address: "Jeronimo Drive, Coral Gables, FL 33146, Enugu",
-      beds: 4,
-      baths: 4,
-      sqft: 3800,
-      price: "₦850,000",
-      status: "Rejected",
-      date: "March 8, 2025",
-      image: List2, // third listing uses List 2
-    },
-  ];
-
+  // ✅ Status color mapping
   const statusColors = {
-    Live: "bg-green-100 text-green-700",
-    Pending: "bg-yellow-100 text-yellow-700",
-    Rejected: "bg-red-100 text-red-700",
+    pending: "bg-yellow-500",
+    approved: "bg-green-600",
+    rejected: "bg-red-600",
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
-        <div>
-          {/* Menu */}
-          <nav className="mt-[85px] space-y-1">
-            <button
-              onClick={() => navigate("/owners-dashboard")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                "/owners-dashboard"
-              )}`}
-            >
-              <Clock size={18} />
-              <span>Dashboard</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/owners-listings")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                "/owners-listings"
-              )}`}
-            >
-              <Bell size={18} />
-              <span>My Listings</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/owners-saved-property")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                "/owners-saved-property"
-              )}`}
-            >
-              <Heart size={18} />
-              <span>My saved property</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/owners-documents")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
-                "/owners-documents"
-              )}`}
-            >
-              <Heart size={18} />
-              <span>My documents</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/owners-agreement")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
-                "/owners-agreement"
-              )}`}
-            >
-              <Heart size={18} />
-              <span>New tenancy agreement</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/owners-settings")}
-              className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive(
-                "/owners-settings"
-              )}`}
-            >
-              <Settings size={18} />
-              <span>Account Settings</span>
-            </button>
-          </nav>
+    <div className="flex min-h-screen bg-gray-100 relative">
+      {/* ===== Sidebar ===== */}
+      <aside
+        className={`fixed md:static top-0 left-0 min-h-screen w-72 bg-green-900 text-white flex flex-col justify-between transform transition-transform duration-300 z-50 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
+      >
+        <div className="flex items-center justify-between px-6 py-4 md:hidden border-b border-green-800">
+          <span className="text-lg font-semibold">Menu</span>
+          <button onClick={() => setSidebarOpen(false)}>
+            <X size={24} />
+          </button>
         </div>
 
-        {/* User Info */}
+        <nav className="mt-[85px] space-y-1 flex-1 overflow-y-auto">
+          <button
+            onClick={() => navigate("/agents-dashboard")}
+            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive("/agents-dashboard")}`}
+          >
+            <Clock size={18} />
+            <span>Dashboard Overview</span>
+          </button>
+          <button
+            onClick={() => navigate("/agents-transaction")}
+            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive("/agents-transaction")}`}
+          >
+            <Bell size={18} />
+            <span>Transaction & Commission</span>
+          </button>
+          <button
+            onClick={() => navigate("/agents-client")}
+            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive("/agents-client")}`}
+          >
+            <Heart size={18} />
+            <span>Clients</span>
+          </button>
+          <button
+            onClick={() => navigate("/agents-property")}
+            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive("/agents-property")}`}
+          >
+            <Heart size={18} />
+            <span>Document Compliance</span>
+          </button>
+          <button
+            onClick={() => navigate("/agents-document")}
+            className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg transition ${isActive("/agents-document")}`}
+          >
+            <Heart size={18} />
+            <span>Property Management</span>
+          </button>
+          <button
+            onClick={() => navigate("/account-settings")}
+            className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg transition ${isActive("/account-settings")}`}
+          >
+            <Settings size={18} />
+            <span>Account Settings</span>
+          </button>
+        </nav>
+
         <div className="p-6 border-t border-green-800">
           <div className="flex items-center space-x-3">
             <img
-              src={user?.profilePic || "https://via.placeholder.com/40"}
+              src={user?.profilePic || "https://placehold.co/40x40"}
               alt="profile"
               className="w-10 h-10 rounded-full object-cover border"
             />
             <div>
               <p className="font-medium">
-                {user?.firstName} {user?.lastName}
+                {user?.firstName || "Agent"} {user?.lastName || ""}
               </p>
-              <p className="text-sm text-gray-300">{user?.email}</p>
+              <p className="text-sm text-gray-300">
+                {user?.email || "user@email.com"}
+              </p>
             </div>
           </div>
           <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
@@ -169,86 +228,149 @@ export default function OwnersPropertyListings() {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 p-8">
-        {/* Header */}
-        <h1 className="text-2xl font-bold">My listings</h1>
-        <p className="text-gray-600 mt-1">
-          View, manage, and update all your properties in one place.
-        </p>
-        <button
-          onClick={() => navigate("/agents-form")}
-          className="mt-4 px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800"
-        >
-          + List property
-        </button>
+      {/* ===== Overlay (mobile) ===== */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden"
+        ></div>
+      )}
 
-        {/* Listings */}
-        <h2 className="font-semibold mt-8 mb-4">My Listings</h2>
-        <div className="space-y-6">
-          {listings.map((listing) => (
-            <div
-              key={listing.id}
-              className="bg-white rounded-xl shadow p-4 flex items-center gap-6"
+      {/* ===== Main Content ===== */}
+      <main className="flex-1 flex flex-col w-full p-4 md:p-8 overflow-y-auto">
+        <div className="flex items-center justify-between mb-6 md:hidden">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="text-green-900 p-2 rounded-md hover:bg-green-100"
+          >
+            <Menu size={24} />
+          </button>
+          <h1 className="text-xl font-semibold text-green-900">
+            Agent Properties
+          </h1>
+        </div>
+
+        {/* ===== Tabs ===== */}
+        <div className="flex gap-4 mb-6 border-b border-gray-300">
+          {["pending", "approved", "rejected"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-2 capitalize text-lg font-medium ${
+                activeTab === tab
+                  ? "text-green-800 border-b-4 border-green-800"
+                  : "text-gray-500 hover:text-green-700"
+              }`}
             >
-              {/* Left image */}
-              <img
-                src={listing.image}
-                alt={listing.title}
-                className="w-60 h-40 rounded-lg object-cover"
-              />
-
-              {/* Right content */}
-              <div className="flex-1">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-semibold text-lg">{listing.title}</p>
-                    <p className="flex items-center text-gray-600 text-sm mt-1">
-                      <MapPin size={16} className="mr-1" /> {listing.address}
-                    </p>
-                    <div className="flex items-center text-gray-600 text-sm mt-2 space-x-4">
-                      <span className="flex items-center">
-                        <BedDouble size={16} className="mr-1" /> {listing.beds}
-                      </span>
-                      <span className="flex items-center">
-                        <Bath size={16} className="mr-1" /> {listing.baths}
-                      </span>
-                      <span className="flex items-center">
-                        <Ruler size={16} className="mr-1" /> {listing.sqft} sq ft
-                      </span>
-                    </div>
-                    <p className="text-green-800 font-bold text-lg mt-2">
-                      {listing.price}
-                    </p>
-                  </div>
-
-                  {/* Status badge */}
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[listing.status]}`}
-                  >
-                    {listing.status}
-                  </span>
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center space-x-3 mt-4">
-                  <button className="flex items-center space-x-1 border px-3 py-1 rounded-lg text-sm hover:bg-gray-50">
-                    <Edit size={16} /> <span>Edit</span>
-                  </button>
-                  <button className="flex items-center space-x-1 border px-3 py-1 rounded-lg text-sm hover:bg-gray-50">
-                    <EyeOff size={16} /> <span>Hide</span>
-                  </button>
-                  <button className="flex items-center space-x-1 border px-3 py-1 rounded-lg text-sm text-red-600 hover:bg-gray-50">
-                    <Trash2 size={16} /> <span>Delete</span>
-                  </button>
-                  <p className="text-sm text-gray-500 ml-auto">
-                    Added: {listing.date}
-                  </p>
-                </div>
-              </div>
-            </div>
+              {tab}
+            </button>
           ))}
         </div>
+
+        {/* ===== Property Listings ===== */}
+        {loading && (
+          <p className="text-gray-500 text-center mt-10">
+            Loading {activeTab} properties...
+          </p>
+        )}
+
+        {error && <p className="text-red-500 text-center">{error}</p>}
+
+        {/* 🟡 Show properties ONLY when loading is false */}
+        {!loading && !error && properties.length === 0 && (
+          <p className="text-gray-500 text-center mt-10">
+            No {activeTab} properties found.
+          </p>
+        )}
+
+        {!loading && !error && properties.length > 0 && (
+          <div className="space-y-6">
+            {properties.map((property) => (
+              <div
+                key={property._id}
+                className="flex flex-col md:flex-row gap-4 border rounded-xl shadow-sm p-4 bg-white"
+              >
+                <img
+                  src={
+                    property.images?.[0] ||
+                    "https://placehold.co/300x200?text=No+Image"
+                  }
+                  alt={property.title}
+                  className="w-full md:w-48 h-48 object-cover rounded-lg"
+                />
+
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold">{property.title}</h3>
+                  <p className="flex items-center text-gray-600 text-sm">
+                    <FaMapMarkerAlt className="mr-1" />{" "}
+                    {property.location || "Unknown location"}
+                  </p>
+                  <div className="flex flex-wrap gap-4 text-gray-700 mt-2 text-sm">
+                    <span className="flex items-center gap-1">
+                      <FaBed /> {property.bedrooms || "N/A"}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FaBath /> {property.bathrooms || "N/A"}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FaRulerCombined /> {property.sqft || "N/A"} sq ft
+                    </span>
+                  </div>
+                  <p className="text-green-700 font-bold text-lg mt-2">
+                    ₦{property.price?.toLocaleString() || "N/A"}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">ID: {property._id}</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Created:{" "}
+                    {new Date(property.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+
+                {/* Status + Actions */}
+                <div className="flex flex-row md:flex-col items-center md:items-end justify-between">
+                  <span
+                    className={`text-white text-xs px-3 py-1 rounded-full ${
+                      statusColors[activeTab] || "bg-gray-400"
+                    }`}
+                  >
+                    {activeTab}
+                  </span>
+
+                  <div className="flex gap-2 mt-4 flex-wrap">
+                    <button
+                      onClick={() => setSelectedProperty(property)}
+                      className="px-3 py-1 border rounded-lg text-sm hover:bg-gray-100"
+                    >
+                      View
+                    </button>
+
+                    {/* Only show Sold for pending */}
+                    {activeTab === "pending" && (
+                      <button
+                        onClick={() => setSoldModalOpen(true)}
+                        className="px-3 py-1 border rounded-lg text-green-800 text-sm hover:bg-yellow-200"
+                      >
+                        Sold
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() => handleDelete(property._id)}
+                      disabled={deleting === property._id}
+                      className={`px-3 py-1 border rounded-lg text-sm text-red-600 hover:bg-red-50 ${
+                        deleting === property._id
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
+                      }`}
+                    >
+                      {deleting === property._id ? "Deleting..." : "Delete"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

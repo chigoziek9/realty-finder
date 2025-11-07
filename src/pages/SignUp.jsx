@@ -27,6 +27,7 @@ export default function SignUp() {
     middleName: "",
     lastName: "",
     email: "",
+    phone:"",
     password: "",
     confirmPassword: "",
     agree: false,
@@ -244,6 +245,25 @@ export default function SignUp() {
                   name="email"
                   placeholder="Enter email"
                   value={formData.email}
+                  onChange={handleChange}
+                  className="w-full focus:outline-none"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Phone Number */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Phone Number <span className="text-red-500">*</span>
+              </label>
+              <div className="flex items-center border rounded-lg px-3 py-2">
+                <FaEnvelope className="text-gray-400 mr-2" />
+                <input
+                  type="phone"
+                  name="phone"
+                  placeholder="Enter Phone Number"
+                  value={formData.phone}
                   onChange={handleChange}
                   className="w-full focus:outline-none"
                   required
