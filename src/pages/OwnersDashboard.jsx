@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext.jsx";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,6 +25,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
+// Register chart elements
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -39,49 +39,99 @@ ChartJS.register(
 export default function OwnersDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useContext(AuthContext) || {};
+  const { user, token } = useContext(AuthContext) || {};
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Active link styling
+  const [activeListingsCount, setActiveListingsCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ Fetch approved listings
+  useEffect(() => {
+    const fetchApprovedListings = async () => {
+      try {
+        const res = await fetch(
+          "https://realtyfinder.onrender.com/api/properties/user/approved",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const result = await res.json();
+
+        if (result.success && Array.isArray(result.data)) {
+          const userEmail = user?.email?.toLowerCase();
+          const userId = user?._id;
+
+          const owned = result.data.filter(
+            (p) =>
+              p.createdBy?.email?.toLowerCase() === userEmail ||
+              p.user?._id === userId
+          );
+
+          setActiveListingsCount(owned.length);
+        } else {
+          setActiveListingsCount(0);
+        }
+      } catch (err) {
+        console.error("Error fetching approved listings:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token && user) fetchApprovedListings();
+  }, [token, user]);
+
   const isActive = (path) =>
     location.pathname === path
       ? "bg-white text-green-900 font-medium"
       : "hover:bg-green-800";
 
-  // ---------- Stat cards ----------
+  // ✅ Dashboard stats
   const stats = {
-    activeListing: 45678,
+    activeListing: activeListingsCount,
     savedProperties: 2405,
     listingViews: 10353,
   };
 
-  // ---------- Market Insights ----------
+  // ✅ Insights section
   const insights = [
-    { date: "Feb 12", text: "3-bedroom flats in Kubwa saw 15% price increase this month." },
-    { date: "Feb 11", text: "2-bedroom apartments in Maitama up 12% this week." },
+    {
+      date: "Feb 12",
+      text: "3-bedroom flats in Kubwa saw 15% price increase this month.",
+    },
+    {
+      date: "Feb 11",
+      text: "2-bedroom apartments in Maitama up 12% this week.",
+    },
     { date: "Feb 07", text: "1-bedroom flats in Garki experienced higher demand." },
   ];
 
-  // ---------- Chart Data ----------
-  const labels = useMemo(() => Array.from({ length: 30 }, (_, i) => (i + 1).toString()), []);
+  // ✅ Chart setup
+  const labels = useMemo(
+    () => Array.from({ length: 30 }, (_, i) => (i + 1).toString()),
+    []
+  );
 
   const generateSampleData = () => {
     const base = 180;
-    const arr = [];
-    for (let i = 0; i < 30; i++) {
+    return Array.from({ length: 30 }, (_, i) => {
       const variance = Math.round(Math.sin(i / 3) * 30 + Math.random() * 30 - 10);
-      arr.push(Math.max(30, base + variance));
-    }
-    return arr;
+      return Math.max(30, base + variance);
+    });
   };
 
-  const [chartDataPoints, setChartDataPoints] = useState(generateSampleData());
+  const [chartDataPoints] = useState(generateSampleData());
   const lineRef = useRef(null);
 
   const chartData = useMemo(() => {
     const ctx = lineRef?.current?.canvas?.getContext("2d");
     let gradient = null;
-
     if (ctx) {
       gradient = ctx.createLinearGradient(0, 0, 0, 300);
       gradient.addColorStop(0, "rgba(96,165,250,0.18)");
@@ -151,16 +201,9 @@ export default function OwnersDashboard() {
     return "bg-gray-100 text-gray-800";
   };
 
-  // Re-render chart when ref is ready
-  useEffect(() => {
-    if (lineRef.current) {
-      setChartDataPoints((d) => [...d]);
-    }
-  }, [lineRef]);
-
   return (
     <div className="min-h-screen bg-gray-100 flex">
-      {/* Mobile overlay */}
+      {/* Overlay for mobile */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-20 bg-black/30 lg:hidden"
@@ -176,7 +219,9 @@ export default function OwnersDashboard() {
       >
         <div className="px-6 py-6 border-b border-green-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center font-bold">RF</div>
+            <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center font-bold">
+              RF
+            </div>
             <div className="text-lg font-bold">RealtyFinder</div>
           </div>
           <button className="lg:hidden" onClick={() => setSidebarOpen(false)}>
@@ -184,56 +229,37 @@ export default function OwnersDashboard() {
           </button>
         </div>
 
+        {/* Navigation */}
         <nav className="mt-6 px-4 space-y-1 flex-1">
-          <button
-            onClick={() => navigate("/owners-dashboard")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive("/owners-dashboard")}`}
-          >
-            <Clock size={18} />
-            <span>Dashboard</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/owners-listings")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive("/owners-listings")}`}
-          >
-            <Bell size={18} />
-            <span>My listings</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/owners-saved-property")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive("/owners-saved-property")}`}
-          >
-            <Heart size={18} />
-            <span>My saved property</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/owners-documents")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive("/owners-documents")}`}
-          >
-            <FileText size={18} />
-            <span>My documents</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/owners-agreement")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive("/owners-agreement")}`}
-          >
-            <FileText size={18} />
-            <span>New tenancy agreement</span>
-          </button>
+          {[
+            { label: "Dashboard", icon: Clock, path: "/owners-dashboard" },
+            { label: "My listings", icon: Bell, path: "/owners-listings" },
+            { label: "My saved property", icon: Heart, path: "/owners-saved-property" },
+            { label: "My documents", icon: FileText, path: "/owners-documents" },
+            { label: "New tenancy agreement", icon: FileText, path: "/owners-agreement" },
+          ].map((item, i) => (
+            <button
+              key={i}
+              onClick={() => navigate(item.path)}
+              className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left ${isActive(item.path)}`}
+            >
+              <item.icon size={18} />
+              <span>{item.label}</span>
+            </button>
+          ))}
 
           <button
             onClick={() => navigate("/owners-settings")}
-            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left border-t border-green-800 mt-4 ${isActive("/owners-settings")}`}
+            className={`flex w-full items-center space-x-3 px-4 py-3 rounded-r-lg text-left border-t border-green-800 mt-4 ${isActive(
+              "/owners-settings"
+            )}`}
           >
             <Settings size={18} />
             <span>Account settings</span>
           </button>
         </nav>
 
+        {/* Profile and logout */}
         <div className="p-6 border-t border-green-800">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold">
@@ -255,144 +281,98 @@ export default function OwnersDashboard() {
         </div>
       </aside>
 
-      {/* Main content */}
-      <div className="flex-1">
-        <main className="p-6">
-          {/* Header */}
-          <header className="flex items-center justify-between px-6 py-6 bg-white border-b mb-4 rounded-lg shadow-sm">
-            <div className="flex items-center gap-4">
-              <button className="lg:hidden p-2 rounded hover:bg-gray-100" onClick={() => setSidebarOpen(true)}>
-                <Menu size={20} />
-              </button>
-              <h1 className="text-2xl font-bold">Hello {user?.firstName || "User"}</h1>
+      {/* Main Content */}
+      <main className="flex-1 p-6 space-y-8 md:ml-0">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="md:hidden mb-4 text-green-900"
+        >
+          <Menu />
+        </button>
+
+        <h1 className="text-2xl font-semibold text-gray-800">
+          Welcome back, {user?.firstName || "Owner"} 👋
+        </h1>
+
+        {/* Stat Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {Object.entries(stats).map(([key, value]) => (
+            <div key={key} className="bg-white rounded-lg p-6 shadow">
+              <p className="text-sm text-gray-600 capitalize">
+                {key.replace(/([A-Z])/g, " $1")}
+              </p>
+              <p className="text-4xl font-bold mt-4">
+                {loading ? "Loading..." : value.toLocaleString()}
+              </p>
+              <p className="text-xs text-gray-400 mt-3">Compared to last month</p>
             </div>
+          ))}
+        </div>
 
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => navigate("/owners-form")}
-                className="px-4 py-2 bg-green-700 hover:bg-green-800 text-white rounded-md font-semibold shadow"
-              >
-                + List Property
-              </button>
+        {/* Chart */}
+        <div className="bg-white p-6 rounded-lg shadow h-72">
+          <h2 className="text-lg font-semibold mb-4">Listing Views (Last 30 Days)</h2>
+          <Line ref={lineRef} data={chartData} options={chartOptions} />
+        </div>
 
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold">
-                {user?.firstName?.slice(0, 2)?.toUpperCase() || "U"}
-              </div>
-            </div>
-          </header>
-
-          {/* Stat cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {Object.entries(stats).map(([key, value]) => (
-              <div key={key} className="bg-white rounded-lg p-6 shadow">
-                <p className="text-sm text-gray-600 capitalize">{key.replace(/([A-Z])/g, " $1")}</p>
-                <p className="text-4xl font-bold mt-4">{value.toLocaleString()}</p>
-                <p className="text-xs text-gray-400 mt-3">Compared to last month</p>
-              </div>
+        {/* Insights */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-lg font-semibold mb-4">Market Insights</h2>
+          <ul className="space-y-3">
+            {insights.map((item, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <Clock size={16} className="text-green-600 mt-1" />
+                <div>
+                  <p className="text-sm text-gray-600">{item.text}</p>
+                  <p className="text-xs text-gray-400 mt-1">{item.date}</p>
+                </div>
+              </li>
             ))}
-          </div>
+          </ul>
+        </div>
 
-          {/* Graph and Market Insights */}
-          <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-white rounded-lg p-6 shadow">
-              <div className="flex justify-between items-start">
-                <h2 className="text-lg font-semibold">Property views</h2>
-                <div className="text-sm text-gray-500">Your listings got 12 new views today.</div>
-              </div>
-
-              <div className="mt-4 h-72 relative">
-                <Line ref={lineRef} data={chartData} options={chartOptions} />
-              </div>
-            </div>
-
-            <aside className="bg-white rounded-lg p-6 shadow">
-              <h3 className="font-semibold mb-3">Market Insights</h3>
-              <div className="text-sm text-gray-500 mb-3">This Week</div>
-
-              <div className="divide-y divide-gray-100">
-                {insights.map((it, idx) => (
-                  <div key={idx} className="py-3 flex items-start justify-between">
-                    <div className="flex items-start gap-3">
-                      <div className="text-xs text-gray-400">{it.date}</div>
-                      <div className="text-sm">{it.text}</div>
-                    </div>
-                    <div className="ml-3">
-                      <button className="p-1 rounded-full border border-gray-100 text-green-700">⤴︎</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </aside>
-          </div>
-
-          {/* Active listings */}
-          <div className="mt-6 bg-white rounded-lg shadow overflow-hidden">
-            <div className="px-6 py-4 border-b flex items-center justify-between">
-              <h3 className="font-semibold text-lg">Active listings</h3>
-              <div className="flex items-center gap-3">
-                <button className="text-sm bg-gray-50 px-3 py-2 rounded">Filters</button>
-                <button
-                  onClick={() => navigate("/agents-form")}
-                  className="text-sm bg-green-700 text-white px-3 py-2 rounded"
-                >
-                  + List Property
-                </button>
-              </div>
-            </div>
-
-            <table className="w-full text-left">
-              <thead className="bg-gray-50 text-sm text-gray-600">
-                <tr>
-                  <th className="px-6 py-3">Property</th>
-                  <th className="px-6 py-3">Status</th>
-                  <th className="px-6 py-3">Views</th>
-                  <th className="px-6 py-3">Actions</th>
+        {/* Table */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-lg font-semibold mb-4">Active Listings</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm text-gray-700">
+              <thead>
+                <tr className="border-b">
+                  <th className="py-3 px-4 font-semibold">Title</th>
+                  <th className="py-3 px-4 font-semibold">Status</th>
+                  <th className="py-3 px-4 font-semibold">Views</th>
+                  <th className="py-3 px-4 font-semibold">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {listings.map((l) => (
-                  <tr key={l.id} className="border-t">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-14 h-10 rounded bg-gray-200 flex items-center justify-center text-xs">
-                          img
-                        </div>
-                        <div>
-                          <div className="font-medium">{l.title}</div>
-                          <div className="text-xs text-gray-500">Short address / area</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs ${statusBadge(l.status)}`}>
-                        {l.status}
+                {listings.map((listing) => (
+                  <tr key={listing.id} className="border-b hover:bg-gray-50">
+                    <td className="py-3 px-4">{listing.title}</td>
+                    <td className="py-3 px-4">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${statusBadge(
+                          listing.status
+                        )}`}
+                      >
+                        {listing.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{l.views.toLocaleString()} views</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3 text-gray-600">
-                        <button title="Edit" onClick={() => alert("Edit clicked")}>✏️</button>
-                        <button title="View" onClick={() => alert("View clicked")}>👁️</button>
-                        <button
-                          title="Delete"
-                          onClick={() => alert("Delete clicked")}
-                          className="text-red-500"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
+                    <td className="py-3 px-4">{listing.views.toLocaleString()}</td>
+                    <td className="py-3 px-4 flex gap-2">
+                      <button className="text-blue-600 hover:text-blue-800 text-sm">
+                        Edit
+                      </button>
+                      <button className="text-red-600 hover:text-red-800 text-sm">
+                        <Trash2 size={14} />
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-
-            <div className="px-6 py-4 border-t text-sm text-gray-500">
-              Showing 1–{listings.length} of {listings.length}
-            </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

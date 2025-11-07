@@ -4,6 +4,13 @@ import PropertyNav from "./PropertyNav.jsx";
 import Contactform from "./Contactagentform.jsx";
 import PropertyGallery from "./PropertyGallery.jsx";
 import { AuthContext } from "../AuthContext";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 import arrow from "../assets/downarrow.png";
 import commision from "../assets/2comm.png";
@@ -33,10 +40,11 @@ export default function PropertyDetails() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: token ? `Bearer ${token}` : undefined,
             },
           }
         );
+
         if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
         const result = await res.json();
 
@@ -53,12 +61,7 @@ export default function PropertyDetails() {
       }
     };
 
-    if (token) fetchProperty();
-    else {
-      setError("You must be logged in to view this property.");
-      setLoading(false);
-    }
-
+    fetchProperty();
     window.scrollTo(0, 0);
   }, [id, token]);
 
@@ -82,21 +85,30 @@ export default function PropertyDetails() {
       <PropertyNav />
 
       {/* GALLERY */}
-      <div className="px-8">
-        <h1 className="mt-6 font-bold text-3xl">{property.title}</h1>
+      <div className="px-8 w-full">
+        <h1 className="mt-6 font-bold text-3xl px-8">{property.title}</h1>
 
-        {/* ✅ Properly handle image URLs */}
         {Array.isArray(property.images) && property.images.length > 0 ? (
-          <img
-            src={property.images[0]}
-            alt={property.title}
-            className="w-full max-w-4xl h-[400px] object-cover rounded-lg shadow"
-          />
+          <Carousel className="w-full mt-6 relative">
+            <CarouselContent>
+              {property.images.map((imgUrl, index) => (
+                <CarouselItem key={index} className="w-full">
+                  <img
+                    src={imgUrl}
+                    alt={`${property.title} image ${index + 1}`}
+                    className="w-full h-[500px] sm:h-[600px] object-cover rounded-none"
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-4 bg-black/40 text-white hover:bg-black/60" />
+            <CarouselNext className="right-4 bg-black/40 text-white hover:bg-black/60" />
+          </Carousel>
         ) : (
           <img
-            src="https://placehold.co/600x400?text=No+Image"
+            src="https://placehold.co/1200x600?text=No+Image"
             alt="No image available"
-            className="w-full max-w-4xl h-[400px] object-cover rounded-lg shadow"
+            className="w-full h-[500px] sm:h-[600px] object-cover rounded-none mt-6"
           />
         )}
       </div>
@@ -128,14 +140,11 @@ export default function PropertyDetails() {
           <p className="mt-2">{property.description}</p>
 
           <div className="flex mt-6 gap-2 items-center">
-            <p className="text-[#0d542a] font-bold cursor-pointer">
-              Show More
-            </p>
+            <p className="text-[#0d542a] font-bold cursor-pointer">Show More</p>
             <img src={arrow} alt="expand" />
           </div>
 
           {/* FEATURES SECTION (unchanged) */}
-          {/* ... */}
         </div>
 
         {/* ACTIONS PANEL */}
@@ -158,25 +167,44 @@ export default function PropertyDetails() {
       </div>
 
       {/* LISTED BY */}
-      <div className="px-10">
+      <div className="px-10 mt-10">
         <h1 className="text-xl font-bold">Listed by RealtyFinder</h1>
-        <div className="max-w-200 h-40 border rounded-2xl mt-4 flex gap-4 p-4">
+        <div className="max-w-200 h-40 border rounded-2xl mt-4 flex gap-4 p-4 items-center">
           <img
-            src={poster}
-            alt="Agent"
-            className="w-24 h-24 object-cover rounded-full"
+            src={
+              property.user?.profilePhoto ||
+              "https://placehold.co/100x100?text=No+Image"
+            }
+            alt={`${property.user?.firstName || "Agent"} ${
+              property.user?.lastName || ""
+            }`}
+            className="w-24 h-24 object-cover rounded-full border border-gray-300"
           />
-          <p className="mt-8 text-2xl font-bold text-[#27513d]">
-            {property.createdBy?.name || "Josephine Pauland"} <br />
+          <div>
+            <p className="text-2xl font-bold text-[#27513d]">
+              {property.user
+                ? `${property.user.firstName || ""} ${
+                    property.user.lastName || ""
+                  }`.trim()
+                : "Unknown Agent"}
+            </p>
             <span className="text-black text-xl font-light">
-              RealtyFinder Corporation
+              {property.user?.companyName || "RealtyFinder Corporation"}
             </span>
-          </p>
+          </div>
         </div>
       </div>
 
       {/* CONTACT FORM */}
-      <Contactform />
+      <div className="mt-10">
+        <Contactform
+          agentEmail={property.user?.email}
+          agentName={`${property.user?.firstName || ""} ${
+            property.user?.lastName || ""
+          }`.trim()}
+          propertyTitle={property.title}
+        />
+      </div>
 
       {/* MAP */}
       <div className="px-8 mt-10">

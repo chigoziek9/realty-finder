@@ -1,4 +1,3 @@
-// src/context/FavoriteContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 
 const FavoriteContext = createContext();
@@ -8,24 +7,42 @@ export const useFavorites = () => useContext(FavoriteContext);
 export function FavoriteProvider({ children }) {
   const [favorites, setFavorites] = useState([]);
 
-  // ✅ Load favorites from localStorage
+  // Load favorites from localStorage
   useEffect(() => {
     const stored = localStorage.getItem("favorites");
-    if (stored) setFavorites(JSON.parse(stored));
+    if (stored) {
+      try {
+        setFavorites(JSON.parse(stored));
+      } catch (err) {
+        console.error("Failed to parse favorites:", err);
+      }
+    }
   }, []);
 
-  // ✅ Save favorites to localStorage
+  // Save favorites to localStorage
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
-  const toggleFavorite = (property) => {
-    setFavorites((prev) =>
-      prev.find((item) => item.id === property.id)
-        ? prev.filter((item) => item.id !== property.id)
-        : [...prev, property]
+  // ✅ Toggle favorite by unique property ID
+  const toggleFavorite = (propertyId, propertyData) => {
+  setFavorites((prev) => {
+    if (!Array.isArray(prev)) return [propertyData];
+
+    const exists = prev.some(
+      (item) => (item?._id || item?.id) === propertyId
     );
-  };
+
+    if (exists) {
+      // remove it
+      return prev.filter((item) => (item?._id || item?.id) !== propertyId);
+    } else {
+      // add it
+      return [...prev, propertyData];
+    }
+  });
+};
+
 
   return (
     <FavoriteContext.Provider value={{ favorites, toggleFavorite }}>
