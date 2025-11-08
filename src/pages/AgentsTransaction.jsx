@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Clock, Bell, Heart, Settings, LogOut } from "lucide-react";
-
+import { Clock, Bell, Heart, Settings, LogOut, Menu, X } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { useContext } from "react";
@@ -20,14 +19,15 @@ import {
 
 export default function AgentsTransaction() {
   const navigate = useNavigate();
-    const location = useLocation();
-    const { user } = useContext(AuthContext);
-    
-  
+  const location = useLocation();
+  const { user } = useContext(AuthContext);
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const isActive = (path) =>
-      location.pathname === path
-        ? "bg-white text-green-900 font-medium"
-        : "hover:bg-green-800";
+    location.pathname === path
+      ? "bg-white text-green-900 font-medium"
+      : "hover:bg-green-800";
 
   // 🔽 Filter states
   const [timeframe, setTimeframe] = useState("This week");
@@ -36,97 +36,21 @@ export default function AgentsTransaction() {
 
   // Dummy data
   const commissions = [
-    {
-      id: 1,
-      commission: "1.5%",
-      property: "St. feb homes",
-      client: "John smith",
-      status: "Pending",
-      amount: 5000000,
-    },
-    {
-      id: 2,
-      commission: "20%",
-      property: "Banana island villa",
-      client: "Patrick will",
-      status: "Paid",
-      amount: 8000000,
-    },
-    {
-      id: 3,
-      commission: "30%",
-      property: "Lekki apartment",
-      client: "Mercy okeke",
-      status: "Pending",
-      amount: 5000000,
-    },
-    {
-      id: 4,
-      commission: "2.4%",
-      property: "Senister Villa house",
-      client: "Sandra lange",
-      status: "Paid",
-      amount: 7000000,
-    },
-    {
-      id: 5,
-      commission: "5.5%",
-      property: "Monserrate Terrace",
-      client: "Lukeman john",
-      status: "Cancelled",
-      amount: 1500000,
-    },
+    { id: 1, commission: "1.5%", property: "St. feb homes", client: "John smith", status: "Pending", amount: 5000000 },
+    { id: 2, commission: "20%", property: "Banana island villa", client: "Patrick will", status: "Paid", amount: 8000000 },
+    { id: 3, commission: "30%", property: "Lekki apartment", client: "Mercy okeke", status: "Pending", amount: 5000000 },
+    { id: 4, commission: "2.4%", property: "Senister Villa house", client: "Sandra lange", status: "Paid", amount: 7000000 },
+    { id: 5, commission: "5.5%", property: "Monserrate Terrace", client: "Lukeman john", status: "Cancelled", amount: 1500000 },
   ];
 
   const transactions = [
-    {
-      id: "#00123",
-      property: "St. feb homes",
-      client: "John smith",
-      type: "Rent",
-      status: "Pending",
-      amount: 5000000,
-      date: "12 Aug",
-    },
-    {
-      id: "#00124",
-      property: "Banana island villa",
-      client: "Patrick will",
-      type: "Sale",
-      status: "Complete",
-      amount: 8000000,
-      date: "16 Aug",
-    },
-    {
-      id: "#00125",
-      property: "Lekki apartment",
-      client: "Mercy okeke",
-      type: "Rent",
-      status: "Pending",
-      amount: 5000000,
-      date: "17 Aug",
-    },
-    {
-      id: "#00126",
-      property: "Senister Villa house",
-      client: "Sandra lange",
-      type: "Sale",
-      status: "Complete",
-      amount: 7000000,
-      date: "15 Aug",
-    },
-    {
-      id: "#00127",
-      property: "Monserrate Terrace",
-      client: "Lukeman john",
-      type: "Sale",
-      status: "Cancelled",
-      amount: 1500000,
-      date: "19 Aug",
-    },
+    { id: "#00123", property: "St. feb homes", client: "John smith", type: "Rent", status: "Pending", amount: 5000000, date: "12 Aug" },
+    { id: "#00124", property: "Banana island villa", client: "Patrick will", type: "Sale", status: "Complete", amount: 8000000, date: "16 Aug" },
+    { id: "#00125", property: "Lekki apartment", client: "Mercy okeke", type: "Rent", status: "Pending", amount: 5000000, date: "17 Aug" },
+    { id: "#00126", property: "Senister Villa house", client: "Sandra lange", type: "Sale", status: "Complete", amount: 7000000, date: "15 Aug" },
+    { id: "#00127", property: "Monserrate Terrace", client: "Lukeman john", type: "Sale", status: "Cancelled", amount: 1500000, date: "19 Aug" },
   ];
 
-  // Chart Data
   const lineData = [
     { name: "Jan, 2025", earning: 4800 },
     { name: "Feb, 2025", earning: 7200 },
@@ -149,95 +73,82 @@ export default function AgentsTransaction() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-         {/* Sidebar */}
-         <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
-           <div>
-             {/* Menu */}
-             <nav className="mt-[85px] space-y-1">
-               <button
-                 onClick={() => navigate("/agents-dashboard")}
-                 className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
-                   "/agents-dashboard"
-                 )}`}
-               >
-                 <Clock size={18} />
-                 <span>Dashboard Overview</span>
-               </button>
-   
-               <button
-                 onClick={() => navigate("/agents-transaction")}
-                 className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
-                   "/agents-transaction"
-                 )}`}
-               >
-                 <Bell size={18} />
-                 <span>Transaction & Commission</span>
-               </button>
-   
-               <button
-                 onClick={() => navigate("/agents-client")}
-                 className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg  hover:text-green-900 hover:bg-white  ${isActive(
-                   "/agents-client"
-                 )}`}
-               >
-                 <Heart size={18} />
-                 <span>Clients</span>
-               </button>
-               <button
-                 onClick={() => navigate("/agents-document")}
-                 className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
-                   "/agents-document"
-                 )}`}
-               >
-                 <Heart size={18} />
-                 <span>Document Compliance</span>
-               </button>
-               <button
-                 onClick={() => navigate("/agents-property")}
-                 className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive(
-                   "/agents-property"
-                 )}`}
-               >
-                 <Heart size={18} />
-                 <span>Property Management</span>
-               </button>
-   
-               <button
-                 onClick={() => navigate("/agent-settings")}
-                 className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg  hover:text-green-900 hover:bg-white ${isActive(
-                   "/agent-settings"
-                 )}`}
-               >
-                 <Settings size={18} />
-                 <span>Account Settings</span>
-               </button>
-             </nav>
-           </div>
-   
-           {/* User Info */}
-           <div className="p-6 border-t border-green-800">
-             <div className="flex items-center space-x-3">
-               <img
-                 src={user?.profilePic || "https://via.placeholder.com/40"}
-                 alt="profile"
-                 className="w-10 h-10 rounded-full object-cover border"
-               />
-               <div className="flex-colunm">
-                 <p className="font-medium ">
-                   {user?.firstName} {user?.lastName}
-                 </p>
-                 <p className="text-sm text-gray-300">{user?.email}</p>
-               </div>
-             </div>
-             <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
-               <LogOut size={18} />
-               <span>Logout</span>
-             </button>
-           </div>
-         </aside>
+      {/* Mobile Hamburger */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="p-2 bg-green-800 text-white rounded"
+        >
+          <Menu size={20} />
+        </button>
+      </div>
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed inset-y-0 left-0 w-72 bg-green-900 text-white flex flex-col justify-between transform transition-transform duration-300 z-40
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:sticky md:top-0 md:h-full`}
+      >
+        <div>
+          {/* Close button for mobile */}
+          <div className="md:hidden flex justify-end p-4">
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="p-2 rounded bg-green-800"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          {/* Menu */}
+          <nav className="mt-[85px] space-y-1">
+            <button onClick={() => navigate("/agents-dashboard")} className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/agents-dashboard")}`}>
+              <Clock size={18} />
+              <span>Dashboard Overview</span>
+            </button>
+            <button onClick={() => navigate("/agents-transaction")} className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/agents-transaction")}`}>
+              <Bell size={18} />
+              <span>Transaction & Commission</span>
+            </button>
+            <button onClick={() => navigate("/agents-client")} className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/agents-client")}`}>
+              <Heart size={18} />
+              <span>Clients</span>
+            </button>
+            <button onClick={() => navigate("/agents-document")} className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive("/agents-document")}`}>
+              <Heart size={18} />
+              <span>Document Compliance</span>
+            </button>
+            <button onClick={() => navigate("/agents-property")} className={`flex w-full items-center space-x-3 px-6 py-3 rounded-r-lg ${isActive("/agents-property")}`}>
+              <Heart size={18} />
+              <span>Property Management</span>
+            </button>
+            <button onClick={() => navigate("/agent-settings")} className={`flex w-full items-center space-x-3 px-6 py-3 border-t border-green-700 mt-4 rounded-r-lg hover:text-green-900 hover:bg-white ${isActive("/agent-settings")}`}>
+              <Settings size={18} />
+              <span>Account Settings</span>
+            </button>
+          </nav>
+        </div>
+
+        {/* User Info */}
+        <div className="p-6 border-t border-green-800">
+          <div className="flex items-center space-x-3">
+            <img src={user?.profilePic || "https://via.placeholder.com/40"} alt="profile" className="w-10 h-10 rounded-full object-cover border" />
+            <div className="flex-colunm">
+              <p className="font-medium">{user?.firstName} {user?.lastName}</p>
+              <p className="text-sm text-gray-300">{user?.email}</p>
+            </div>
+          </div>
+          <button className="flex items-center space-x-2 text-red-400 mt-4 hover:text-red-300">
+            <LogOut size={18} />
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Overlay */}
+      {sidebarOpen && <div onClick={() => setSidebarOpen(false)} className="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden"></div>}
 
       {/* Main Content */}
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-8 ">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
@@ -344,9 +255,7 @@ export default function AgentsTransaction() {
                   <td className="p-3">{c.client}</td>
                   <td className="p-3">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs ${
-                        statusColors[c.status]
-                      }`}
+                      className={`px-3 py-1 rounded-full text-xs ${statusColors[c.status]}`}
                     >
                       {c.status}
                     </span>
@@ -377,12 +286,7 @@ export default function AgentsTransaction() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="earning"
-                  stroke="#4F46E5"
-                  strokeWidth={2}
-                />
+                <Line type="monotone" dataKey="earning" stroke="#4F46E5" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -398,19 +302,9 @@ export default function AgentsTransaction() {
             </div>
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  dataKey="value"
-                  label
-                >
+                <Pie data={pieData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label>
                   {pieData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Legend />
@@ -446,11 +340,7 @@ export default function AgentsTransaction() {
                   <td className="p-3">{t.client}</td>
                   <td className="p-3">{t.type}</td>
                   <td className="p-3">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs ${
-                        statusColors[t.status]
-                      }`}
-                    >
+                    <span className={`px-3 py-1 rounded-full text-xs ${statusColors[t.status]}`}>
                       {t.status}
                     </span>
                   </td>

@@ -1,204 +1,293 @@
-import { useState , useContext  } from "react";
-import { useNavigate } from "react-router-dom";
-import { X } from "lucide-react";
-import houseImg from "../assets/Frame 1.png";
-import logoImg from "../assets/logo.png";
-import { signInWithGoogle } from "../firebase";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
+import PropertyNav from "./PropertyNav.jsx";
+import Contactform from "./Contactagentform.jsx";
+import PropertyGallery from "./PropertyGallery.jsx";
 import { AuthContext } from "../AuthContext";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
-export default function SigninPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+import arrow from "../assets/downarrow.png";
 
-  // 🔹 Normal Email/Password Demo Login
-// 🔹 Normal Email/Password Login
-const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    if (!email || !password) {
-      setError("Please enter both email and password.");
-      return;
-    }
+export default function PropertyDetails() {
+  const { id } = useParams();
+  const { token } = useContext(AuthContext);
+  const [property, setProperty] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  // ===== Fetch Property Details =====
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const res = await fetch(
+          `https://realtyfinder.onrender.com/api/properties/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token ? `Bearer ${token}` : undefined,
+            },
+          }
+        );
 
-      const data = await res.json();
+        if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
+        const result = await res.json();
 
-      if (res.ok) {
-        login(data.user, data.token); // ✅ updates context + localStorage
-        navigate("/");
-      } else {
-        setError(data.message || "Login failed. Please check your credentials.");
+        if (result.success && result.data) {
+          setProperty(result.data);
+        } else {
+          setError("Property not found or invalid data format.");
+        }
+      } catch (err) {
+        console.error("Error fetching property:", err);
+        setError("Failed to load property details. Please try again later.");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("Something went wrong. Please try again.");
-    }
-  };
+    };
 
+    fetchProperty();
+    window.scrollTo(0, 0);
+  }, [id, token]);
 
-  // 🔹 Google Sign In
-  const handleGoogleSignIn = async () => {
-    try {
-      const user = await signInWithGoogle();
-      alert(`Welcome ${user.displayName}!`);
-      navigate("/"); // ✅ Redirect after login
-    } catch (err) {
-      console.error("Google Sign In failed:", err);
-      setError("Google Sign In failed. Please try again.");
-    }
-  };
+  // ===== Loading and Error States =====
+  if (loading)
+    return <p className="text-center mt-10 text-xl">Loading property...</p>;
 
+  if (error)
+    return (
+      <p className="text-center text-red-500 mt-10 text-xl font-semibold">
+        {error}
+      </p>
+    );
+
+  if (!property)
+    return <p className="text-center mt-10 text-xl">No property found.</p>;
+
+  // ===== Page Layout =====
   return (
-    <div className="min-h-screen flex flex-col md:grid md:grid-cols-2">
-      {/* Left Side Image */}
-      <div className="w-full h-64 md:h-auto">
-        <img
-          src={houseImg}
-          alt="House"
-          className="w-full h-full object-cover"
+    <>
+      <PropertyNav />
+
+      {/* GALLERY */}
+      <div className="px-8 w-full">
+        <h1 className="mt-6 font-bold text-3xl px-8">{property.title}</h1>
+
+        {Array.isArray(property.images) && property.images.length > 0 ? (
+          <Carousel className="w-full mt-6 relative">
+            <CarouselContent>
+              {property.images.map((imgUrl, index) => (
+                <CarouselItem key={index} className="w-full">
+                  <img
+                    src={imgUrl}
+                    alt={`${property.title} image ${index + 1}`}
+                    className="w-full h-[500px] sm:h-[600px] object-cover rounded-none"
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-4 bg-black/40 text-white hover:bg-black/60" />
+            <CarouselNext className="right-4 bg-black/40 text-white hover:bg-black/60" />
+          </Carousel>
+        ) : (
+          <img
+            src="https://placehold.co/1200x600?text=No+Image"
+            alt="No image available"
+            className="w-full h-[500px] sm:h-[600px] object-cover rounded-none mt-6"
+          />
+        )}
+      </div>
+
+      {/* PROPERTY SUMMARY */}
+      <div className="p-10 flex flex-col lg:flex-row justify-between">
+        <div className="lg:w-2/3">
+          <p>{property.address}</p>
+          <div className="flex justify-between text-2xl sm:text-3xl font-semibold mt-3">
+            <p>
+              ₦{property.price?.toLocaleString()} <br />
+              <span className="text-xl font-light">Price</span>
+            </p>
+            <p>
+              {property.bedrooms || 0} <br />
+              <span className="text-xl font-light">Beds</span>
+            </p>
+            <p>
+              {property.bathrooms || 0} <br />
+              <span className="text-xl font-light">Baths</span>
+            </p>
+            <p>
+              {property.area || "N/A"} <br />
+              <span className="text-xl font-light">Sqft</span>
+            </p>
+          </div>
+
+          <h1 className="text-3xl mt-3 font-bold">About this home</h1>
+          <p className="mt-2">{property.description}</p>
+
+          <div className="flex mt-6 gap-2 items-center">
+            <p className="text-[#0d542a] font-bold cursor-pointer">Show More</p>
+            <img src={arrow} alt="expand" />
+          </div>
+
+          {/* FEATURES SECTION (unchanged) */}
+        </div>
+
+        {/* ACTIONS PANEL */}
+        <div className="lg:w-1/3 mt-8 lg:mt-0">
+          <div className="p-6 border border-[#dadada] rounded-lg w-full">
+            <button className="text-sm text-white bg-[#27513d] w-full px-6 py-5 rounded-lg">
+              Request Showing
+            </button>
+            <p className="mt-3 text-gray-600">
+              Tour for free, no strings attached
+            </p>
+            <button className="text-sm text-white bg-[#27513d] w-full px-6 py-5 rounded-lg mt-3">
+              Start an offer
+            </button>
+            <p className="mt-3 text-gray-600">
+              Make a winning offer with the help of a local agent
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* LISTED BY */}
+      <div className="px-10 mt-10">
+        <h1 className="text-xl font-bold">Listed by RealtyFinder</h1>
+        <div className="max-w-200 h-40 border rounded-2xl mt-4 flex gap-4 p-4 items-center">
+          <img
+            src={
+              property.user?.profilePhoto ||
+              "https://placehold.co/100x100?text=No+Image"
+            }
+            alt={`${property.user?.firstName || "Agent"} ${
+              property.user?.lastName || ""
+            }`}
+            className="w-24 h-24 object-cover rounded-full border border-gray-300"
+          />
+          <div>
+            <p className="text-2xl font-bold text-[#27513d]">
+              {property.user
+                ? `${property.user.firstName || ""} ${
+                    property.user.lastName || ""
+                  }`.trim()
+                : "Unknown Agent"}
+            </p>
+            <span className="text-black text-xl font-light">
+              {property.user?.companyName || "RealtyFinder Corporation"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* CONTACT FORM */}
+      <div className="mt-10">
+        <Contactform
+          agentEmail={property.user?.email}
+          agentName={`${property.user?.firstName || ""} ${
+            property.user?.lastName || ""
+          }`.trim()}
+          propertyTitle={property.title}
         />
       </div>
 
-      {/* Right Side */}
-      <div className="flex flex-col justify-center px-6 md:px-12 bg-white py-8 relative">
-        {/* Close Button (X) */}
-        <button
-          onClick={() => navigate("/")}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-        >
-          <X size={24} />
-        </button>
-
-        {/* Logo */}
-        <div className="flex items-center gap-2 mb-8">
-          <img src={logoImg} alt="RealtyFinder" className="w-6 h-6" />
-          <span className="text-xl font-semibold text-gray-900">
-            RealtyFinder
-          </span>
+      {/* MAP */}
+      <div className="px-8 mt-10">
+        <h1 className="font-bold text-5xl mb-4">Around This Home</h1>
+        <div className="w-full max-w-4xl h-[400px]">
+          <iframe
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            src={`https://www.google.com/maps?q=${encodeURIComponent(
+              property.address
+            )}&output=embed`}
+          ></iframe>
         </div>
-
-        {/* Headings */}
-        <h2 className="text-2xl font-bold mb-1">Welcome back</h2>
-        <p className="text-gray-500 mb-6">Sign in to your account</p>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-600"
-              placeholder="you@example.com"
-            />
-          </div>
-
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setError("");
-              }}
-              className={`mt-1 block w-full border rounded-lg px-3 py-2 focus:ring-2 ${
-                error
-                  ? "border-red-500 focus:ring-red-500"
-                  : "focus:ring-green-600"
-              }`}
-              placeholder="Enter your password"
-            />
-          </div>
-
-          {/* Error */}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-
-          {/* Remember Me + Forgot Password */}
-          <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4"
-              />
-              Remember me
-            </label>
-            <button
-              type="button"
-              onClick={() => navigate("/forgot-password")}
-              className="text-green-700 hover:underline"
-            >
-              Forgot password?
-            </button>
-          </div>
-
-          {/* Sign In Button */}
-          <button
-            type="submit"
-            className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition"
-          >
-            Sign In
-          </button>
-        </form>
-
-        {/* Divider */}
-        <div className="flex items-center my-6">
-          <div className="flex-grow border-t border-gray-300"></div>
-          <span className="mx-3 text-sm text-gray-500">or</span>
-          <div className="flex-grow border-t border-gray-300"></div>
-        </div>
-
-        {/* Google Sign In */}
-        <button
-          onClick={handleGoogleSignIn}
-          className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50 transition"
-        >
-          <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            alt="Google"
-            className="w-5 h-5"
-          />
-          Sign in with Google
-        </button>
-
-        {/* Continue with Phone (no input, just button) */}
-        <button
-          onClick={() => navigate("/phone-signin")}
-          className="w-full mt-3 flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50 transition"
-        >
-          📱 Continue with Phone
-        </button>
-
-        {/* Sign Up Link */}
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Don’t have an account?{" "}
-          <button
-            onClick={() => navigate("/signup")}
-            className="text-green-700 font-medium hover:underline"
-          >
-            Sign Up
-          </button>
+      </div>
+      <div className="p-8 mt-6">
+        <h1 className="font-bold text-5xl">Climate risks</h1>
+        <p className="mt-3 text-2xl font-light">
+          {" "}
+          Risk data is not availaible for this property.
         </p>
       </div>
-    </div>
+      <hr class="border-t border-gray-400 " />
+      <div className="p-8 ">
+        <h1 className="font-bold text-5xl">Property details</h1>
+      </div>
+      <div className="max-w-4xl px-8 bg-[#f7f7f5] ">
+        <p className="p-3 font-bold text-3xl">Interior</p>
+      </div>
+      <div className="max-w-4xl px-8 py-6 grid grid-cols-1 sm:grid-cols-2 gap-8">
+        {/* Bedrooms & bathrooms */}
+
+        <div className="px-4">
+          <h2 className="font-bold text-lg">Bedrooms & bathrooms</h2>
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>Bedrooms: 4</li>
+            <li>Bathrooms: 3</li>
+            <li>Full bathrooms: 2</li>
+            <li>1/2 bathrooms: 1</li>
+          </ul>
+        </div>
+
+        {/* Cooling */}
+        <div>
+          <h2 className="font-bold text-lg">Cooling</h2>
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>Has cooling: Yes</li>
+          </ul>
+        </div>
+
+        {/* Heating */}
+        <div className="px-4">
+          <h2 className="font-bold text-lg">Heating</h2>
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>Has Heating (Unspecified Type)</li>
+          </ul>
+        </div>
+
+        {/* Features */}
+        <div>
+          <h2 className="font-bold text-lg">Features</h2>
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>Basement: Yes</li>
+            <li>Has fireplace: Yes</li>
+          </ul>
+        </div>
+
+        {/* Interior area */}
+        <div className="px-4">
+          <h2 className="font-bold text-lg">Interior area</h2>
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>Total structure area: 2,277</li>
+            <li>Total interior livable area: 2,277 sqft</li>
+          </ul>
+        </div>
+      </div>
+      <div className="max-w-4xl px-8 bg-[#f7f7f5] ">
+        <p className="p-3 font-bold text-3xl">Property</p>
+      </div>
+      <p className="mt-4 px-11 text-3xl">Parking</p>
+      <div className="flex mt-12 gap-2 px-11">
+        <img src={arrow} alt="" />
+        <p className="text-[#0d542a] font-bold text-xl ">Show More</p>
+      </div>
+      <div className="mt-5 px-8">
+        <h1 className=" font-bold text-5xl">Public tax history</h1>
+        <p className="mt-4 text-2xl"> Tax history is unavailaible.</p>
+      </div>
+      <hr class="border-t border-gray-400 mt-6 " />
+    </>
   );
 }

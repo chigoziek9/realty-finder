@@ -4,19 +4,19 @@ export default function ServiceCards() {
   const cards = [
     {
       id: "01",
-      title: "Buy a Home",
+      title: "Buy a property",
       text: "One of the most significant benefits of owning a RealtyFinder home is lower energy costs. Our homes are designed to use less energy with our solar powered system, saving money on bills.",
       button: "Search Homes",
     },
     {
       id: "02",
-      title: "Sell a Home",
+      title: "Sell a property",
       text: "Our homes also have a smaller carbon footprint. They constantly use renewable energy sources and produce less waste which means they have a lower impact on the environment.",
       button: "See your Options",
     },
     {
       id: "03",
-      title: "Rent a Home",
+      title: "Rent a property",
       text: "Our hybrid ventilation strategy includes both natural and mechanical ventilation, while our airtight wooden structure reduces risk of mold development, ensuring a healthy home.",
       button: "Find Rentals",
     },

@@ -22,7 +22,6 @@ export default function AgentPropertyForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [locationField, setLocationField] = useState("");
   const [state, setState] = useState("");
   const [type, setType] = useState("");
   const [postalCode, setPostalCode] = useState("");
@@ -92,12 +91,15 @@ export default function AgentPropertyForm() {
         files.map((file) => handleImageUpload(file))
       );
 
+      // ✅ Auto-generate location
+      const fullLocation = `${address}, ${state}, ${country}`.trim();
+
       // ✅ Full property object
       const newProperty = {
         title,
         description,
         price: Number(price),
-        location: locationField,
+        location: fullLocation,
         type,
         address,
         state,
@@ -128,7 +130,6 @@ export default function AgentPropertyForm() {
         setTitle("");
         setDescription("");
         setPrice("");
-        setLocationField("");
         setState("");
         setType("");
         setPostalCode("");
@@ -359,19 +360,6 @@ export default function AgentPropertyForm() {
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
                 className="border rounded px-3 py-2"
-              />
-            </div>
-
-            <div className="flex flex-col">
-              <label className="mb-1 text-sm font-medium text-gray-700">
-                Location
-              </label>
-              <input
-                type="text"
-                value={locationField}
-                onChange={(e) => setLocationField(e.target.value)}
-                className="border rounded px-3 py-2"
-                required
               />
             </div>
           </div>
