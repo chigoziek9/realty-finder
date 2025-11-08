@@ -58,20 +58,7 @@ export default function UserDropdown({ user, logout }) {
           >
             Profile
           </Link>
-           <Link
-              to="/owners-dashboard"
-              onClick={handleItemClick}
-              className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
-            >
-              Owners Dashboard
-            </Link>
-            <Link
-              to="/agents-dashboard"
-              onClick={handleItemClick}
-              className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
-            >
-              Agent Dashboard
-            </Link>
+          
 
           {/* Conditional Dashboards */}
           {user?.role === "real_estate_agent" && (
