@@ -1,13 +1,14 @@
 import { useState, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ChevronDown, Bell } from "lucide-react";
+import { Menu, X, ChevronDown, Bell, ChevronUp } from "lucide-react";
 import logo from "../assets/NavLogo.png";
 import { AuthContext } from "../AuthContext";
 import UserDropdown from "./UserDropdown";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(null);
+  const [isOpen, setIsOpen] = useState(false); // mobile menu
+  const [menuOpen, setMenuOpen] = useState(null); // desktop hover dropdowns
+  const [mobileDropdown, setMobileDropdown] = useState(null); // mobile dropdowns
   const [open, setOpen] = useState(false); // notifications
   const timeoutRef = useRef(null);
   const { user, logout } = useContext(AuthContext);
@@ -23,6 +24,10 @@ export default function Navbar() {
   };
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => setMenuOpen(null), 200);
+  };
+
+  const toggleMobileDropdown = (menu) => {
+    setMobileDropdown(mobileDropdown === menu ? null : menu);
   };
 
   return (
@@ -83,7 +88,6 @@ export default function Navbar() {
                 </div>
               )}
             </li>
-             
 
             {/* Other links */}
             {user?.role !== "agent" && (
@@ -165,26 +169,56 @@ export default function Navbar() {
         {isOpen ? <X size={28} /> : <Menu size={28} />}
       </button>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       {isOpen && (
         <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-200 md:hidden z-50 animate-slideDown">
-          <nav className="flex flex-col p-5 space-y-3 text-gray-800 text-[15px] font-medium">
-            <Link
-              to="/buy/home"
-              className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
-              onClick={() => setIsOpen(false)}
-            >
-              🏠 Buy
-            </Link>
+          <nav className="flex flex-col p-5 space-y-2 text-gray-800 text-[15px] font-medium">
 
-            <Link
-              to="/rent/apartments"
-              className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
-              onClick={() => setIsOpen(false)}
+            {/* BUY DROPDOWN (mobile) */}
+            <button
+              onClick={() => toggleMobileDropdown("buy")}
+              className="flex justify-between items-center px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200 w-full text-left"
             >
-              🏢 Rent
-            </Link>
+              <span>🏠 Buy</span>
+              {mobileDropdown === "buy" ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            </button>
+            {mobileDropdown === "buy" && (
+              <div className="pl-6 flex flex-col space-y-2">
+                <Link to="/buy/home" onClick={() => setIsOpen(false)} className="py-2 hover:text-green-700">
+                  House For Sale
+                </Link>
+                <Link to="/buy/land" onClick={() => setIsOpen(false)} className="py-2 hover:text-green-700">
+                  Land For Sale
+                </Link>
+                <Link to="/buy/recent" onClick={() => setIsOpen(false)} className="py-2 hover:text-green-700">
+                  Recently Sold
+                </Link>
+              </div>
+            )}
 
+            {/* RENT DROPDOWN (mobile) */}
+            <button
+              onClick={() => toggleMobileDropdown("rent")}
+              className="flex justify-between items-center px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200 w-full text-left"
+            >
+              <span>🏢 Rent</span>
+              {mobileDropdown === "rent" ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            </button>
+            {mobileDropdown === "rent" && (
+              <div className="pl-6 flex flex-col space-y-2">
+                <Link to="/rent/apartments" onClick={() => setIsOpen(false)} className="py-2 hover:text-green-700">
+                  Apartments / Condos For Rent
+                </Link>
+                <Link to="/rent/houses" onClick={() => setIsOpen(false)} className="py-2 hover:text-green-700">
+                  Houses For Rent
+                </Link>
+                <Link to="/rent/land" onClick={() => setIsOpen(false)} className="py-2 hover:text-green-700">
+                  Land For Rent
+                </Link>
+              </div>
+            )}
+
+            {/* OTHER LINKS */}
             {user?.role !== "agent" && (
               <Link
                 to="/agent"
@@ -194,7 +228,6 @@ export default function Navbar() {
                 👨‍💼 Real Estate Agents
               </Link>
             )}
-
             <Link
               to="/feed"
               className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
@@ -205,19 +238,61 @@ export default function Navbar() {
 
             <hr className="border-gray-200 my-2" />
 
+            {/* USER SECTION (mobile) */}
             {user ? (
               <>
                 <Link
                   to="/profile"
-                  className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
+                  className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800"
                   onClick={() => setIsOpen(false)}
                 >
                   👤 Profile
                 </Link>
 
+                {/* ✅ DASHBOARD LINKS BASED ON ROLE */}
+                {user?.role === "real_estate_agent" && (
+                  <Link
+                    to="/agents-dashboard"
+                    className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    💼 Agent Dashboard
+                  </Link>
+                )}
+
+                {user?.role === "property_owner" && (
+                  <Link
+                    to="/owners-dashboard"
+                    className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    🏡 Owners Dashboard
+                  </Link>
+                )}
+
+                {user?.role === "admin" && (
+                  <Link
+                    to="/admin-dashboard"
+                    className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    🛠️ Admin Dashboard
+                  </Link>
+                )}
+
+                {user?.role === "individual" && (
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    👤 Individual Dashboard
+                  </Link>
+                )}
+
                 <Link
                   to="/notifications"
-                  className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800 transition-all duration-200"
+                  className="block px-4 py-3 rounded-lg hover:bg-green-50 hover:text-green-800"
                   onClick={() => setIsOpen(false)}
                 >
                   🔔 Notifications

@@ -1,7 +1,7 @@
 import { Clock, Bell, Heart, Settings, LogOut } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { AuthContext } from "../AuthContext";
 import { useContext, useState, useEffect } from "react";
+import { AuthContext } from "../AuthContext";
 import Graph from "../components/Graph.jsx";
 import RecentActivity from "../components/RecentActivity";
 import InboxInquiry from "../components/InboxInquiry.jsx";
@@ -14,8 +14,9 @@ export default function AgentsDashboard() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // ✅ Fetch all agent properties (approved + pending + rejected)
+  // Fetch agent properties
   useEffect(() => {
     const fetchAllProperties = async () => {
       try {
@@ -45,7 +46,6 @@ export default function AgentsDashboard() {
         const userEmail = user?.email?.toLowerCase();
         const userId = user?._id;
 
-        // ✅ Filter only properties created by this agent
         const filtered = allProperties.filter(
           (p) =>
             p.createdBy?.email?.toLowerCase() === userEmail ||
@@ -72,7 +72,11 @@ export default function AgentsDashboard() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-70 bg-green-900 text-white flex flex-col justify-between">
+      <aside
+        className={`fixed top-0 left-0 z-40 h-screen w-64 bg-green-900 text-white flex flex-col justify-between transform transition-transform duration-200 md:sticky md:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
         <div>
           <nav className="mt-[85px] space-y-1">
             <button
@@ -159,8 +163,30 @@ export default function AgentsDashboard() {
         </div>
       </aside>
 
+      {/* Overlay for mobile */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-30"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Main Content */}
-      <main className="flex-1 p-[60px]">
+      <main className="flex-1 p-4 md:p-8">
+        {/* Mobile Header */}
+        <div className="flex items-center justify-between md:hidden bg-white p-4 shadow mb-4 rounded-md">
+          <h1 className="text-lg font-semibold text-gray-800">
+            Dashboard Overview
+          </h1>
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 rounded-md bg-green-800 text-white"
+          >
+            ☰
+          </button>
+        </div>
+
+        {/* Header */}
         <div className="flex justify-between w-full">
           <h1 className="mt-4 text-3xl">Hello {user?.firstName}</h1>
           <button
@@ -171,60 +197,56 @@ export default function AgentsDashboard() {
           </button>
         </div>
 
-        {/* ✅ Stats Boxes */}
-        <div className="flex gap-[27px] flex-wrap">
-          <div className="mt-[31px] inline-block border w-[240px] h-[154px] p-[19px] bg-white rounded-lg shadow">
+        {/* Stats Boxes (Centered on mobile) */}
+        <div className="flex flex-wrap justify-center gap-6 mt-6">
+          <div className="w-full sm:w-[240px] h-[154px] p-4 bg-white rounded-lg shadow">
             <p>Total Listings (All Status)</p>
-            <p className="text-5xl font-bold mt-[13px]">
+            <p className="text-5xl font-bold mt-3">
               {loading ? "..." : properties.length}
             </p>
-           
           </div>
 
-          <div className="mt-[31px] inline-block border w-[240px] h-[154px] p-[19px] bg-white rounded-lg shadow">
+          <div className="w-full sm:w-[240px] h-[154px] p-4 bg-white rounded-lg shadow">
             <p>Total Clients</p>
-            <p className="text-5xl font-bold mt-[13px]">25</p>
-            <p className="mt-[13.31px] mb-3">This Week</p>
+            <p className="text-5xl font-bold mt-3">25</p>
+            <p className="mt-3">This Week</p>
           </div>
 
-          <div className="mt-[31px] inline-block border w-[240px] h-[154px] p-[19px] bg-white rounded-lg shadow">
+          <div className="w-full sm:w-[240px] h-[154px] p-4 bg-white rounded-lg shadow">
             <p>Total Inquiries</p>
-            <p className="text-5xl font-bold mt-[13px]">45</p>
-            <p className="mt-[13.31px] mb-3">This Week</p>
+            <p className="text-5xl font-bold mt-3">45</p>
+            <p className="mt-3">This Week</p>
           </div>
 
-          <div className="mt-[31px] inline-block border w-[240px] h-[154px] p-[19px] bg-white rounded-lg shadow">
+          <div className="w-full sm:w-[240px] h-[154px] p-4 bg-white rounded-lg shadow">
             <p>Commission Earned</p>
-            <p className="text-5xl font-bold mt-[13px]">₦0</p>
-            <p className="mt-[13.31px] mb-3">This Week</p>
+            <p className="text-5xl font-bold mt-3">₦0</p>
+            <p className="mt-3">This Week</p>
           </div>
         </div>
 
-        {/* Graph & Activity */}
-        <div className="max-w-7xl mt-[24px] flex gap-[27px] flex-wrap">
-          <Graph />
-          <div>
+        {/* Graph & Recent Activity Side by Side */}
+        <div className="flex flex-col md:flex-row gap-6 mt-6 max-w-7xl">
+          <div className="flex-1 bg-white p-4 rounded-lg shadow">
+            <Graph />
+          </div>
+          <div className="w-full md:w-1/3 bg-white p-4 rounded-lg shadow">
             <RecentActivity />
           </div>
         </div>
 
         {/* Appointments */}
-        <div className="flex gap-[27px] max-w-7xl flex-wrap">
-          <div className="max-w-2xl w-full border rounded-xl mt-[27px] bg-white">
-            <div className="flex justify-between mt-[27px] px-[20px] py-[12px]">
-              <h1 className="font-jakarta text-[30px] leading-[30px] font-bold">
-                Appointments
-              </h1>
-              <button className="font-jakarta text-[#28563a] text-[16px] font-medium hover:text-black transition">
+        <div className="flex gap-6 flex-wrap mt-6 max-w-7xl">
+          <div className="w-full max-w-2xl bg-white rounded-xl border mt-6">
+            <div className="flex justify-between px-5 py-3 mt-3">
+              <h1 className="text-2xl font-bold">Appointments</h1>
+              <button className="text-green-900 font-medium hover:text-black">
                 View all
               </button>
             </div>
-            <hr className="border-t border-gray-400 mt-2" />
+            <hr className="border-t border-gray-400" />
           </div>
-
-          <div>
-            <InboxInquiry />
-          </div>
+          <InboxInquiry />
         </div>
       </main>
     </div>

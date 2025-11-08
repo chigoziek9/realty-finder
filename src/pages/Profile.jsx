@@ -26,7 +26,7 @@ export default function AccountSettings() {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
 
-  // 🟢 Prefill form with current user info
+  // Prefill form with current user info
   useEffect(() => {
     if (user) {
       setForm({
@@ -47,13 +47,13 @@ export default function AccountSettings() {
     }
   }, [user]);
 
-  // 🟢 Handle input change
+  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 🟢 Handle profile photo upload
+  // Handle profile photo upload
   const handlePhotoChange = (e) => {
     const selected = e.target.files[0];
     if (selected) {
@@ -62,7 +62,7 @@ export default function AccountSettings() {
     }
   };
 
-  // 🟢 Submit profile update
+  // Submit profile update
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Saving...");
@@ -89,16 +89,16 @@ export default function AccountSettings() {
       const res = await updateProfile(formData);
 
       if (res.success) {
-        setUser(res.data); // ✅ Update AuthContext user immediately
+        setUser(res.data); // Update AuthContext user immediately
         setStatus("✅ Profile updated successfully!");
+        alert("Profile updated successfully!"); // <-- Alert added
         setTimeout(() => setStatus(""), 3000);
         navigate("/profile");
-      } else {
-        setStatus("❌ Failed to update profile.");
-      }
+      } 
     } catch (err) {
       console.error(err);
       setStatus("❌ Failed to update profile. Please try again.");
+      alert("Failed to update profile. Please try again."); // optional alert on failure
     }
   };
 
@@ -273,10 +273,6 @@ export default function AccountSettings() {
               Save Changes
             </button>
           </div>
-
-          {status && (
-            <p className="text-sm mt-4 text-gray-600 text-center">{status}</p>
-          )}
         </form>
       </div>
     </DashboardLayout>
