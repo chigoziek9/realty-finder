@@ -81,6 +81,7 @@ import OwnersPropertyList from "./components/OwnersListedProperty";
 import OwnersPropertyForm from "./components/OwnersPropeertyForm";
 import AdminProperties from "./pages/AdminProperties"
 import AdminPropertyRequest from "./pages/AdminPropertyRequest";
+import Adminuserview from "./pages/AdminUserView"
 // ✅ Force lowercase URLs
 function LowercaseRedirect() {
   const location = useLocation();
@@ -147,6 +148,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+       
+        <Route
+          path="/admin-user-view"
+          element={
+            <ProtectedRoute>
+              <Adminuserview />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/admin-dashboard"
           element={
@@ -155,6 +166,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
 
         
         <Route

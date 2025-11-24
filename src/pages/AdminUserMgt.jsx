@@ -15,7 +15,7 @@ export default function AdminUserMgt() {
     { label: "User Management", path: "/admin-user-mgt", icon: Users },
     { label: "Property Management", path: "/admin-properties", icon: Building },
     { label: "Estate Agent Management", path: "/admin-agents-mgt", icon: Bell },
-    { label: "Property Requests", path: "/admin-property-requests", icon: ClipboardList },
+    { label: "Property Requests", path: "/admin-property-request", icon: ClipboardList },
   ];
 
   const isActive = (path) =>

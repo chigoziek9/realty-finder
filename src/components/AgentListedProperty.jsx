@@ -38,7 +38,7 @@ export default function AgentPropertyForm() {
     phone: "",
   });
 
-  // 🟢 Active tab: "pending" | "approved" | "rejected"
+  // Active tab: "pending" | "approved" | "rejected"
   const [activeTab, setActiveTab] = useState("pending");
 
   // API endpoints
@@ -48,7 +48,7 @@ export default function AgentPropertyForm() {
     rejected: "https://realtyfinder.onrender.com/api/properties/user/rejected",
   };
 
-  // ✅ Fetch properties depending on activeTab
+  // Fetch properties depending on activeTab
   useEffect(() => {
     const fetchProperties = async () => {
       setLoading(true);
@@ -91,7 +91,7 @@ export default function AgentPropertyForm() {
     if (token && user) fetchProperties();
   }, [token, user, activeTab]);
 
-  // ✅ Handle delete
+  // Handle delete
   const handleDelete = async (propertyId) => {
     if (!window.confirm("Are you sure you want to delete this property?")) return;
 
@@ -124,7 +124,7 @@ export default function AgentPropertyForm() {
     }
   };
 
-  // ✅ Handle Sold Submission
+  // Handle Sold Submission
   const handleSoldSubmit = (e) => {
     e.preventDefault();
     alert("Buyer details submitted successfully!");
@@ -132,13 +132,11 @@ export default function AgentPropertyForm() {
     setSoldModalOpen(false);
   };
 
-  // ✅ Sidebar route styling
   const isActive = (path) =>
     window.location.pathname === path
       ? "bg-white text-green-900"
       : "hover:bg-white hover:text-green-900";
 
-  // ✅ Status color mapping
   const statusColors = {
     pending: "bg-yellow-500",
     approved: "bg-green-600",
@@ -276,7 +274,6 @@ export default function AgentPropertyForm() {
 
         {error && <p className="text-red-500 text-center">{error}</p>}
 
-        {/* 🟡 Show properties ONLY when loading is false */}
         {!loading && !error && properties.length === 0 && (
           <p className="text-gray-500 text-center mt-10">
             No {activeTab} properties found.
@@ -344,10 +341,12 @@ export default function AgentPropertyForm() {
                       View
                     </button>
 
-                    {/* Only show Sold for pending */}
-                    {activeTab === "pending" && (
+                    {activeTab === "approved" && (
                       <button
-                        onClick={() => setSoldModalOpen(true)}
+                        onClick={() => {
+                          setSelectedProperty(property);
+                          setSoldModalOpen(true);
+                        }}
                         className="px-3 py-1 border rounded-lg text-green-800 text-sm hover:bg-yellow-200"
                       >
                         Sold
@@ -372,6 +371,71 @@ export default function AgentPropertyForm() {
           </div>
         )}
       </main>
+
+      {/* ===== Sold Modal ===== */}
+      {soldModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
+            <button
+              onClick={() => setSoldModalOpen(false)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+            >
+              <X size={20} />
+            </button>
+            <h2 className="text-lg font-semibold mb-4">Enter Buyer Details</h2>
+            <form onSubmit={handleSoldSubmit} className="space-y-3">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  required
+                  value={buyerDetails.firstName}
+                  onChange={(e) =>
+                    setBuyerDetails((prev) => ({ ...prev, firstName: e.target.value }))
+                  }
+                  className="flex-1 px-3 py-2 border rounded"
+                />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  required
+                  value={buyerDetails.lastName}
+                  onChange={(e) =>
+                    setBuyerDetails((prev) => ({ ...prev, lastName: e.target.value }))
+                  }
+                  className="flex-1 px-3 py-2 border rounded"
+                />
+              </div>
+              <input
+                type="email"
+                placeholder="Email"
+                required
+                value={buyerDetails.email}
+                onChange={(e) =>
+                  setBuyerDetails((prev) => ({ ...prev, email: e.target.value }))
+                }
+                className="w-full px-3 py-2 border rounded"
+              />
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                required
+                value={buyerDetails.phone}
+                onChange={(e) =>
+                  setBuyerDetails((prev) => ({ ...prev, phone: e.target.value }))
+                }
+                className="w-full px-3 py-2 border rounded"
+              />
+              <button
+                type="submit"
+                className="w-full bg-green-700 text-white py-2 rounded hover:bg-green-800"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
