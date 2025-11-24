@@ -1,18 +1,10 @@
 // src/pages/UserManagement.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const tabs = ["Buyers", "Estate agents", "Property owners"];
-
-const users = [
-  { id: 1, name: "Samuel Carter", email: "email@email.com", role: "Buyer", status: "Pending", avatar: "" },
-  { id: 2, name: "John Kennedy", email: "email@email.com", role: "Buyer", status: "Active", avatar: "" },
-  { id: 3, name: "Lucy Jones", email: "email@email.com", role: "Buyer", status: "Inactive", avatar: "" },
-  { id: 4, name: "Micheal Donald", email: "email@email.com", role: "Buyer", status: "Active", avatar: "" },
-  { id: 5, name: "Peace Patrick", email: "email@email.com", role: "Buyer", status: "Active", avatar: "" },
-  { id: 6, name: "Helen Paul", email: "email@email.com", role: "Buyer", status: "Pending", avatar: "" },
-  { id: 7, name: "Samson Green", email: "email@email.com", role: "Buyer", status: "Inactive", avatar: "" },
-];
 
 const statusColors = {
   Active: "bg-green-100 text-green-600",
@@ -22,12 +14,138 @@ const statusColors = {
 
 export default function UserManagement() {
   const [activeTab, setActiveTab] = useState("Buyers");
+  const navigate = useNavigate();
+
+  // BUYERS STATE
+  const [buyers, setBuyers] = useState([]);
+  const [loadingBuyers, setLoadingBuyers] = useState(false);
+
+  // ESTATE AGENTS STATE
+  const [agents, setAgents] = useState([]);
+  const [loadingAgents, setLoadingAgents] = useState(false);
+
+  // PROPERTY OWNERS STATE
+  const [owners, setOwners] = useState([]);
+  const [loadingOwners, setLoadingOwners] = useState(false);
+
+  // --- FETCH TRIGGERS ---
+  useEffect(() => {
+    if (activeTab === "Buyers") fetchBuyers();
+    if (activeTab === "Estate agents") fetchAgents();
+    if (activeTab === "Property owners") fetchOwners();
+  }, [activeTab]);
+
+  // --- FETCH BUYERS ---
+  const fetchBuyers = async () => {
+    try {
+      setLoadingBuyers(true);
+
+      const response = await fetch(
+        "https://realtyfinder.onrender.com/api/users/role/individual"
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        const formatted = data.users.map((u) => ({
+          id: u._id,
+          name: `${u.firstName} ${u.middleName || ""} ${u.lastName}`.trim(),
+          email: u.email,
+          role: "Buyer",
+          status: u.isVerified ? "Active" : "Pending",
+          avatar: u.profilePhoto,
+        }));
+
+        setBuyers(formatted);
+      }
+    } catch (error) {
+      console.error("Error fetching buyers:", error);
+    } finally {
+      setLoadingBuyers(false);
+    }
+  };
+
+  // --- FETCH ESTATE AGENTS ---
+  const fetchAgents = async () => {
+    try {
+      setLoadingAgents(true);
+
+      const response = await fetch(
+        "https://realtyfinder.onrender.com/api/users/role/real_estate_agent"
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        const formatted = data.users.map((u) => ({
+          id: u._id,
+          name: `${u.firstName} ${u.middleName || ""} ${u.lastName}`.trim(),
+          email: u.email,
+          role: "Estate Agent",
+          status: u.isVerified ? "Active" : "Pending",
+          avatar: u.profilePhoto,
+        }));
+
+        setAgents(formatted);
+      }
+    } catch (error) {
+      console.error("Error fetching agents:", error);
+    } finally {
+      setLoadingAgents(false);
+    }
+  };
+
+  // --- FETCH PROPERTY OWNERS ---
+  const fetchOwners = async () => {
+    try {
+      setLoadingOwners(true);
+
+      const response = await fetch(
+        "https://realtyfinder.onrender.com/api/users/role/property_owner"
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        const formatted = data.users.map((u) => ({
+          id: u._id,
+          name: `${u.firstName} ${u.middleName || ""} ${u.lastName}`.trim(),
+          email: u.email,
+          role: "Property Owner",
+          status: u.isVerified ? "Active" : "Pending",
+          avatar: u.profilePhoto,
+        }));
+
+        setOwners(formatted);
+      }
+    } catch (error) {
+      console.error("Error fetching property owners:", error);
+    } finally {
+      setLoadingOwners(false);
+    }
+  };
+
+  // CHOOSE DATASET FOR CURRENT TAB
+  const users =
+    activeTab === "Buyers"
+      ? buyers
+      : activeTab === "Estate agents"
+      ? agents
+      : owners;
+
+  const loading =
+    activeTab === "Buyers"
+      ? loadingBuyers
+      : activeTab === "Estate agents"
+      ? loadingAgents
+      : loadingOwners;
 
   return (
     <div className="p-4 sm:p-6">
       <h1 className="text-xl sm:text-2xl font-bold">User Management</h1>
       <p className="text-gray-500 mb-4 text-sm sm:text-base">
-        Manage all users including buyers, agents, and property owners in one place.
+        Manage all users including buyers, agents, and property owners in one
+        place.
       </p>
 
       {/* Tabs */}
@@ -47,7 +165,7 @@ export default function UserManagement() {
         ))}
       </div>
 
-      {/* Search + Filter */}
+      {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4">
         <input
           type="text"
@@ -80,64 +198,104 @@ export default function UserManagement() {
               <th className="p-3 sm:p-4">Action</th>
             </tr>
           </thead>
+
           <tbody>
-            {users.map((user) => (
-              <tr
-                key={user.id}
-                className="border-t hover:bg-gray-50 transition-colors duration-150"
-              >
-                <td className="p-3 sm:p-4">
-                  <input type="checkbox" />
-                </td>
-                <td className="p-3 sm:p-4 flex items-center gap-2">
-                  {user.avatar ? (
-                    <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full" />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium">
-                      {user.name.charAt(0)}
-                    </div>
-                  )}
-                  <div className="flex flex-col">
-                    <span className="font-medium">{user.name}</span>
-                    <span className="text-gray-400 text-xs md:hidden">{user.email}</span>
-                  </div>
-                </td>
-                <td className="p-3 sm:p-4 hidden md:table-cell">{user.email}</td>
-                <td className="p-3 sm:p-4 hidden md:table-cell">{user.role}</td>
-                <td className="p-3 sm:p-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${statusColors[user.status]}`}
-                  >
-                    {user.status}
-                  </span>
-                </td>
-                <td className="p-3 sm:p-4 text-green-600 flex items-center gap-1 cursor-pointer">
-                  <span className="text-xs sm:text-sm">View</span> <FaArrowRight size={12} />
+            {/* Loading State */}
+            {loading && (
+              <tr>
+                <td colSpan="6" className="p-6 text-center text-gray-500">
+                  Loading {activeTab.toLowerCase()}...
                 </td>
               </tr>
-            ))}
+            )}
+
+            {/* Empty State */}
+            {!loading && users.length === 0 && (
+              <tr>
+                <td colSpan="6" className="p-6 text-center text-gray-500">
+                  No users found.
+                </td>
+              </tr>
+            )}
+
+            {/* Data Rows */}
+            {!loading &&
+              users.map((user) => (
+                <tr
+                  key={user.id}
+                  className="border-t hover:bg-gray-50 transition-colors"
+                >
+                  <td className="p-3 sm:p-4">
+                    <input type="checkbox" />
+                  </td>
+
+                  <td className="p-3 sm:p-4 flex items-center gap-2">
+                    {/* Avatar */}
+                    {user.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt={user.name}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium">
+                        {user.name.charAt(0)}
+                      </div>
+                    )}
+
+                    <div className="flex flex-col">
+                      <span className="font-medium">{user.name}</span>
+                      <span className="text-gray-400 text-xs md:hidden">
+                        {user.email}
+                      </span>
+                    </div>
+                  </td>
+
+                  <td className="p-3 sm:p-4 hidden md:table-cell">
+                    {user.email}
+                  </td>
+                  <td className="p-3 sm:p-4 hidden md:table-cell">
+                    {user.role}
+                  </td>
+
+                  <td className="p-3 sm:p-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                        statusColors[user.status] ?? "bg-gray-100 text-gray-600"
+                      }`}
+                    >
+                      {user.status}
+                    </span>
+                  </td>
+
+                  <td className="p-3 sm:p-4 text-green-600 flex items-center gap-1 cursor-pointer">
+                    <span>
+                      {" "}
+                      <button
+                        onClick={() =>
+                          navigate("/admin-user-view", {
+                            state: {
+                              userId: user.id,
+                              role:
+                                activeTab === "Buyers"
+                                  ? "individual"
+                                  : activeTab === "Estate agents"
+                                  ? "real_estate_agent"
+                                  : "property_owner",
+                            },
+                          })
+                        }
+                        className="text-xs sm:text-sm text-blue-600 underline"
+                      >
+                        View
+                      </button>
+                    </span>
+                    <FaArrowRight size={12} />
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Pagination */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mt-4 text-xs sm:text-sm text-gray-500 gap-3 sm:gap-0">
-        <p>Showing 1–10 from 100</p>
-        <div className="flex gap-1 sm:gap-2">
-          <button className="px-2 sm:px-3 py-1 border rounded-lg">&lt;</button>
-          {[1, 2, 3, 4, 5].map((num) => (
-            <button
-              key={num}
-              className={`px-2 sm:px-3 py-1 rounded-lg ${
-                num === 1 ? "bg-green-600 text-white" : "border"
-              }`}
-            >
-              {num}
-            </button>
-          ))}
-          <button className="px-2 sm:px-3 py-1 border rounded-lg">...</button>
-          <button className="px-2 sm:px-3 py-1 border rounded-lg">&gt;</button>
-        </div>
       </div>
     </div>
   );

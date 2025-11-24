@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   Clock,
   Bell,
@@ -19,6 +19,45 @@ export default function AdminAgentMgt() {
   const location = useLocation();
   const { user } = useContext(AuthContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Total agents
+  const [totalAgents, setTotalAgents] = useState(0);
+  // Active today agents
+  const [activeAgentsToday, setActiveAgentsToday] = useState(0);
+
+  // Fetch agents from API and calculate stats
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        const res = await fetch(
+          "https://realtyfinder.onrender.com/api/users/role/real_estate_agent"
+        );
+        const data = await res.json();
+
+        if (Array.isArray(data.users)) {
+          const agents = data.users;
+
+          // Total agents
+          setTotalAgents(agents.length);
+
+          // Active today: lastLogin within 24 hours
+          const now = new Date();
+          const activeToday = agents.filter((agent) => {
+            if (!agent.lastLogin) return false;
+            const lastLoginDate = new Date(agent.lastLogin);
+            const hoursDiff = (now - lastLoginDate) / (1000 * 60 * 60);
+            return hoursDiff <= 24;
+          });
+
+          setActiveAgentsToday(activeToday.length);
+        }
+      } catch (error) {
+        console.error("Error fetching agents:", error);
+      }
+    };
+
+    fetchAgents();
+  }, []);
 
   const isActive = (path) =>
     location.pathname === path
@@ -186,8 +225,8 @@ export default function AdminAgentMgt() {
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             {[
-              { title: "Total agents", value: "150" },
-              { title: "Active today", value: "95" },
+              { title: "Total agents", value: totalAgents },
+              { title: "Active today", value: activeAgentsToday },
               { title: "Total collected", value: "₦50,000" },
               { title: "Pending contributions", value: "50" },
             ].map((card, i) => (
